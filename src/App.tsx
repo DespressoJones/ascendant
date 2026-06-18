@@ -16,7 +16,13 @@ export default function App() {
 
   // Mobile-first: a centered phone-width column on larger screens, full-bleed on phones.
   return (
-    <div className="mx-auto min-h-dvh w-full max-w-[430px]">
+    <div
+      className="mx-auto min-h-dvh w-full max-w-[430px]"
+      style={{
+        paddingTop: 'env(safe-area-inset-top)',
+        paddingBottom: 'env(safe-area-inset-bottom)',
+      }}
+    >
       <TodayScreen />
     </div>
   )

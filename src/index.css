@@ -69,4 +69,11 @@
     padding: 0;
     cursor: pointer;
   }
+
+  /* Installed (standalone) on iOS: hide our faux clock so it doesn't double the OS one. */
+  @media (display-mode: standalone) {
+    .pwa-clock {
+      visibility: hidden;
+    }
+  }
 }

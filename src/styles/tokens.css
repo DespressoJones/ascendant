@@ -1,0 +1,91 @@
+/*
+  WORLD TOKENS — the theming engine.
+
+  Each world is one block of --w-* variables. The shared typography + radii live on
+  :root (the <html> element), so a world block only needs to override what differs.
+  Switch worlds by setting [data-world="…"] on <html>; everything re-themes instantly.
+
+  Ink & Paper is the locked default (a near-black "broadsheet at night"). Paper is its
+  daytime sibling; Bronze and Atelier are the two contrasting worlds that prove the engine.
+*/
+
+:root,
+[data-world='ink'] {
+  color-scheme: dark;
+
+  --w-bg: #0e0e0f;
+  --w-surface: #141312;
+  --w-surface-raised: #1a1816;
+  --w-ink: #ece8df;
+  --w-ink-soft: #cfc9be;
+  --w-ink-muted: #8a8278;
+  --w-hairline: rgb(236 232 223 / 0.13);
+  --w-hairline-strong: rgb(236 232 223 / 0.22);
+  --w-accent: #c8442a;
+  --w-accent-soft: rgb(200 68 42 / 0.5);
+
+  /* Familiar (sumi-e brush-beast): strokes are luminous bone on the dark field. */
+  --w-fam-stroke: #ece8df;
+  --w-fam-aura: #c8442a;
+
+  --w-font-serif: 'Fraunces Variable', Georgia, 'Times New Roman', serif;
+  --w-font-mono: 'Space Mono', ui-monospace, SFMono-Regular, monospace;
+  --w-font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+
+  --w-radius: 12px;
+  --w-radius-lg: 18px;
+}
+
+[data-world='paper'] {
+  color-scheme: light;
+
+  --w-bg: #f4f1ea;
+  --w-surface: #fbfaf6;
+  --w-surface-raised: #ffffff;
+  --w-ink: #1a1714;
+  --w-ink-soft: #3c372f;
+  --w-ink-muted: #6b655c;
+  --w-hairline: rgb(26 23 20 / 0.16);
+  --w-hairline-strong: rgb(26 23 20 / 0.28);
+  --w-accent: #c8442a;
+  --w-accent-soft: rgb(200 68 42 / 0.45);
+
+  --w-fam-stroke: #1a1714;
+  --w-fam-aura: #c8442a;
+}
+
+[data-world='bronze'] {
+  color-scheme: dark;
+
+  --w-bg: #0b0a09;
+  --w-surface: #121110;
+  --w-surface-raised: #1a1816;
+  --w-ink: #f4efe6;
+  --w-ink-soft: #d8d0c2;
+  --w-ink-muted: #8c857a;
+  --w-hairline: rgb(244 239 230 / 0.1);
+  --w-hairline-strong: rgb(244 239 230 / 0.2);
+  --w-accent: #c8a35b;
+  --w-accent-soft: rgb(200 163 91 / 0.5);
+
+  --w-fam-stroke: #e6c079;
+  --w-fam-aura: #c8a35b;
+}
+
+[data-world='atelier'] {
+  color-scheme: dark;
+
+  --w-bg: #0b0c0e;
+  --w-surface: #0e0f12;
+  --w-surface-raised: #121317;
+  --w-ink: #ecece4;
+  --w-ink-soft: #c8ccc8;
+  --w-ink-muted: #9aa0a8;
+  --w-hairline: rgb(236 236 228 / 0.1);
+  --w-hairline-strong: rgb(236 236 228 / 0.2);
+  --w-accent: #aeceda;
+  --w-accent-soft: rgb(174 206 218 / 0.45);
+
+  --w-fam-stroke: #aeceda;
+  --w-fam-aura: #aeceda;
+}

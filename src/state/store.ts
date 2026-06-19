@@ -1,13 +1,13 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import { levelForXp } from '@/domain/xp'
-import { seedProfile, seedQuest, seedSkills, seedStreakDays } from '@/domain/sampleState'
+import { seedProfile, seedQuests, seedSkills, seedStreakDays } from '@/domain/sampleState'
 import type { Locale, PlayerProfile, Quest, SkillState, WorldId } from '@/domain/types'
 
 /*
   Local-first store. State persists to localStorage and would later sync when signed in.
-  `onboarded` gates the first-run flow vs the app. completeQuest is a REAL mutation —
-  it awards XP and can level the skill up, so the UI responds to action, not placeholders.
+  `onboarded` gates first-run vs the app. completeQuest is a REAL mutation — it awards XP
+  and can level the skill up, so the UI responds to action, not placeholders.
 */
 
 const WORLDS: WorldId[] = ['ink', 'bronze', 'atelier', 'paper']
@@ -18,7 +18,7 @@ interface GameState {
   onboarded: boolean
   profile: PlayerProfile
   skills: SkillState[]
-  quest: Quest
+  quests: Quest[]
   streakDays: number
 
   toggleLocale: () => void
@@ -26,7 +26,7 @@ interface GameState {
   setWorld: (w: WorldId) => void
   cycleWorld: () => void
   completeOnboarding: (p: PlayerProfile) => void
-  completeQuest: () => void
+  completeQuest: (id: string) => void
 }
 
 export const useGame = create<GameState>()(
@@ -37,7 +37,7 @@ export const useGame = create<GameState>()(
       onboarded: false,
       profile: seedProfile,
       skills: seedSkills,
-      quest: seedQuest,
+      quests: seedQuests,
       streakDays: seedStreakDays,
 
       toggleLocale: () => set((s) => ({ locale: s.locale === 'en' ? 'fr' : 'en' })),
@@ -47,17 +47,24 @@ export const useGame = create<GameState>()(
 
       completeOnboarding: (profile) => set({ profile, world: profile.world, onboarded: true }),
 
-      completeQuest: () =>
+      completeQuest: (id) =>
         set((s) => {
-          if (s.quest.done) return s
+          const q = s.quests.find((x) => x.id === id)
+          if (!q || q.done) return s
           const skills = s.skills.map((k) => {
-            if (k.id !== s.quest.skill) return k
-            const xp = k.xp + s.quest.xp
+            if (k.id !== q.skill) return k
+            const xp = k.xp + q.xp
             return { ...k, xp, level: levelForXp(xp) }
           })
-          return { skills, quest: { ...s.quest, done: true, progress: s.quest.target ?? 1 } }
+          const quests = s.quests.map((x) => (x.id === id ? { ...x, done: true, progress: x.target ?? 1 } : x))
+          return { skills, quests }
         }),
     }),
     { name: 'ascendant.v2', version: 2 },
   ),
 )
+
+/** The day's headline quest — first unfinished daily, else the first quest. */
+export function primaryQuest(quests: Quest[]): Quest {
+  return quests.find((q) => q.kind === 'daily' && !q.done) ?? quests.find((q) => !q.done) ?? quests[0]
+}

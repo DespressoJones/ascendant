@@ -1,6 +1,6 @@
 import { motion } from 'motion/react'
 import { Familiar } from '@/components/Familiar'
-import { useGame } from '@/state/store'
+import { primaryQuest, useGame } from '@/state/store'
 import { overallLevel, tierStage } from '@/domain/xp'
 import { coach, L } from '@/lib/i18n'
 
@@ -8,7 +8,8 @@ import { coach, L } from '@/lib/i18n'
 export function FamiliarHero() {
   const locale = useGame((s) => s.locale)
   const skills = useGame((s) => s.skills)
-  const done = useGame((s) => s.quest.done)
+  const quests = useGame((s) => s.quests)
+  const done = primaryQuest(quests).done
 
   const stage = tierStage(overallLevel(skills))
   const line = done ? coach.questDone : coach.morning

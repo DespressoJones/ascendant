@@ -1,11 +1,12 @@
 import { SKILLS } from './skills'
+import { generateSlate } from './quests'
 import { xpForLevel, xpToReach } from './xp'
-import type { PlayerProfile, Quest, SkillState } from './types'
+import type { PlayerProfile, SkillState } from './types'
 
 /*
   The seed state for a returning player — their own local progression, not fabricated
-  social proof. There is NO fake leaderboard or invented other-user data anywhere; the
-  only numbers here are this player's. Real actions (completing the quest) mutate it.
+  social proof. There is NO fake leaderboard or invented other-user data anywhere.
+  Real actions (completing a quest) mutate it.
 */
 
 const SEED: Record<string, [level: number, ratioIntoLevel: number]> = {
@@ -25,18 +26,6 @@ export const seedSkills: SkillState[] = SKILLS.map((s) => {
   return { id: s.id, level, xp: xpToReach(level) + Math.round(ratio * xpForLevel(level)) }
 })
 
-export const seedQuest: Quest = {
-  id: 'q-focus-deep-hour',
-  skill: 'focus',
-  kind: 'daily',
-  title: { en: 'One deep hour. No second screen.', fr: 'Une heure pleine. Pas de deuxième écran.' },
-  detail: { en: 'scaled to your week', fr: 'ajustée à ta semaine' },
-  xp: 40,
-  progress: 0,
-  target: 1,
-  done: false,
-}
-
 export const seedProfile: PlayerProfile = {
   handle: 'you',
   goals: ['focus', 'strength'],
@@ -48,5 +37,7 @@ export const seedProfile: PlayerProfile = {
   world: 'ink',
   createdAt: '2026-06-18',
 }
+
+export const seedQuests = generateSlate(seedProfile, seedSkills)
 
 export const seedStreakDays = 4

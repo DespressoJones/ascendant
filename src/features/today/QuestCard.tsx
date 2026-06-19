@@ -1,5 +1,5 @@
 import { motion } from 'motion/react'
-import { useGame } from '@/state/store'
+import { primaryQuest, useGame } from '@/state/store'
 import { SKILL_BY_ID } from '@/domain/skills'
 import { L, ui } from '@/lib/i18n'
 import { Eyebrow } from '@/components/Eyebrow'
@@ -8,8 +8,9 @@ import { spring } from '@/motion/motion'
 /** The day's generated quest. Begin awards real XP and re-inks the named stroke. */
 export function QuestCard() {
   const locale = useGame((s) => s.locale)
-  const quest = useGame((s) => s.quest)
+  const quests = useGame((s) => s.quests)
   const completeQuest = useGame((s) => s.completeQuest)
+  const quest = primaryQuest(quests)
 
   const skill = SKILL_BY_ID[quest.skill]
   const meta = `+${quest.xp} XP · ${L(ui.reinks, locale)} ${L(skill.familiarPart, locale)} · ${L(quest.detail, locale)}`
@@ -25,7 +26,7 @@ export function QuestCard() {
         <motion.button
           whileTap={{ scale: 0.97 }}
           transition={spring.press}
-          onClick={completeQuest}
+          onClick={() => completeQuest(quest.id)}
           disabled={quest.done}
           className="inline-flex items-center rounded-full border border-[color:var(--w-hairline-strong)] px-4 py-[7px] text-[11px] uppercase tracking-[0.22em] disabled:opacity-100"
         >

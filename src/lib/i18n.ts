@@ -90,3 +90,48 @@ export const toneSample: Record<'gentle' | 'mid' | 'tough', Localized> = {
     fr: '« T’as vingt minutes pis aucune excuse qui vaut la peine. On y va. »',
   },
 }
+
+/* Navigation + section chrome. */
+export const nav = {
+  today: { en: 'Today', fr: "Aujourd'hui" },
+  quests: { en: 'Quests', fr: 'Quêtes' },
+  skills: { en: 'Skills', fr: 'Compétences' },
+  profile: { en: 'Profile', fr: 'Profil' },
+} satisfies Record<string, Localized>
+
+export const sections = {
+  questsTitle: { en: 'Your quests', fr: 'Tes quêtes' },
+  questsLede: { en: 'Generated for you — they scale as you do.', fr: 'Générées pour toi — elles montent avec toi.' },
+  daily: { en: 'Daily', fr: 'Du jour' },
+  challenge: { en: 'Challenge', fr: 'Défi' },
+  live: { en: 'Live', fr: 'En direct' },
+  complete: { en: 'Complete', fr: 'Terminer' },
+  skillsTitle: { en: 'Nine skills', fr: 'Neuf compétences' },
+  skillsLede: { en: 'Each leveled on its own. Train it in life; it rises here.', fr: "Chacune monte seule. Entraîne-la dans la vie; elle s'élève ici." },
+  brightens: { en: 'Brightens', fr: 'Illumine' },
+  intoLevel: { en: 'into this level', fr: 'dans ce niveau' },
+  standing: { en: 'Your standing', fr: 'Ton rang' },
+  totalXp: { en: 'Total XP', fr: 'XP total' },
+  streak: { en: 'Day streak', fr: 'Jours de suite' },
+  codex: { en: 'The familiar', fr: 'Le familier' },
+  evolution: { en: 'It evolves as you do.', fr: 'Il évolue avec toi.' },
+} satisfies Record<string, Localized>
+
+export const lb = {
+  title: { en: 'Leaderboard', fr: 'Classement' },
+  realOnly: { en: 'Real people only', fr: 'Des vraies personnes' },
+  body: {
+    en: 'Ascendant ranks only real, signed-in humans — no bots, no filler. The board opens when accounts go live; you’ll be among the first.',
+    fr: 'Ascendant ne classe que de vraies personnes connectées — aucun bot, aucun remplissage. Le classement ouvre avec les comptes; tu seras parmi les premiers.',
+  },
+  soon: { en: 'Accounts coming soon', fr: 'Comptes à venir' },
+  you: { en: 'You', fr: 'Toi' },
+} satisfies Record<string, Localized>
+
+export const stageLabels: Localized[] = [
+  { en: 'Spark', fr: 'Étincelle' },
+  { en: 'Form', fr: 'Forme' },
+  { en: 'Wing', fr: 'Aile' },
+  { en: 'Flight', fr: 'Envol' },
+  { en: 'Ascendant', fr: 'Ascendant' },
+]

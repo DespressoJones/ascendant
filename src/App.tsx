@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
 import { useGame } from '@/state/store'
-import { TodayScreen } from '@/features/today/TodayScreen'
+import { AppShell } from '@/components/AppShell'
 import { OnboardingFlow } from '@/features/onboarding/OnboardingFlow'
 import { duration, ease } from '@/motion/motion'
 
@@ -35,7 +35,7 @@ export default function App() {
             animate={{ opacity: 1 }}
             transition={{ duration: duration.cinematic, ease: ease.entrance }}
           >
-            <TodayScreen />
+            <AppShell />
           </motion.div>
         ) : (
           <motion.div key="onboarding" exit={{ opacity: 0 }} transition={{ duration: duration.slow }}>

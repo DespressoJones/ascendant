@@ -1,4 +1,4 @@
-import { useGame } from '@/state/store'
+import { primaryQuest, useGame } from '@/state/store'
 import { SKILLS } from '@/domain/skills'
 import { levelProgress } from '@/domain/xp'
 import { L, ui } from '@/lib/i18n'
@@ -9,7 +9,8 @@ import type { SkillState } from '@/domain/types'
 export function SkillLedger() {
   const locale = useGame((s) => s.locale)
   const skills = useGame((s) => s.skills)
-  const activeSkill = useGame((s) => s.quest.skill)
+  const quests = useGame((s) => s.quests)
+  const activeSkill = primaryQuest(quests).skill
 
   const byId = Object.fromEntries(skills.map((k) => [k.id, k])) as Record<string, SkillState>
 

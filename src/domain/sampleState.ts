@@ -37,6 +37,16 @@ export const seedQuest: Quest = {
   done: false,
 }
 
-export const seedProfile: PlayerProfile = { handle: 'you', tone: 0.5, createdAt: '2026-06-18' }
+export const seedProfile: PlayerProfile = {
+  handle: 'you',
+  goals: ['focus', 'strength'],
+  minutesPerDay: 30,
+  context: 'home',
+  equipment: 'basic',
+  constraints: [],
+  tone: 0.5,
+  world: 'ink',
+  createdAt: '2026-06-18',
+}
 
 export const seedStreakDays = 4

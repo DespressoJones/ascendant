@@ -51,10 +51,21 @@ export interface Quest {
   done: boolean
 }
 
+export type GoalId = 'strength' | 'leanness' | 'focus' | 'sleep' | 'calm' | 'energy'
+export type ContextId = 'home' | 'gym' | 'outdoors' | 'minimal'
+export type EquipmentId = 'none' | 'basic' | 'full'
+export type ConstraintId = 'knees' | 'back' | 'shoulders' | 'wrists'
+
 export interface PlayerProfile {
   handle: string
+  goals: GoalId[]
+  minutesPerDay: number
+  context: ContextId
+  equipment: EquipmentId
+  constraints: ConstraintId[]
   /** coaching tone, 0 = gentle … 1 = tough */
   tone: number
+  world: WorldId
   createdAt: string
 }
 

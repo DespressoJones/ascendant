@@ -6,8 +6,8 @@ import type { Locale, PlayerProfile, Quest, SkillState, WorldId } from '@/domain
 
 /*
   Local-first store. State persists to localStorage and would later sync when signed in.
-  completeQuest is a REAL mutation — it awards XP and can level the skill up, so the
-  familiar and ledger respond to action rather than showing static placeholder numbers.
+  `onboarded` gates the first-run flow vs the app. completeQuest is a REAL mutation —
+  it awards XP and can level the skill up, so the UI responds to action, not placeholders.
 */
 
 const WORLDS: WorldId[] = ['ink', 'bronze', 'atelier', 'paper']
@@ -15,14 +15,17 @@ const WORLDS: WorldId[] = ['ink', 'bronze', 'atelier', 'paper']
 interface GameState {
   locale: Locale
   world: WorldId
+  onboarded: boolean
   profile: PlayerProfile
   skills: SkillState[]
   quest: Quest
   streakDays: number
 
   toggleLocale: () => void
+  setLocale: (l: Locale) => void
   setWorld: (w: WorldId) => void
   cycleWorld: () => void
+  completeOnboarding: (p: PlayerProfile) => void
   completeQuest: () => void
 }
 
@@ -31,15 +34,18 @@ export const useGame = create<GameState>()(
     (set) => ({
       locale: 'en',
       world: 'ink',
+      onboarded: false,
       profile: seedProfile,
       skills: seedSkills,
       quest: seedQuest,
       streakDays: seedStreakDays,
 
       toggleLocale: () => set((s) => ({ locale: s.locale === 'en' ? 'fr' : 'en' })),
+      setLocale: (locale) => set({ locale }),
       setWorld: (world) => set({ world }),
-      cycleWorld: () =>
-        set((s) => ({ world: WORLDS[(WORLDS.indexOf(s.world) + 1) % WORLDS.length] })),
+      cycleWorld: () => set((s) => ({ world: WORLDS[(WORLDS.indexOf(s.world) + 1) % WORLDS.length] })),
+
+      completeOnboarding: (profile) => set({ profile, world: profile.world, onboarded: true }),
 
       completeQuest: () =>
         set((s) => {
@@ -49,12 +55,9 @@ export const useGame = create<GameState>()(
             const xp = k.xp + s.quest.xp
             return { ...k, xp, level: levelForXp(xp) }
           })
-          return {
-            skills,
-            quest: { ...s.quest, done: true, progress: s.quest.target ?? 1 },
-          }
+          return { skills, quest: { ...s.quest, done: true, progress: s.quest.target ?? 1 } }
         }),
     }),
-    { name: 'ascendant', version: 1 },
+    { name: 'ascendant.v2', version: 2 },
   ),
 )

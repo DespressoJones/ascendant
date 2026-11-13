@@ -11,9 +11,11 @@ import { initCursor, magnetic } from './core/interactions'
 import { brandMark, icon } from './core/icons'
 import { sections } from './sections/registry'
 import { sources } from './content/sources'
+import { mountAssistant } from './assistant/ui'
 
 let current: Lang = 'fr'
 const root = document.getElementById('app')!
+let assistant: ReturnType<typeof mountAssistant> | null = null
 
 /* ------------------------------------------------------------------ header */
 function header(c: Content) {
@@ -249,6 +251,7 @@ async function switchLang(next: Lang) {
   const target = anchorId ? document.getElementById(anchorId) : null
   if (target) window.scrollTo(0, target.getBoundingClientRect().top + window.scrollY - mid + offsetInSection)
   enhance(c, main)
+  assistant?.setLang(next)
   ScrollTrigger.refresh()
   if (!motion.reduced) {
     await gsap.to(curtain, { clipPath: 'inset(0 0 100% 0)', duration: 0.8, ease: 'power3.inOut', delay: 0.15 })
@@ -263,6 +266,7 @@ export function boot(lang: Lang) {
   initSmoothScroll()
   initCursor()
   enhance(c, main)
+  assistant = mountAssistant(() => current)
   if (location.hash.length > 1 && !/^#(fr|en)$/.test(location.hash)) {
     const t = document.querySelector<HTMLElement>(location.hash)
     if (t) setTimeout(() => scrollToTarget(t), 400)

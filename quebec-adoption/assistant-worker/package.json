@@ -1,0 +1,21 @@
+{
+  "name": "fil-rouge-assistant-worker",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Optional proxy that lets the self-hosted Le fil rouge site answer questions with Claude.",
+  "scripts": {
+    "guide": "cd .. && npx tsx scripts/build-kb.ts",
+    "dev": "npm run guide && wrangler dev",
+    "deploy": "npm run guide && wrangler deploy",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^1.8.0"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^5.20261113.1",
+    "typescript": "~6.0.2",
+    "wrangler": "^4.161.0"
+  }
+}

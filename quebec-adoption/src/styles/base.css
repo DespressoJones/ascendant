@@ -39,6 +39,9 @@ body {
   overflow-x: clip;
   min-height: 100%;
 }
+[hidden] {
+  display: none !important;
+}
 img,
 svg,
 canvas,

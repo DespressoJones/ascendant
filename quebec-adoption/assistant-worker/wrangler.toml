@@ -1,0 +1,11 @@
+name = "fil-rouge-assistant"
+main = "src/index.ts"
+compatibility_date = "2026-10-01"
+compatibility_flags = ["nodejs_compat"]
+
+[vars]
+# The exact origin of the published guide (CORS + origin check), e.g. "https://despressojones.github.io"
+ALLOWED_ORIGIN = ""
+# MODEL = "claude-opus-5-5"
+
+# Secret (never commit it):  npx wrangler secret put ANTHROPIC_API_KEY

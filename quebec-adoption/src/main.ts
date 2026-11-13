@@ -4,6 +4,7 @@ import './styles/base.css'
 import './styles/components.css'
 import './styles/layout.css'
 import './styles/sections/index.css'
+import './styles/assistant.css'
 import { boot } from './app'
 import { detectLang } from './core/i18n'
 

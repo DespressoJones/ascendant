@@ -9,35 +9,43 @@ import type { Chunk, KB } from './kb'
 
 const STOP = new Set(
   (
-    'a au aux avec ce ces cet cette dans de des du elle elles en est et etre eux il ils je la le les leur leurs lui ma mais me meme mes moi mon ne nos notre nous on ou par pas pour qu que qui sa se ses son sur ta te tes toi ton tu un une vos votre vous y ' +
-    'the a an and are as at be been but by can could do does for from had has have how i if in into is it its me my no not of on or our so that the their them then there these they this to was we were what when where which who why will with would you your am im ive dont '
+    'a au aux avec ce ces cet cette dans de des du elle elles en est et etre eux il ils je la le les leur leurs lui ma mais me meme mes moi mon ne nos notre nous on ou par pas pour qu que qui sa se ses son sur ta te tes toi ton tu un une vos votre vous y si ai as avons avez ont suis es sommes etes sont peux peut pouvez dois doit devez faut faire veut veux ca cela quoi comment quand aussi tres tout tous bien alors donc deja encore ici ' +
+    'the a an and are as at be been but by can could do does for from had has have how i if in into is it its me my no not of on or our so that the their them then there these they this to was we were what when where which who why will with would you your am im ive dont about also any get got just still should '
   ).split(/\s+/),
 )
 
 /** lay words → guide words (all normalised, space separated) */
 const LEXICON: [RegExp, string][] = [
   // origins first: "birth mother" is about origins, not about giving birth
-  [/\b(birth (mother|father|parents?|family)|biological (mother|father|parents?|family)|(mere|pere|parents?|famille) (biologique\w*|d origine)|find (my|her|his)|retrouv\w*|origin\w*|antecedent\w*|who (is|was) my|qui (est|etait) ma|was adopted|ete adopte\w*)\b/, 'origines origins antecedents retrouvailles reunion identite identity refus refusal'],
+  [/\b(find (my|her|his|out)|retrouv\w*|origin\w*|antecedent\w*|who (is|was) my|who my|qui (est|etait) m(a|on)|find me|me retrouv\w*|me cherch\w*|looking for me|was adopted|i m adopted|ete adopte\w*|suis adopte\w*|adoptee)\b/, 'origines origins antecedents retrouvailles reunion identite identity refus refusal'],
+  [/\b(placed (my|him|her|a) (\w+ )?for adoption|j ai confie|\d+ (years|ans) (ago|later|plus tard)|il y a \d+ ans)\b/, 'parent origine identite identity refus refusal contact retrouvailles'],
+  [/\b(birth (mother|father|parents?|family)|biological (mother|father|parents?|family)|(mere|pere|parents?|famille) (biologique\w*|d origine))\b/, 'parent origine filiation'],
   [/\b(bebe|baby|babies|newborn|nouveau ne|naissance|give birth|gave birth|giving birth|accoucher|accouche|accouchement|deliver\w*|hopital|hospital)\b/, 'naissance birth hopital hospital bebe baby consentement consent'],
   [/\b(enceinte|pregnan\w*|grossesse)\b/, 'grossesse pregnancy naissance birth hopital hospital'],
-  [/\b(give up|giving up|abandon\w*|donner mon|place my|placing|confier|garder mon|keep my|pas capable|can t cope|not able)\b/, 'consentement consent adoption confier place options'],
+  [/\b(give up|giving up|abandon\w*|donner mon|place my|placing|confier|garder mon|keep my|pas capable|can t cope|not able)\b/, 'consentement consent adoption confier place options envisage considering'],
   [/\b(grand ?m\w*|grand ?p\w*|grandparent\w*|grandmother|grandfather|grandma|grandpa|grandson|granddaughter|grandchild\w*|petit fils|petite fille|petits enfants|mamie|papi|tante|oncle|aunt|uncle|niece|nephew|neveu|cousin\w*|relative\w*|proche\w*|famille elargie|kin|kinship)\b/, 'famille family proche relative tutelle tutorship special grand parent kin proximite'],
   [/\b(chum|blonde|beau ?pere|belle ?mere|stepfather|stepmother|stepdad|stepmom|step ?parent|step ?(son|daughter|child)|conjoint\w*|spouse|partner|husband|wife|mari|femme|boyfriend|girlfriend)\b/, 'conjoint spouse special consent stepparent beau parent cohabitation'],
   [/\b(foster\w*|accueil)\b/, 'accueil foster famille family placement'],
   [/\b(dpj|dyp|youth protection|protection de la jeunesse|cps|social worker|intervenant\w*|travailleu\w*)\b/, 'dpj protection jeunesse youth signalement report'],
   [/\b(court|judge|juge|tribunal|hearing|audience)\b/, 'tribunal court juge judge'],
   [/\b(lawyer|avocat\w*|legal aid|aide juridique|attorney)\b/, 'avocat lawyer aide juridique legal aid'],
-  [/\b(cost\w*|cout\w*|coute|price|prix|money|argent|frais|fee\w*|tax\w*|impot\w*|credit\w*|cher|expensive)\b/, 'cout cost frais credit impot tax'],
+  [/\b(cost\w*|cout\w*|coute|price|prix|money|argent|frais|fee\w*|tax\w*|impot\w*|credit\w*|cher|expensive)\b/, 'cout cost frais credit impot tax aide financiere financial assistance'],
   [/\b(leave|conge\w*|work|travail|job|emploi|employer|rqap|qpip|benefit\w*|prestation\w*)\b/, 'conge leave rqap qpip prestations benefits travail work'],
   [/\b(abroad|international\w*|etranger|foreign|country|pays|china|chine|haiti|colombi\w*|vietnam|sasie|sai)\b/, 'international etranger abroad sasie moratoire'],
   [/\b(suicid\w*|mourir|die|dying|kill|tuer|danger\w*|hurt|blesse\w*|abus\w*|violen\w*|beat\w*|hit|hits|hitting|frapp\w*|battre|bat|emergency|urgence|unsafe|neglect\w*|neglig\w*)\b/, 'urgence emergency 911 danger signalement report aide help dpj'],
   [/\b(neighbou?r\w*|voisin\w*|report|signaler|signalement|worried about a child|inquiet)\b/, 'signalement report dpj signaler confidentiel'],
-  [/\b(change my mind|changer d avis|regret\w*|withdraw|retirer|retract\w*|annuler|cancel|take back|reprendre|ravoir|get (them|him|her|my \w+) back|return)\b/, 'retirer withdraw consentement consent 30 jours days restitution retour'],
-  [/\b(see my|voir mon|voir ma|voir mes|revoir|visit\w*|contact\w*|rencontr\w*|nouvelles|news|lettres?|letters?|photos?)\b/, 'contact contacts visites entente communication agreement'],
+  [/\b(change my mind|changer d avis|regret\w*|withdraw\w*|retirer (mon|le|ce) consentement|retract\w*|annuler|cancel|take back|reprendre)\b/, 'retirer withdraw consentement consent 30 jours days restitution'],
+  [/\b(ravoir|get (them|him|her|my \w+) back|returns? home|retour\w*|revenir|rentrer|come (back )?home)\b/, 'retour return restitution rendu returned'],
+  [/\b(a pris|ont pris|pris (mon|ma|mes)|retire (mon|ma|mes)|m a retire|enleve\w*|took (my|our)|taken|removed|apprehend\w*|placed (him|her|them|my \w+) (with|in))\b/, 'urgence urgent mesures measures 48 heures hours placement retirer contacts droits rights parents'],
+  [/\b(s en occupe (pas|plus)|ne s occupe|absent\w*|introuvable|disparu\w*|not involved|uninvolved|no contact|never (sees?|seen|visits?))\b/, 'admissibilite eligibility assument soin'],
+  [/\b(pere|father|dad|papa|other parent|autre parent|both parents|deux parents)\b/, 'filiation autre parent other conjoint spouse presume presumed'],
+  [/\b(see my|voir mon|voir ma|voir mes|revoi\w*|visit\w*|contact\w*|rencontr\w*)\b/, 'contact contacts visites'],
+  [/\b(nouvelles|news|lettres?|letters?|photos?)\b/, 'contact entente communication agreement'],
   [/\b(how long|combien de temps|delai\w*|deadline\w*|duree\w*|months?|mois|days?|jours?)\b/, 'delai deadline duree duration mois months jours days'],
-  [/\b(single|seul\w*|celibataire|gay|lesbian|same sex|meme sexe|lgbt\w*|married|marie\w*|age|old|vieux|years old|ans)\b/, 'conditions adopter adopt celibataire single couple age difference'],
+  [/\b(single|seule?|celibataire|gay|lesbian|same sex|meme sexe|lgbt\w*|married|marie\w*)\b/, 'conditions adopter adopt celibataire single couple'],
+  [/\b(age|old|older|vieux|vieille|[2-9]\d (ans|years))\b/, 'age limite limit conditions difference'],
   [/\b(kids?|child\w*|enfant\w*|fils|fille|son|daughter)\b/, 'enfant child'],
-  [/\b(teen\w*|ado\w*|minor|mineur\w*|14 ans|14 years|10 ans|10 years)\b/, 'mineur minor enfant child consentement consent 14 10'],
+  [/\b(teen\w*|ados?|adolescen\w*|minor|mineur\w*|14 ans|14 years|10 ans|10 years)\b/, 'mineur minor enfant child consentement consent 14 10'],
   [/\b(indigenous|autochtone\w*|first nation\w*|premieres nations|inuit|metis|coutum\w*|custom\w*)\b/, 'autochtone indigenous coutumiere customary'],
   [/\b(help|aide|call|appeler|phone|telephone|numero|number|talk|parler)\b/, 'aide help telephone phone 811'],
 ]
@@ -133,7 +141,7 @@ export function search(index: Index, query: string, limit = 20): Hit[] {
   return hits.slice(0, limit)
 }
 
-const CRISIS = /\b(suicid\w*|me tuer|veux mourir|envie de mourir|plus envie de vivre|want to die|wanna die|kill (myself|me)|end my life|en finir|danger immediat|immediate danger|in danger|en danger|frapp\w*|hits?|hitting|beat\w*|abus\w*|agress\w*|violen\w*|hurt(s|ing)? (me|my|him|her|them|his|the)|blesse\w*|maltrait\w*)\b/
+const CRISIS = /\b(suicid\w*|me tuer|veux mourir|envie de mourir|plus envie de vivre|want to die|wanna die|kill (myself|me)|end my life|en finir|danger immediat|immediate danger|in danger|en danger|frapp\w*|hits?|hitting|beat\w*|abus\w*|agress\w*|violen\w*|hurt(s|ing)? (me|my|him|her|them|his|the)|blesse\w*|maltrait\w*|hurt(ing)? myself|self ?harm|me faire du mal|me blesser|idees noires|don t want to live|no reason to live|better off (dead|without me)|mieux sans moi|n etais plus la)\b/
 
 /** true when the message suggests someone may be in danger right now */
 export const isCrisis = (s: string) => CRISIS.test(` ${norm(s)} `)

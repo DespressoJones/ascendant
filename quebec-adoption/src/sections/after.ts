@@ -345,7 +345,10 @@ function certificate(c: Content) {
 
   // the same information, for screen readers
   const table = h(
-    'table.sr-only',
+    'div.sr-only',
+    null,
+    h(
+    'table',
     null,
     h('caption', null, `${cert.docTitle} : ${ui.caption}`),
     h(
@@ -360,6 +363,7 @@ function certificate(c: Content) {
         h('tr', null, h('th', { scope: 'row' }, f.label), h('td', null, f.before.trim() || ui.empty), h('td', null, f.after.trim() || ui.empty)),
       ),
     ),
+  ),
   )
 
   const figure = h(

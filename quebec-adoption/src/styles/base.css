@@ -8,6 +8,7 @@
   margin: 0;
 }
 html {
+  overflow-x: clip;
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
   scroll-padding-top: calc(var(--header-h) + env(safe-area-inset-top, 0px) + 12px);

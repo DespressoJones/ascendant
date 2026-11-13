@@ -1,1 +1,681 @@
-/* rights section */
+/* ==================================================================
+   RIGHTS: "Your rights, whoever you are"
+   group switcher (Flip pill) + a calm ice slab where each right is
+   vouched for by a shield, sewn together by a running stitch.
+   ================================================================== */
+.rights {
+  --rights-pad: clamp(1.25rem, 0.55rem + 3.2vw, 3.75rem);
+  --rights-radius: var(--radius-l);
+}
+.rights [hidden] {
+  display: none !important;
+}
+
+/* ------------------------------------------------------------------ switcher */
+.rights-picker {
+  display: grid;
+  gap: var(--space-xs);
+  margin-bottom: calc(var(--space-m) - 14px);
+}
+.rights-picker-label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-s);
+  font-family: var(--font-display);
+  font-size: var(--step-1);
+  font-weight: 720;
+  font-stretch: 84%;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+.rights-picker-label::after {
+  content: '';
+  flex: 1;
+  min-width: 2rem;
+  height: 1px;
+  background: var(--line-strong);
+}
+
+/* the row scrolls sideways when the pills do not fit (always on phones); edges fade while it does */
+.rights-scroller {
+  --fade-l: 0px;
+  --fade-r: 0px;
+  margin-inline: -16px;
+  padding: 6px 16px 20px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, var(--birch) var(--fade-l), var(--birch) calc(100% - var(--fade-r)), transparent 100%);
+  mask-image: linear-gradient(90deg, transparent 0, var(--birch) var(--fade-l), var(--birch) calc(100% - var(--fade-r)), transparent 100%);
+}
+.rights-scroller::-webkit-scrollbar {
+  display: none;
+}
+.rights-scroller[data-start='false'] {
+  --fade-l: 36px;
+}
+.rights-scroller[data-end='false'] {
+  --fade-r: 36px;
+}
+@media (min-width: 720px) {
+  .rights-scroller {
+    margin-inline: -32px;
+    padding-inline: 32px;
+  }
+}
+
+.rights-tabs {
+  display: flex;
+  width: max-content;
+  gap: 4px;
+  padding: 5px;
+  border-radius: 999px;
+  background: var(--birch-2);
+  box-shadow: inset 0 0 0 1px var(--line);
+}
+.rights-tab {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  min-height: 50px;
+  padding: 0.45rem 0.8rem 0.45rem 0.5rem;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: var(--step--1);
+  line-height: 1.2;
+  white-space: nowrap;
+  color: var(--spruce-ink-2);
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    color var(--dur-2) linear 140ms,
+    background-color var(--dur-2) linear,
+    scale var(--dur-2) var(--ease-out);
+}
+.rights-tab > :not(.rights-ind) {
+  position: relative;
+  z-index: 1;
+}
+.rights-tab.is-target {
+  z-index: 2;
+}
+.rights-tab:active {
+  scale: 0.965;
+}
+.rights-tab:focus-visible {
+  border-radius: 999px;
+  outline-offset: 2px;
+}
+.rights-tab[aria-selected='true'] {
+  color: var(--birch);
+}
+@media (hover: hover) and (pointer: fine) {
+  .rights-tab:not([aria-selected='true']):hover {
+    color: var(--spruce-ink);
+    background: var(--spruce-soft);
+  }
+  .rights-tab:hover .rights-tab-icon .icon > * {
+    animation: rights-draw 0.9s var(--ease-out) both;
+  }
+}
+/* the indicator that glides between pills (Flip) */
+.rights-ind {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+  background: var(--spruce-ink);
+  box-shadow: 0 10px 18px -12px var(--spruce-ink);
+  pointer-events: none;
+}
+.rights-tab-icon {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--card);
+  color: var(--atoca-text);
+  box-shadow: inset 0 0 0 1px var(--line);
+  transition:
+    background-color var(--dur-2) linear 120ms,
+    box-shadow var(--dur-2) linear 120ms;
+}
+.rights-tab-icon .icon {
+  width: 20px;
+  height: 20px;
+  stroke-width: 1.7;
+}
+.rights-tab-icon .icon > * {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+}
+.rights-tab[aria-selected='true'] .rights-tab-icon {
+  background: color-mix(in srgb, var(--birch) 10%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--birch) 22%, transparent);
+  color: var(--atoca);
+}
+.rights-tab.is-drawn .rights-tab-icon .icon > * {
+  animation: rights-draw-sel 1s var(--ease-out) both;
+}
+.rights-tab-count {
+  display: inline-grid;
+  place-items: center;
+  min-width: 1.7em;
+  height: 1.7em;
+  padding-inline: 0.35em;
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: var(--step--2);
+  font-weight: 600;
+  background: var(--spruce-soft);
+  color: var(--spruce-ink-3);
+  transition:
+    background-color var(--dur-2) linear 140ms,
+    color var(--dur-2) linear 140ms;
+}
+.rights-tab[aria-selected='true'] .rights-tab-count {
+  background: var(--atoca);
+  color: var(--on-atoca);
+}
+@keyframes rights-draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes rights-draw-sel {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* ------------------------------------------------------------------ the slab */
+.rights-stage {
+  position: relative;
+  isolation: isolate;
+  overflow: clip;
+  padding: var(--rights-pad);
+  border-radius: var(--rights-radius);
+  background: var(--ice);
+  color: var(--spruce-ink);
+  box-shadow:
+    inset 0 0 0 1px var(--line),
+    var(--shadow);
+}
+
+/* the oversized outline word behind the list (wide screens; decorative, aria-hidden) */
+.rights-ghost {
+  display: none;
+}
+@media (min-width: 960px) {
+  /* anchored bottom-left: it fills the quiet column under the sticky meta and runs on behind the list */
+  .rights-ghost {
+    position: absolute;
+    z-index: -1;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    justify-content: flex-start;
+    padding: 0 var(--rights-pad) calc(var(--rights-pad) * 0.55) calc(var(--rights-pad) * 0.6);
+    pointer-events: none;
+    user-select: none;
+  }
+  .rights-ghost-word {
+    display: block;
+    max-width: 100%;
+    font-family: var(--font-display);
+    font-size: clamp(9rem, 0.5rem + 15vw, 21rem);
+    font-weight: 800;
+    font-stretch: 75%;
+    line-height: 0.8;
+    letter-spacing: -0.05em;
+    text-align: left;
+    text-wrap: balance;
+    overflow-wrap: anywhere;
+    color: transparent;
+    -webkit-text-stroke: 1.5px color-mix(in srgb, var(--line-strong) 62%, transparent);
+  }
+}
+
+.rights-panel {
+  position: relative;
+  display: grid;
+  gap: var(--space-m);
+}
+.rights-side {
+  display: contents;
+}
+.rights-meta {
+  display: grid;
+  gap: 0.55rem;
+  align-content: start;
+}
+.rights-meta-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-s);
+  margin-bottom: 0.35rem;
+}
+.rights-meta-icon {
+  display: grid;
+  place-items: center;
+  width: clamp(52px, 44px + 1.6vw, 68px);
+  height: clamp(52px, 44px + 1.6vw, 68px);
+  border-radius: 50%;
+  background: var(--card);
+  color: var(--atoca-text);
+  box-shadow: inset 0 0 0 1px var(--line);
+}
+.rights-meta-icon .icon {
+  width: 46%;
+  height: 46%;
+  stroke-width: 1.5;
+}
+.rights-meta-icon .icon > * {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+}
+.rights-meta-index {
+  font-family: var(--font-mono);
+  font-size: var(--step--2);
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  color: var(--ice-ink);
+}
+.rights-who {
+  font-size: var(--step-3);
+  font-weight: 760;
+  font-stretch: 80%;
+  line-height: 0.95;
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+}
+.rights-count {
+  display: flex;
+  align-items: baseline;
+  gap: 0.45em;
+  font-family: var(--font-mono);
+  font-size: var(--step--1);
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ice-ink);
+}
+.rights-count b {
+  font-weight: 700;
+  color: var(--atoca-text);
+}
+
+/* actions: copy the list, go to the next group */
+.rights-actions {
+  display: grid;
+  gap: 0.6rem;
+  align-content: start;
+}
+.rights-copy {
+  justify-self: start;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  min-height: 44px;
+  padding: 0.4rem 1rem 0.4rem 0.8rem;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: var(--step--1);
+  color: var(--spruce-ink);
+  box-shadow: inset 0 0 0 1.5px var(--line-strong);
+  transition:
+    box-shadow var(--dur-2) linear,
+    color var(--dur-2) linear,
+    background-color var(--dur-2) linear,
+    scale var(--dur-2) var(--ease-out);
+}
+.rights-copy:active {
+  scale: 0.97;
+}
+.rights-copy:focus-visible {
+  border-radius: 999px;
+}
+.rights-copy-icon {
+  position: relative;
+  width: 1.25em;
+  height: 1.25em;
+}
+.rights-copy-icon .icon {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  transition:
+    opacity var(--dur-2) linear,
+    scale var(--dur-3) var(--ease-spring);
+}
+.rights-copy-icon .icon:last-child {
+  opacity: 0;
+  scale: 0.4;
+  stroke: var(--atoca-text);
+  stroke-width: 2.2;
+}
+.rights-copy.is-done {
+  box-shadow: inset 0 0 0 1.5px var(--atoca);
+  background: var(--atoca-soft);
+}
+.rights-copy.is-done .rights-copy-icon .icon:first-child {
+  opacity: 0;
+  scale: 0.4;
+}
+.rights-copy.is-done .rights-copy-icon .icon:last-child {
+  opacity: 1;
+  scale: 1;
+}
+@media (hover: hover) and (pointer: fine) {
+  .rights-copy:hover {
+    box-shadow: inset 0 0 0 1.5px var(--atoca);
+    color: var(--atoca-text);
+  }
+}
+
+.rights-next {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  column-gap: var(--space-s);
+  width: 100%;
+  min-height: 64px;
+  padding: 0.8rem 0.9rem 0.85rem 1.1rem;
+  border-radius: var(--radius-m);
+  text-align: left;
+  background: var(--card);
+  color: var(--spruce-ink);
+  box-shadow:
+    inset 0 0 0 1px var(--line),
+    0 14px 30px -24px var(--spruce-ink);
+  transition:
+    background-color var(--dur-2) linear,
+    color var(--dur-2) linear,
+    scale var(--dur-2) var(--ease-out);
+  -webkit-tap-highlight-color: transparent;
+}
+.rights-next:active {
+  scale: 0.985;
+}
+.rights-next:focus-visible {
+  border-radius: var(--radius-m);
+  outline-offset: 3px;
+}
+.rights-next-kicker {
+  grid-column: 1;
+  font-family: var(--font-mono);
+  font-size: var(--step--2);
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--spruce-ink-3);
+  transition: color var(--dur-2) linear;
+}
+.rights-next-who {
+  grid-column: 1;
+  font-family: var(--font-display);
+  font-size: var(--step-1);
+  font-weight: 720;
+  font-stretch: 84%;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  text-wrap: balance;
+}
+.rights-next-arrow {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--spruce-ink);
+  color: var(--birch);
+  transition:
+    background-color var(--dur-2) linear,
+    color var(--dur-2) linear;
+}
+.rights-next-arrow .icon {
+  width: 20px;
+  height: 20px;
+  stroke-width: 2;
+  transition: translate var(--dur-3) var(--ease-out);
+}
+@media (hover: hover) and (pointer: fine) {
+  .rights-next:hover {
+    background: var(--spruce-ink);
+    color: var(--birch);
+  }
+  .rights-next:hover .rights-next-kicker {
+    color: color-mix(in srgb, var(--birch) 70%, transparent);
+  }
+  .rights-next:hover .rights-next-arrow {
+    background: var(--atoca);
+    color: var(--on-atoca);
+  }
+  .rights-next:hover .rights-next-arrow .icon {
+    translate: 3px 0;
+  }
+}
+
+/* ------------------------------------------------------------------ the list */
+.rights-list {
+  position: relative;
+  z-index: 1;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.rights-item {
+  /* --mark: shield size; --pad: vertical rhythm; --pt: this item's top padding (the seam needs both) */
+  --mark: 1.05em;
+  --pad: 0.62em;
+  --pt: var(--pad);
+  --mark-top: 0.07em;
+  position: relative;
+  display: grid;
+  grid-template-columns: var(--mark) minmax(0, 1fr);
+  column-gap: 0.62em;
+  padding-block: var(--pt) var(--pad);
+  font-size: 1.32rem;
+  border-top: 1px solid var(--line);
+}
+.rights-item:first-child {
+  --pt: 0.1em;
+  border-top: 0;
+}
+.rights-item:last-child {
+  padding-bottom: 0.1em;
+}
+@media (min-width: 720px) {
+  .rights-item {
+    font-size: var(--step-2);
+  }
+}
+
+/* the mark stays static so its seam is positioned against the whole item */
+.rights-mark {
+  width: var(--mark);
+  height: var(--mark);
+  margin-top: var(--mark-top);
+}
+.rights-shield {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.rights-shield-body {
+  fill: var(--ice);
+  stroke: var(--spruce-ink-2);
+  stroke-width: 1.35;
+  stroke-linejoin: round;
+  transition:
+    fill var(--dur-2) linear,
+    stroke var(--dur-2) linear;
+}
+.rights-shield-check {
+  fill: none;
+  stroke: var(--atoca);
+  stroke-width: 2.1;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+  transition: stroke var(--dur-2) linear;
+}
+/*
+  The running stitch: the red thread sewn from this shield down to the next one.
+  It starts at this shield's centre (pt + mark-top + mark/2 from the top) and spans the rest of this
+  item, the next item's 1px border and its top padding: 100% + 1px + pad - pt.
+*/
+.rights-seam {
+  position: absolute;
+  z-index: 0;
+  top: calc(var(--pt) + var(--mark-top) + var(--mark) / 2);
+  left: calc(var(--mark) / 2 - 1px);
+  width: 2px;
+  height: calc(100% + 1px + var(--pad) - var(--pt));
+  border-radius: 2px;
+  background: repeating-linear-gradient(to bottom, var(--atoca) 0 7px, transparent 7px 13px);
+  pointer-events: none;
+}
+.rights-item:last-child .rights-seam {
+  display: none;
+}
+
+.rights-body {
+  min-width: 0;
+}
+.rights-text {
+  max-width: 33ch;
+  font-family: var(--font-display);
+  font-weight: 560;
+  font-stretch: 88%;
+  line-height: 1.16;
+  letter-spacing: -0.016em;
+  color: var(--spruce-ink);
+  text-wrap: pretty;
+  /* a halo in the slab colour: the outline word behind never touches a letter */
+  text-shadow:
+    0 0 2px var(--ice),
+    0 0 6px var(--ice),
+    0 0 12px var(--ice);
+}
+.rights-text strong {
+  font-weight: 760;
+  text-shadow: none;
+  background: linear-gradient(transparent 64%, var(--atoca-soft) 0);
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+.rights-body .refs {
+  margin-top: 0.7rem;
+}
+.rights-body .ref {
+  background: color-mix(in srgb, var(--card) 70%, transparent);
+}
+@media (hover: hover) and (pointer: fine) {
+  .rights-item:hover .rights-shield-body {
+    fill: var(--atoca);
+    stroke: var(--atoca);
+  }
+  .rights-item:hover .rights-shield-check {
+    stroke: var(--on-atoca);
+  }
+}
+
+/* ------------------------------------------------------------------ foot (legend + thread knot) */
+.rights-foot {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  min-height: 1.5rem;
+  margin-top: var(--space-s);
+  font-size: var(--step--1);
+  color: var(--spruce-ink-3);
+}
+.rights-tie {
+  height: 2.75rem;
+}
+.rights-foot-chip {
+  padding-inline: 0.45em;
+}
+.rights-foot-chip::before {
+  margin: 0;
+}
+
+/* ------------------------------------------------------------------ wide screens */
+@media (min-width: 960px) {
+  .rights-panel {
+    grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+    column-gap: var(--space-xl);
+  }
+  .rights-side {
+    display: grid;
+    gap: var(--space-l);
+    align-content: start;
+    align-self: start;
+    position: sticky;
+    top: calc(var(--header-h) + env(safe-area-inset-top, 0px) + 28px);
+  }
+  .rights-list {
+    padding-top: 0.2rem;
+  }
+}
+
+/* ------------------------------------------------------------------ narrow: actions after the list */
+@media (max-width: 959px) {
+  .rights-meta {
+    grid-template-columns: auto minmax(0, 1fr);
+    column-gap: var(--space-s);
+    align-items: center;
+  }
+  .rights-meta-top {
+    display: contents;
+  }
+  .rights-meta-icon {
+    grid-row: 1 / span 2;
+  }
+  .rights-meta-index {
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
+  .rights-who {
+    align-self: end;
+    padding-right: 4.5rem;
+  }
+  .rights-count {
+    grid-column: 2;
+    align-self: start;
+  }
+  .rights-panel .rights-meta {
+    padding-bottom: var(--space-s);
+    border-bottom: 1px solid var(--line-strong);
+  }
+  .rights-actions {
+    order: 3;
+    padding-top: var(--space-s);
+    border-top: 1px solid var(--line-strong);
+  }
+  .rights-list {
+    order: 2;
+  }
+}
+
+/* ------------------------------------------------------------------ reduced motion */

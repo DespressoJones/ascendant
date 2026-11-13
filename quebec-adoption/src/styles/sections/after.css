@@ -403,7 +403,7 @@
 .after-seal {
   position: absolute;
   z-index: 5;
-  right: -12px;
+  right: max(-12px, calc(-1 * env(safe-area-inset-right, 0px)));
   bottom: -26px;
   width: 78px;
   aspect-ratio: 1;

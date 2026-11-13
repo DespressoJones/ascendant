@@ -1,1 +1,761 @@
-/* actors section */
+/* ================================================================== actors: the constellation */
+
+/* ---------------------------------------------------------------- hint (in the section head) */
+.actors-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  justify-self: start;
+  margin-top: var(--space-2xs);
+  font-family: var(--font-mono);
+  font-size: var(--step--1);
+  letter-spacing: 0.04em;
+  color: var(--spruce-ink-2);
+}
+.actors-tap {
+  position: relative;
+  flex: none;
+  width: 22px;
+  height: 22px;
+  display: grid;
+  place-items: center;
+}
+.actors-tap::before,
+.actors-tap::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+}
+.actors-tap::before {
+  width: 8px;
+  height: 8px;
+  background: var(--atoca);
+}
+.actors-tap::after {
+  inset: 0;
+  box-shadow: inset 0 0 0 1.5px var(--atoca);
+  opacity: 0;
+  animation: actors-tap 2.4s var(--ease-out) infinite;
+}
+@keyframes actors-tap {
+  0% {
+    transform: scale(0.3);
+    opacity: 0.9;
+  }
+  70%,
+  100% {
+    transform: scale(1.15);
+    opacity: 0;
+  }
+}
+.actors-hint-fine {
+  display: none;
+}
+@media (hover: hover) and (pointer: fine) and (min-width: 900px) {
+  .actors-hint-fine {
+    display: inline;
+  }
+  .actors-hint-touch {
+    display: none;
+  }
+}
+
+/* ---------------------------------------------------------------- which layout */
+.actors-desk {
+  display: none;
+}
+@media (min-width: 900px) {
+  .actors-desk {
+    display: flex;
+    gap: clamp(1.5rem, 0.4rem + 2.4vw, 3rem);
+    align-items: stretch;
+  }
+  .actors-list {
+    display: none;
+  }
+}
+
+/* ================================================================== the stage (sky) */
+.actors-stage {
+  /* when the card is taller (narrow desktops), the sky waits beside it while you read */
+  position: sticky;
+  top: calc(var(--header-h) + env(safe-area-inset-top, 0px) + 20px);
+  align-self: flex-start;
+  flex: none;
+  /* ~62% of the row, but the whole sky always fits on screen (short laptop screens); the card takes the rest */
+  width: min(61%, calc((100svh - var(--header-h) - 56px) * 1000 / 920));
+  aspect-ratio: 1000 / 920;
+  border-radius: var(--radius-l);
+  background:
+    radial-gradient(circle closest-side at 50% 50%, var(--atoca-soft), transparent 30%),
+    radial-gradient(ellipse 54% 58% at 50% 50%, color-mix(in srgb, var(--ice) 92%, transparent), transparent 100%),
+    var(--birch-2);
+  box-shadow: inset 0 0 0 1px var(--line);
+  isolation: isolate;
+}
+.actors-sky {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  overflow: hidden;
+  pointer-events: none;
+}
+.actors-sky svg {
+  width: 100%;
+  height: 100%;
+}
+.actors-ring {
+  fill: none;
+  stroke: var(--line-strong);
+  stroke-width: 1.3;
+}
+.actors-ring-0 {
+  stroke-dasharray: 2 8;
+  stroke-linecap: round;
+}
+.actors-ring-1 {
+  stroke: var(--line);
+}
+.actors-ring-2 {
+  stroke: var(--line);
+  stroke-dasharray: 1 10;
+  stroke-linecap: round;
+}
+.actors-ring-3 {
+  stroke: var(--line);
+}
+.actors-star {
+  fill: var(--spruce-ink-3);
+  opacity: 0.32;
+}
+.actors-star.is-twinkle {
+  animation: actors-twinkle 4.6s ease-in-out infinite;
+  animation-delay: var(--d, 0s);
+}
+@keyframes actors-twinkle {
+  0%,
+  100% {
+    opacity: 0.12;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+.actors-field {
+  position: absolute;
+  inset: 0;
+}
+
+/* ---------------------------------------------------------------- threads */
+.actors-threads {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  overflow: visible;
+  pointer-events: none;
+}
+.actors-thread {
+  fill: none;
+  stroke: var(--atoca);
+  stroke-width: 1.9;
+  stroke-linecap: round;
+  stroke-dasharray: 1 1;
+  opacity: 0.55;
+  transition:
+    stroke-width var(--dur-3) var(--ease-out),
+    opacity 450ms linear;
+}
+.actors-thread.is-hover {
+  stroke-width: 3;
+  opacity: 0.95;
+}
+.actors-thread.is-active {
+  stroke-width: 4.4;
+  opacity: 1;
+}
+.actors-stage.is-engaged .actors-thread:not(.is-active, .is-hover) {
+  opacity: 0.17;
+}
+/* a bead of light sent from the child to the selected actor */
+.actors-pulse {
+  fill: none;
+  stroke: var(--atoca);
+  stroke-width: 10;
+  stroke-linecap: round;
+  stroke-dasharray: 0.03 1.2;
+  stroke-dashoffset: 0.03;
+  opacity: 0;
+}
+.actors-stage.is-drawn .actors-pulse {
+  opacity: 0.85;
+  animation: actors-pulse 2.6s var(--ease-in-out) infinite;
+}
+@keyframes actors-pulse {
+  0% {
+    stroke-dashoffset: 0.03;
+  }
+  78%,
+  100% {
+    stroke-dashoffset: -1;
+  }
+}
+
+/* ---------------------------------------------------------------- the child */
+.actors-core {
+  --size: clamp(98px, 4.5rem + 3.4vw, 134px);
+  position: absolute;
+  z-index: 2;
+  left: calc(50% - var(--size) / 2);
+  top: calc(50% - var(--size) / 2);
+  width: var(--size);
+  height: var(--size);
+  pointer-events: none;
+}
+.actors-halo,
+.actors-ripple {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+}
+.actors-halo {
+  inset: -16px;
+  background: var(--atoca-soft);
+  animation: actors-breathe 5.2s var(--ease-in-out) infinite;
+}
+@keyframes actors-breathe {
+  0%,
+  100% {
+    transform: scale(0.92);
+    opacity: 0.55;
+  }
+  50% {
+    transform: scale(1.06);
+    opacity: 1;
+  }
+}
+.actors-ripple {
+  box-shadow: inset 0 0 0 1.5px var(--atoca);
+  opacity: 0;
+}
+.actors-child {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 0.2rem;
+  padding: 0.6rem;
+  border-radius: 50%;
+  background: var(--card);
+  box-shadow:
+    inset 0 0 0 1.5px var(--atoca),
+    var(--shadow);
+  text-align: center;
+}
+.actors-child-knot {
+  width: 30px;
+  height: 30px;
+  color: var(--atoca);
+  stroke-width: 1.7;
+}
+.actors-child-label {
+  font-family: var(--font-display);
+  font-size: clamp(1rem, 0.7rem + 0.62vw, 1.36rem);
+  font-weight: 740;
+  font-stretch: 84%;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--spruce-ink);
+}
+
+/* ---------------------------------------------------------------- stars (the actors) */
+.actors-nodes {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+}
+.actors-node {
+  position: absolute;
+  width: 0;
+  height: 0;
+  transition: opacity var(--dur-3) var(--ease-out);
+}
+.actors-stage.is-engaged .actors-node:not(.is-active, :hover, :focus-within) {
+  opacity: 0.4;
+}
+.actors-node-btn {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  width: max-content;
+  min-height: 44px;
+  pointer-events: auto;
+  color: var(--spruce-ink-2);
+  border-radius: 999px;
+  transition: color var(--dur-2) linear;
+}
+.actors-node-btn:focus-visible {
+  outline-offset: 0;
+  border-radius: 12px;
+}
+.actors-node[data-side='right'] .actors-node-btn {
+  left: -22px;
+  top: -22px;
+  text-align: left;
+}
+.actors-node[data-side='left'] .actors-node-btn {
+  right: -22px;
+  top: -22px;
+  flex-direction: row-reverse;
+  text-align: right;
+}
+.actors-node[data-side='top'] .actors-node-btn,
+.actors-node[data-side='bottom'] .actors-node-btn {
+  left: 0;
+  flex-direction: column;
+  text-align: center;
+  transform: translateX(-50%);
+}
+.actors-node[data-side='top'] .actors-node-btn {
+  bottom: -22px;
+  flex-direction: column-reverse;
+}
+.actors-node[data-side='bottom'] .actors-node-btn {
+  top: -22px;
+}
+
+.actors-bead {
+  position: relative;
+  flex: none;
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+}
+.actors-bead::before,
+.actors-bead::after {
+  content: '';
+  grid-area: 1 / 1;
+  border-radius: 50%;
+}
+.actors-bead::before {
+  position: relative;
+  z-index: 1;
+  width: 14px;
+  height: 14px;
+  background: var(--card);
+  box-shadow: inset 0 0 0 2px var(--atoca);
+  transition:
+    transform var(--dur-3) var(--ease-spring),
+    background-color var(--dur-2) linear;
+}
+.actors-bead::after {
+  width: 30px;
+  height: 30px;
+  background: var(--atoca-soft);
+  transform: scale(0);
+  transition: transform var(--dur-3) var(--ease-out);
+}
+.actors-node-btn:hover .actors-bead::before {
+  transform: scale(1.3);
+}
+.actors-node-btn:hover .actors-bead::after {
+  transform: scale(0.85);
+}
+.actors-node.is-active .actors-bead::before {
+  background: var(--atoca);
+  transform: scale(1.3);
+}
+.actors-node.is-active .actors-bead::after {
+  transform: scale(1);
+}
+/* the pulse arrives: the selected star answers */
+.actors-stage.is-drawn .actors-node.is-active .actors-bead::after {
+  animation: actors-receive 2.6s var(--ease-out) infinite;
+}
+@keyframes actors-receive {
+  0%,
+  62% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  74% {
+    transform: scale(1.5);
+    opacity: 0.9;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.actors-label {
+  display: block;
+  /* ~11 characters a line (mono + tracking); a longer single word is never split */
+  max-width: calc(12ch + 0.6rem);
+  padding: 0.2rem 0.3rem;
+  font-family: var(--font-mono);
+  font-size: clamp(0.68rem, 0.52rem + 0.26vw, 0.8rem);
+  font-weight: 600;
+  line-height: 1.18;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-wrap: balance;
+}
+.actors-node-btn:hover .actors-label {
+  color: var(--spruce-ink);
+}
+.actors-node.is-active .actors-label {
+  color: var(--atoca-text);
+  font-weight: 700;
+}
+
+/* ================================================================== the card (tabpanels) */
+.actors-detail {
+  display: flex;
+  flex: 1 1 300px;
+  flex-direction: column;
+  min-width: 0;
+  padding: clamp(1.25rem, 0.7rem + 1.2vw, 2.1rem);
+  border-radius: var(--radius-l);
+  background: var(--card);
+  box-shadow:
+    inset 0 0 0 1px var(--line),
+    var(--shadow);
+}
+.actors-detail-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-s);
+  padding-bottom: var(--space-s);
+  margin-bottom: var(--space-m);
+  border-bottom: 1px solid var(--line);
+}
+.actors-index {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.35rem;
+  font-family: var(--font-mono);
+  font-size: var(--step--1);
+  font-variant-numeric: tabular-nums;
+  color: var(--spruce-ink-3);
+}
+.actors-index-mask {
+  display: inline-block;
+  overflow: hidden;
+  padding-block: 0.1em;
+  margin-block: -0.1em;
+}
+.actors-index-cur {
+  display: inline-block;
+  font-weight: 700;
+  color: var(--atoca-text);
+}
+.actors-nav {
+  display: flex;
+  gap: 0.4rem;
+}
+.actors-step {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  color: var(--spruce-ink-2);
+  box-shadow: inset 0 0 0 1.5px var(--line-strong);
+  transition:
+    box-shadow var(--dur-2) linear,
+    color var(--dur-2) linear,
+    transform var(--dur-3) var(--ease-spring);
+}
+.actors-step:hover {
+  color: var(--atoca-text);
+  box-shadow: inset 0 0 0 1.5px var(--atoca);
+}
+.actors-step:active {
+  transform: scale(0.92);
+}
+.actors-step:focus-visible {
+  border-radius: 50%;
+}
+.actors-step .icon {
+  width: 1.15rem;
+  height: 1.15rem;
+}
+.actors-flip {
+  transform: scaleX(-1);
+}
+
+.actors-panels {
+  display: grid;
+  flex: 1 1 auto;
+}
+.actors-panel {
+  grid-area: 1 / 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-m);
+  min-width: 0;
+}
+.actors-panel:not(.is-active, .is-leaving) {
+  visibility: hidden;
+}
+.actors-panel.is-leaving {
+  pointer-events: none;
+}
+.actors-panel:focus-visible {
+  outline-offset: 8px;
+}
+
+.actors-title {
+  display: grid;
+  gap: 0.55rem;
+}
+.actors-big {
+  display: block;
+  font-family: var(--font-display);
+  font-size: clamp(2.7rem, 1.3rem + 3.1vw, 4.7rem);
+  font-weight: 760;
+  font-stretch: 76%;
+  line-height: 0.88;
+  letter-spacing: -0.035em;
+  color: var(--atoca-text);
+  overflow-wrap: anywhere;
+}
+.actors-big[data-len='l'] {
+  font-size: clamp(2.2rem, 1.1rem + 2.4vw, 3.6rem);
+}
+.actors-big[data-len='m'] {
+  font-size: clamp(1.8rem, 1rem + 1.7vw, 2.7rem);
+}
+.actors-name {
+  display: block;
+  font-family: var(--font-display);
+  font-size: var(--step-1);
+  font-weight: 700;
+  font-stretch: 88%;
+  line-height: 1.12;
+  letter-spacing: -0.015em;
+  color: var(--spruce-ink);
+  text-wrap: balance;
+}
+
+.actors-k {
+  margin-bottom: 0.3rem;
+  font-family: var(--font-mono);
+  font-size: var(--step--2);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--spruce-ink-3);
+}
+.actors-role {
+  max-width: 50ch;
+  line-height: 1.55;
+  color: var(--spruce-ink-2);
+}
+.actors-role strong {
+  color: var(--spruce-ink);
+}
+.actors-when {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: start;
+  gap: 0.8rem;
+  padding: 0.95rem 1.1rem 1.05rem;
+  border-radius: 12px;
+  background: var(--ice);
+  color: var(--ice-ink);
+  line-height: 1.5;
+}
+.actors-when > .icon {
+  width: 1.4rem;
+  height: 1.4rem;
+  margin-top: 0.1rem;
+}
+.actors-when .actors-k {
+  color: var(--ice-ink);
+  opacity: 0.85;
+}
+.actors-when-text {
+  font-size: clamp(0.95rem, 0.9rem + 0.18vw, 1.05rem);
+}
+.actors-link {
+  align-self: flex-start;
+  margin-top: auto;
+  min-height: 44px;
+  gap: 0.55em;
+  max-width: 100%;
+}
+.actors-link > * {
+  position: relative;
+}
+.actors-host {
+  font-family: var(--font-mono);
+  font-size: var(--step--2);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  opacity: 0.7;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+.actors-link .icon {
+  width: 1em;
+  height: 1em;
+}
+
+/* ================================================================== narrow screens: accordion list */
+.actors-list {
+  list-style: none;
+  padding: 0;
+  border-top: 1px solid var(--line-strong);
+}
+.actors-row {
+  position: relative;
+  border-bottom: 1px solid var(--line);
+}
+.actors-row-h {
+  font: inherit;
+  letter-spacing: normal;
+}
+.actors-row-btn {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--space-s);
+  width: 100%;
+  min-height: 76px;
+  padding: 0.95rem 0.15rem 0.95rem 0;
+  text-align: left;
+  border-radius: 6px;
+}
+.actors-row-text {
+  display: grid;
+  justify-items: start;
+  gap: 0.4rem;
+  min-width: 0;
+}
+.actors-chip {
+  display: inline-block;
+  max-width: 100%;
+  padding: 0.24em 0.6em 0.2em;
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: var(--step--2);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  line-height: 1.3;
+  text-transform: uppercase;
+  color: var(--spruce-ink-2);
+  background: var(--spruce-soft);
+  box-shadow: inset 0 0 0 1px var(--line);
+  transition:
+    background-color var(--dur-2) linear,
+    color var(--dur-2) linear,
+    box-shadow var(--dur-2) linear;
+}
+.actors-row-name {
+  font-family: var(--font-display);
+  font-size: var(--step-1);
+  font-weight: 700;
+  font-stretch: 88%;
+  line-height: 1.12;
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+}
+.actors-row-btn:hover .actors-chip {
+  box-shadow: inset 0 0 0 1px var(--atoca);
+}
+.actors-row-btn[aria-expanded='true'] .actors-chip {
+  background: var(--atoca);
+  color: var(--on-atoca);
+  box-shadow: none;
+}
+.actors-plus {
+  position: relative;
+  flex: none;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1.5px var(--line-strong);
+  transition:
+    background-color var(--dur-2) linear,
+    box-shadow var(--dur-2) linear,
+    color var(--dur-2) linear,
+    transform var(--dur-3) var(--ease-spring);
+}
+.actors-plus::before,
+.actors-plus::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 12px;
+  height: 2px;
+  margin: -1px 0 0 -6px;
+  border-radius: 2px;
+  background: currentColor;
+  transition: transform var(--dur-3) var(--ease-out);
+}
+.actors-plus::after {
+  transform: rotate(90deg);
+}
+.actors-row-btn[aria-expanded='true'] .actors-plus {
+  background: var(--spruce-ink);
+  color: var(--birch);
+  box-shadow: none;
+  transform: rotate(180deg);
+}
+.actors-row-btn[aria-expanded='true'] .actors-plus::after {
+  transform: rotate(0deg);
+}
+.actors-row-btn:active .actors-plus {
+  transform: scale(0.9);
+}
+
+.actors-row-panel {
+  overflow: hidden;
+}
+.actors-row-inner {
+  position: relative;
+  display: grid;
+  gap: var(--space-s);
+  padding: 0 4px var(--space-m) 1.1rem;
+}
+/* opening a row stitches a red thread down its left edge */
+.actors-row-inner::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.2rem;
+  bottom: var(--space-m);
+  width: 2px;
+  border-radius: 2px;
+  background: var(--atoca);
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform 0.9s var(--ease-out) 0.1s;
+}
+.actors-row.is-open .actors-row-inner::before {
+  transform: scaleY(1);
+}
+.actors-row-inner .actors-link {
+  margin-top: 0.2rem;
+}
+
+/* ---------------------------------------------------------------- reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .actors-pulse {
+    display: none;
+  }
+  .actors-halo {
+    animation: none;
+  }
+}

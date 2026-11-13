@@ -1,1 +1,390 @@
-/* principles section */
+/* ==================================================================
+   PRINCIPLES: "Three things to know first"
+   Narrow: one column, every statement in full ink, the page thread ties its knots in the gutter.
+   Wide (≥ 1000px): sticky column (head + mini-thread index) | statements on a spine the page thread runs down.
+   ================================================================== */
+
+.principles-grid {
+  display: grid;
+  gap: var(--space-l);
+}
+.principles-head {
+  margin-bottom: 0;
+}
+.principles-head .section-title {
+  font-size: clamp(2.3rem, 1.25rem + 3.1vw, 4.1rem);
+  max-width: 12ch;
+}
+
+/* ------------------------------------------------------------------ statements */
+.principles-list {
+  list-style: none;
+  padding: 0;
+  display: grid;
+}
+.principles-item {
+  position: relative;
+  padding-block: var(--space-l) var(--space-xl);
+  border-top: 1px solid var(--line);
+  scroll-margin-top: calc(var(--header-h) + 24px);
+}
+.principles-item:focus {
+  outline: none;
+}
+/* after a jump from the index, focus lands on the statement: ring its keyword phrase, not the whole block */
+.principles-item:focus-visible .principles-title {
+  outline: 2px solid var(--atoca);
+  outline-offset: 10px;
+  border-radius: 4px;
+}
+.principles-copy {
+  min-width: 0;
+}
+
+.principles-icon {
+  display: inline-grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  margin-bottom: var(--space-s);
+  border-radius: 50%;
+  color: var(--spruce-ink);
+  box-shadow: inset 0 0 0 1.5px var(--line-strong);
+  transition:
+    color var(--dur-3) linear,
+    box-shadow var(--dur-3) linear;
+}
+.principles-icon .icon {
+  width: 22px;
+  height: 22px;
+}
+
+.principles-title {
+  font-size: clamp(2.05rem, 1.05rem + 3.3vw, 4.6rem);
+  font-weight: 760;
+  font-stretch: 78%;
+  line-height: 0.98;
+  letter-spacing: -0.035em;
+  max-width: 17ch;
+  color: var(--spruce-ink);
+  transition: color var(--dur-3) linear;
+}
+/* the key words: a running stitch in atoca thread, sewn from left to right (across line breaks) */
+.principles-title strong {
+  font-weight: inherit;
+  background-image: repeating-linear-gradient(
+    90deg,
+    var(--atoca) 0 0.3em,
+    transparent 0.3em 0.46em
+  );
+  background-repeat: no-repeat;
+  /* just under the baseline (display face: ascent ≈ 0.93em), inside this line's box, clear of the next line */
+  background-position: 0 1em;
+  background-size: 100% max(2.5px, 0.055em);
+  transition: background-size 1.2s var(--ease-in-out) 0.15s;
+}
+
+.principles-body {
+  max-width: 50ch;
+  margin-top: var(--space-m);
+  color: var(--spruce-ink-2);
+  transition: color var(--dur-3) linear;
+}
+.principles-copy .refs {
+  margin-top: var(--space-m);
+}
+.principles-copy .ref {
+  transition: color var(--dur-3) linear;
+}
+
+/* the knot: on narrow screens it is only an anchor at the item's top rule (the page thread ties there) */
+.principles-knot {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: 1px;
+  pointer-events: none;
+}
+.principles-knot-svg {
+  display: none;
+}
+.principles-tail {
+  height: 1px;
+}
+
+/* ------------------------------------------------------------------ the index (wide only) */
+.principles-index {
+  display: none;
+}
+
+/* ================================================================== wide: sticky column + spine */
+@media (min-width: 1000px) {
+  .principles-grid {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    column-gap: clamp(2rem, 0.5rem + 3.4vw, 4.5rem);
+    align-items: stretch;
+  }
+  .principles-aside {
+    min-width: 0;
+  }
+  .principles-sticky {
+    display: grid;
+    gap: var(--space-xl);
+  }
+
+  .principles-item {
+    display: grid;
+    grid-template-columns: 56px minmax(0, 1fr);
+    column-gap: clamp(1rem, 0.2rem + 1.4vw, 2rem);
+    align-items: start;
+    padding-block: clamp(2.5rem, 8vh, 5rem);
+    border-top: 0;
+  }
+  .principles-item:first-child {
+    padding-top: 0.25rem;
+  }
+
+  /* the knot sits on the spine, level with the icon; the page thread runs through its strands */
+  .principles-knot {
+    position: relative;
+    top: auto;
+    left: auto;
+    width: 56px;
+    height: 58px;
+    margin-top: calc(0.25rem - 7px);
+    display: grid;
+    place-items: center;
+  }
+  .principles-item:first-child .principles-knot {
+    margin-top: -7px;
+  }
+  .principles-knot-svg {
+    display: block;
+    width: 36px;
+    height: 58px;
+    overflow: visible;
+  }
+  .principles-tail {
+    width: 56px;
+    height: var(--space-xl);
+  }
+
+  /* ---------- index: a mini-thread with one bead per principle */
+  .principles-index {
+    display: block;
+    padding-top: var(--space-m);
+    border-top: 1px solid var(--line);
+  }
+  .principles-index-track {
+    position: relative;
+  }
+  .principles-index-list {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: 0.9rem;
+  }
+  /* the mini-thread, from the first bead's centre to the last one's (set by the script; CSS fallback) */
+  .principles-index-track::before {
+    content: '';
+    position: absolute;
+    left: 21.25px;
+    top: var(--t0, 22px);
+    height: calc(var(--t1, 100%) - var(--t0, 22px));
+    width: 1.5px;
+    border-radius: 2px;
+    background: var(--line-strong);
+  }
+  .principles-index-link {
+    display: grid;
+    grid-template-columns: 44px minmax(0, 1fr);
+    align-items: center;
+    column-gap: 0.9rem;
+    min-height: 44px;
+    text-decoration: none;
+    color: var(--spruce-ink-3);
+    border-radius: 999px;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .principles-index-link:focus-visible {
+    outline-offset: 4px;
+  }
+  /* layers inside the track: thread < bead disc < sliding bead < icon */
+  .principles-index-track {
+    isolation: isolate;
+  }
+  .principles-bead {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    color: var(--spruce-ink-2);
+    transition: color var(--dur-2) linear;
+  }
+  /* (no transform on the bead itself: it would trap the icon under the sliding bead) */
+  .principles-bead::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    border-radius: 50%;
+    background: var(--birch);
+    box-shadow: inset 0 0 0 1.5px var(--line-strong);
+    transition:
+      box-shadow var(--dur-2) linear,
+      transform var(--dur-2) var(--ease-out);
+  }
+  .principles-bead .icon {
+    position: relative;
+    z-index: 3;
+    width: 20px;
+    height: 20px;
+  }
+  .principles-index-label {
+    font-size: var(--step--1);
+    line-height: 1.35;
+    font-weight: 600;
+    text-wrap: balance;
+    transition: color var(--dur-2) linear;
+  }
+  .principles-index-link:hover .principles-index-label {
+    color: var(--spruce-ink-2);
+  }
+  .principles-index-link:hover .principles-bead::before {
+    box-shadow: inset 0 0 0 1.5px var(--atoca);
+    transform: scale(1.08);
+  }
+  .principles-index-link:active .principles-bead::before {
+    transform: scale(0.92);
+  }
+  .principles-index-link[aria-current='true'] .principles-index-label {
+    color: var(--spruce-ink);
+  }
+  .principles-index-link[aria-current='true'] .principles-bead {
+    color: var(--on-atoca);
+    transition-delay: 0.12s;
+  }
+  /* the bead that slides along the mini-thread to the principle being read */
+  .principles-slider {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--atoca);
+    z-index: 2;
+    box-shadow: 0 0 0 6px var(--atoca-soft);
+    transform-origin: 50% 50%;
+    will-change: transform;
+    pointer-events: none;
+  }
+}
+
+/* sticky only where the column fits the viewport */
+@media (min-width: 1000px) and (min-height: 600px) {
+  .principles-sticky {
+    position: sticky;
+    top: calc(var(--header-h) + var(--space-l));
+  }
+}
+
+/* ---------- knot glyph */
+.principles-knot-svg path {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+/* drawn at ~1.45x: these read as 2px and 2.5px */
+.principles-knot-ghost {
+  stroke: var(--line-strong);
+  stroke-width: 1.4;
+  transition: opacity var(--dur-3) linear;
+}
+.principles-knot-live {
+  stroke: var(--atoca);
+  stroke-width: 1.75;
+  /* dash 1, gap 2: when untied the whole path sits in a gap, so no round-cap dot is left behind */
+  stroke-dasharray: 1 2;
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset 1s var(--ease-in-out);
+}
+.principles-knot-halo {
+  fill: var(--atoca-soft);
+  transform-box: fill-box;
+  transform-origin: center;
+  transition:
+    opacity var(--dur-3) linear,
+    transform 0.9s var(--ease-spring);
+}
+
+/* ================================================================== live (wide, motion allowed): the reading line */
+@media (min-width: 1000px) {
+  .principles.is-live .principles-item:not(.is-active):not(:focus-within) .principles-title,
+  .principles.is-live .principles-item:not(.is-active):not(:focus-within) .principles-body {
+    color: var(--spruce-ink-3);
+  }
+  .principles.is-live .principles-item:not(.is-active):not(:focus-within) .principles-icon {
+    color: var(--spruce-ink-3);
+    box-shadow: inset 0 0 0 1.5px var(--line);
+  }
+  /* chips dim by colour, not opacity, so they keep AA contrast */
+  .principles.is-live .principles-item:not(.is-active):not(:focus-within) .ref {
+    color: var(--spruce-ink-3);
+  }
+  /* a statement under the pointer lifts a little out of the dim */
+  @media (hover: hover) {
+    .principles.is-live .principles-item:not(.is-active):hover .principles-title {
+      color: var(--spruce-ink-2);
+    }
+    .principles.is-live .principles-item:not(.is-active):hover .principles-knot-ghost {
+      stroke: var(--spruce-ink-3);
+    }
+  }
+
+  /* untied until read */
+  .principles.is-live .principles-title strong {
+    background-size: 0% max(2.5px, 0.055em);
+    transition-delay: 0s;
+    transition-duration: 0.6s;
+  }
+  .principles.is-live .principles-knot-live {
+    stroke-dashoffset: 1.02;
+    transition-duration: 0.7s;
+  }
+  .principles.is-live .principles-knot-halo {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+
+  /* the statement on the reading line: the knot ties itself, the stitch is sewn */
+  .principles.is-live .principles-item.is-active.is-in .principles-title strong {
+    background-size: 100% max(2.5px, 0.055em);
+    transition-duration: 1.2s;
+    transition-delay: 0.35s;
+  }
+  .principles.is-live .principles-item.is-active.is-in .principles-knot-live {
+    stroke-dashoffset: 0;
+    transition-duration: 1s;
+  }
+  .principles.is-live .principles-item.is-active.is-in .principles-knot-ghost {
+    opacity: 0;
+  }
+  .principles.is-live .principles-item.is-active.is-in .principles-knot-halo {
+    opacity: 1;
+    transform: scale(1);
+  }
+  .principles.is-live .principles-item.is-active.is-in .principles-knot-svg {
+    animation: principles-tighten 1.1s var(--ease-spring) 0.25s both;
+  }
+}
+@keyframes principles-tighten {
+  from {
+    transform: scale(1.22) rotate(-10deg);
+  }
+  to {
+    transform: none;
+  }
+}

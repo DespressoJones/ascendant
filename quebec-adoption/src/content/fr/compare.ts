@@ -1,148 +1,254 @@
-// DRAFT — replaced by researched content
-import type { Compare } from '../types'
+// Researched content — verified 2026-11-13
+import type { Compare, LegalRef } from '../types'
 
 /*
- * Écriture : chaque `keepsTie` commence par un verdict court (Oui / Non / En partie / Selon…) suivi
- * de « — » puis d'une explication. Le verdict devient la pastille visuelle de la carte.
+ * Écriture : chaque `keepsTie` commence par un verdict court suivi de « — » puis d'une explication.
+ * Le rendu transforme le verdict en pastille : « Oui » (lien maintenu), « Non » (lien remplacé),
+ * « En partie » ou « Selon… » (pointillé). Garder le verdict court (moins de 34 caractères) et sans « : ».
  */
+
+const LQ = 'https://www.legisquebec.gouv.qc.ca/fr/document/lc/'
+const se = (a: string) => `#se:${a.replace(/\./g, '_')}`
+const ccq = (a: string): LegalRef => ({ label: `C.c.Q., art. ${a}`, url: `${LQ}CCQ-1991${se(a)}` })
+const lpj = (a: string): LegalRef => ({ label: `LPJ, art. ${a}`, url: `${LQ}P-34.1${se(a)}` })
+const cpc = (a: string): LegalRef => ({ label: `C.p.c., art. ${a}`, url: `${LQ}C-25.01${se(a)}` })
+
 export const compare: Compare = {
   eyebrow: 'Formes d’adoption',
   title: 'Toutes les adoptions ne se ressemblent pas',
   lede:
-    'Au Québec, une adoption peut commencer par le consentement des parents d’origine, par une décision du tribunal ou par une démarche à l’étranger. Comparez les formes côte à côte, puis voyez les solutions qui protègent l’enfant **sans** changer sa filiation.',
+    'Au Québec, une adoption peut commencer par le consentement des parents d’origine, par une décision du tribunal ou par une démarche à l’étranger. Elle crée une nouvelle filiation qui remplace celle d’origine, en tout ou en partie. Le lien d’origine peut parfois être « reconnu » : le nom du parent d’origine reste alors sur le nouvel acte de naissance, mais sans droits ni devoirs. Plus bas, les solutions qui protègent l’enfant **sans** changer sa filiation.',
   columns: {
     forWho: 'Pour qui',
     whoDecides: 'Qui décide',
     cost: 'Coût',
     time: 'Délais',
-    keepsTie: 'Lien avec la famille d’origine',
+    keepsTie: 'Lien légal avec la famille d’origine',
     start: 'Comment ça commence',
   },
   adoption: [
     {
       id: 'consentement-general',
       name: 'Adoption avec consentement général',
-      forWho: 'Un bébé ou un enfant dont les parents d’origine décident de le confier à l’adoption.',
-      whoDecides: 'Les parents consentent ; la DPJ choisit la famille adoptive ; le tribunal prononce l’adoption.',
-      cost: 'En général, aucuns frais auprès de la DPJ pour les adoptants.',
-      time: '30 jours pour changer d’idée, puis au moins 6 mois de placement avant le jugement.',
+      forWho:
+        'Un bébé ou un enfant dont les parents d’origine (ou le tuteur) décident de le confier à l’adoption, sans choisir eux-mêmes la famille.',
+      whoDecides:
+        'Les parents d’origine consentent. La DPJ choisit la famille adoptive. Le tribunal ordonne le placement, puis prononce l’adoption.',
+      cost: 'Québec.ca ne mentionne pas de frais pour les services d’adoption de la DPJ. Confirmez-le auprès du service de votre région.',
+      time: '30 jours pour changer d’avis, puis, en général, au moins 6 mois de placement avant le jugement. L’attente des adoptants peut durer des années.',
       keepsTie:
-        'Non — la filiation adoptive remplace celle d’origine. Une entente de communication peut prévoir des nouvelles.',
-      start: 'Les parents signent un consentement écrit, devant deux témoins.',
-      refs: [{ label: 'C.c.Q., art. 548' }, { label: 'C.c.Q., art. 557' }, { label: 'C.c.Q., art. 566' }],
+        'Non — la filiation adoptive remplace celle d’origine. Le lien d’origine peut parfois être « reconnu », sans droits ni devoirs, et des échanges ou des contacts peuvent être prévus.',
+      start: 'Chaque parent légal signe un consentement général, par écrit, devant deux témoins. C’est la DPJ qui le reçoit.',
+      refs: [ccq('548'), ccq('551'), ccq('555'), ccq('557'), ccq('566'), ccq('577')],
+      sources: ['ccq-book2', 'qc-adoption-about', 'qc-adoption-legal', 'educaloi-adopt'],
     },
     {
       id: 'banque-mixte',
       name: 'Banque mixte',
-      forWho: 'Un enfant suivi par la DPJ, souvent très jeune, dont le retour dans sa famille semble peu probable.',
-      whoDecides: 'La DPJ choisit la famille ; le tribunal déclare l’enfant admissible, puis prononce l’adoption.',
-      cost: 'Gratuit. La famille est soutenue et compensée comme famille d’accueil pendant le placement.',
-      time: 'Souvent 1 à 3 ans en famille d’accueil avant une adoption, qui peut ne jamais avoir lieu.',
-      keepsTie: 'En partie — les liens demeurent pendant l’accueil ; ils sont remplacés si l’adoption est prononcée.',
-      start: 'Une famille évaluée accueille l’enfant en sachant qu’il pourrait retourner chez ses parents.',
-      refs: [{ label: 'C.c.Q., art. 559' }],
+      forWho:
+        'Un enfant suivi par la DPJ qui risque fortement de ne pas pouvoir retourner dans sa famille. Il est confié à une famille d’accueil prête à l’adopter.',
+      whoDecides:
+        'La DPJ choisit la famille. Sans consentement des parents, le tribunal décide si l’enfant devient admissible à l’adoption, puis prononce l’adoption.',
+      cost: 'Pendant l’accueil, la famille est rémunérée comme famille d’accueil. Une aide financière à l’adoption peut suivre, pendant 3 ans au plus.',
+      time: 'Aucune durée moyenne officielle. Les durées maximales de placement s’appliquent aussi. L’enfant peut retourner chez ses parents : l’adoption n’est jamais garantie.',
+      keepsTie:
+        'Selon l’issue — pendant l’accueil, l’enfant garde sa filiation. Si l’adoption est prononcée, la nouvelle filiation remplace celle d’origine.',
+      start:
+        'Une famille évaluée, reconnue comme famille d’accueil, accueille l’enfant en sachant qu’il pourrait retourner chez ses parents.',
+      refs: [ccq('559'), ccq('561'), lpj('4.2'), lpj('91.1')],
+      sources: [
+        'qc-adoption-about',
+        'educaloi-adopt',
+        'clock-compare-msss-ri-rtf',
+        'clock-compare-qc-foster-process',
+        'clock-compare-reg-adoption-aid',
+      ],
     },
     {
       id: 'admissibilite',
       name: 'Adoption après une déclaration d’admissibilité',
-      forWho: 'Un enfant dont les parents n’ont pas pris soin de lui depuis au moins 6 mois, ou dont la filiation n’est pas établie.',
-      whoDecides: 'La Cour du Québec, chambre de la jeunesse, à la demande de la DPJ. Les parents peuvent être entendus.',
-      cost: 'Aucuns frais pour la famille adoptante. Les parents peuvent avoir droit à l’aide juridique.',
-      time: 'Plusieurs mois de procédure, puis au moins 6 mois de placement.',
-      keepsTie: 'Non — le jugement d’adoption crée une nouvelle filiation qui remplace l’ancienne.',
-      start: 'La DPJ demande au tribunal de déclarer l’enfant admissible à l’adoption.',
-      refs: [{ label: 'C.c.Q., art. 559' }, { label: 'C.c.Q., art. 561' }],
+      forWho:
+        'Un enfant dont les parents n’assument pas, dans les faits, le soin, l’entretien ou l’éducation depuis au moins 6 mois. D’autres cas existent, comme un enfant orphelin sans tuteur.',
+      whoDecides:
+        'Le tribunal, à la demande de la DPJ, d’un proche parent (grand-parent, oncle, tante…) ou de l’enfant de 14 ans et plus. Les parents peuvent s’y opposer.',
+      cost: 'Les parents peuvent avoir droit à l’aide juridique selon leur revenu. Elle est gratuite pour tout enfant mineur.',
+      time: 'Au moins 6 mois sans soins des parents, puis la procédure au tribunal, en général 6 mois de placement, puis le jugement.',
+      keepsTie:
+        'Non — si l’adoption est prononcée, la nouvelle filiation remplace celle d’origine. La déclaration seule ne la change pas encore.',
+      start: 'La DPJ, ou un proche admissible, demande au tribunal de déclarer l’enfant admissible à l’adoption.',
+      refs: [ccq('559'), ccq('560'), ccq('561'), ccq('562')],
+      sources: ['ccq-book2', 'educaloi-adopt', 'csj', 'clock-compare-bill2'],
     },
     {
-      id: 'consentement-special',
-      name: 'Adoption par un proche',
-      forWho: 'Un grand-parent, une tante, un oncle, un frère ou une sœur adulte, ou le conjoint d’un parent.',
-      whoDecides: 'Les parents consentent en faveur d’une personne précise ; le tribunal vérifie l’intérêt de l’enfant.',
-      cost: 'Frais d’avocat ou de notaire, parfois couverts par l’aide juridique.',
-      time: 'De quelques mois à plus d’un an, selon le dossier.',
-      keepsTie: 'En partie — adopté par le conjoint d’un parent, l’enfant garde ce parent ; sinon, la filiation est remplacée.',
-      start: 'Les parents signent un consentement spécial qui nomme la personne qui adoptera.',
-      refs: [{ label: 'C.c.Q., art. 555' }],
+      id: 'proche',
+      name: 'Adoption par un proche (consentement spécial)',
+      forWho:
+        'Un proche parent de l’enfant : par exemple un grand-parent, un frère, une sœur, une tante, un oncle, ou leur conjoint. Il doit avoir 18 ans de plus que l’enfant, sauf si le tribunal l’en dispense. À comparer avec la tutelle supplétive, plus bas.',
+      whoDecides:
+        'Les parents choisissent la personne et consentent en sa faveur. L’enfant de 10 ans et plus doit aussi consentir. Le tribunal vérifie l’intérêt de l’enfant et peut exiger une évaluation psychosociale.',
+      cost: 'Surtout des honoraires d’avocat ou de notaire. Demandez à l’aide juridique si vous y avez droit.',
+      time: 'Au moins 30 jours entre les consentements et l’ordonnance de placement, puis au moins 6 mois avant le jugement (réductible de 3 mois au plus).',
+      keepsTie:
+        'Non — la filiation avec les parents d’origine est remplacée. Des échanges ou des contacts peuvent être prévus par écrit.',
+      start: 'Les parents signent un consentement spécial qui nomme la personne, par écrit, devant deux témoins.',
+      refs: [ccq('555'), ccq('547'), ccq('547.1'), ccq('566'), ccq('577')],
+      sources: ['ccq-book2', 'educaloi-adopt', 'csj'],
+    },
+    {
+      id: 'conjoint',
+      name: 'Adoption de l’enfant du conjoint',
+      forWho:
+        'Le conjoint ou la conjointe d’un parent. Si vous êtes conjoints de fait, vous devez vivre ensemble depuis au moins 3 ans. L’écart d’âge de 18 ans ne s’applique pas.',
+      whoDecides:
+        'Le parent qui est votre conjoint et, s’il existe, l’autre parent légal consentent, ainsi que l’enfant de 10 ans et plus. Le tribunal prononce l’adoption.',
+      cost: 'Surtout des honoraires d’avocat ou de notaire. La DPJ n’est avisée de la demande que si l’enfant fait l’objet d’un signalement.',
+      time: 'Au moins 30 jours entre les consentements et l’ordonnance de placement, puis au moins 6 mois de vie commune ; le tribunal peut réduire ce délai de 3 mois au plus.',
+      keepsTie:
+        'En partie — l’enfant garde son parent, le conjoint de l’adoptant. Seul le lien avec l’autre parent, s’il y en a un, est remplacé.',
+      start:
+        'Le parent signe un consentement spécial en faveur de son conjoint. L’autre parent légal doit aussi consentir, sauf exceptions.',
+      refs: [ccq('555'), ccq('547'), ccq('551'), ccq('552'), ccq('577'), cpc('432')],
+      sources: ['ccq-book2', 'educaloi-adopt'],
     },
     {
       id: 'internationale',
       name: 'Adoption internationale',
-      forWho: 'Une personne ou un couple domicilié au Québec qui veut adopter un enfant vivant dans un autre pays.',
-      whoDecides: 'Les autorités du pays de l’enfant et le ministère de la Santé et des Services sociaux du Québec.',
-      cost: 'Élevé : évaluation, organisme, frais du pays et voyages, souvent des dizaines de milliers de dollars.',
-      time: 'Plusieurs années, et très variable selon le pays.',
-      keepsTie: 'Non, en général — certains pays prononcent une adoption « simple », qui peut être convertie ici.',
-      start: 'Une évaluation psychosociale obligatoire, puis un dossier auprès d’un organisme agréé.',
-      refs: [{ label: 'C.c.Q., art. 563' }, { label: 'Convention de La Haye (1993)' }],
+      forWho:
+        'Une personne domiciliée au Québec qui veut adopter un enfant domicilié hors du Québec, y compris dans une autre province.',
+      whoDecides:
+        'Les autorités du pays de l’enfant et le Secrétariat aux services internationaux à l’enfant (SASIE), qui doit autoriser chaque projet. Le jugement est rendu ici ou à l’étranger.',
+      cost: 'Élevé et variable : évaluation, dossier, traductions, frais à l’étranger, voyages. Le Québec ne publie pas de montant global. Des crédits d’impôt existent.',
+      time: 'Souvent plusieurs années avant qu’un enfant soit proposé.',
+      keepsTie: 'Non — une adoption prononcée ou reconnue au Québec rompt la filiation d’origine (adoption « plénière »).',
+      start:
+        'Depuis novembre 2024, les nouveaux dossiers avec un organisme agréé sont suspendus. Quelques cas prévus par règlement, comme l’adoption dans la famille, commencent par une demande au SASIE.',
+      refs: [ccq('563'), ccq('564'), ccq('565'), ccq('565.1'), { label: 'Convention de La Haye (1993)' }],
+      sources: [
+        'clock-compare-qc-intl',
+        'clock-compare-qc-intl-moratorium',
+        'clock-compare-qc-intl-no-body',
+        'clock-compare-qc-intl-steps',
+        'clock-compare-qc-intl-costs',
+      ],
     },
     {
       id: 'coutumiere',
       name: 'Adoption coutumière autochtone',
-      forWho: 'Les familles des Premières Nations et les familles inuites qui suivent les coutumes de leur communauté.',
-      whoDecides: 'L’autorité désignée par la communauté ou la nation, qui délivre un certificat d’adoption.',
-      cost: 'Peu ou pas de frais.',
-      time: 'Selon la coutume ; l’état civil est ensuite mis à jour à partir du certificat.',
-      keepsTie: 'Selon la coutume — elle peut maintenir des liens et des droits avec la famille d’origine.',
-      start: 'L’adoption se fait selon la coutume, puis l’autorité compétente en atteste.',
-      refs: [{ label: 'C.c.Q., art. 543.1' }],
+      forWho: 'Des familles des Premières Nations ou inuites qui adoptent selon une coutume de leur communauté ou de leur nation.',
+      whoDecides:
+        'L’adoption se fait selon la coutume. L’autorité compétente désignée par la communauté ou la nation l’atteste : elle vérifie la coutume, les consentements et l’intérêt de l’enfant, puis délivre un certificat.',
+      cost: 'Renseignez-vous auprès de l’autorité compétente. Une aide financière existe dans certains cas où la DPJ vous avait confié l’enfant.',
+      time: 'Selon la coutume. L’autorité transmet le certificat au Directeur de l’état civil dans les 30 jours, puis un nouvel acte de naissance est dressé.',
+      keepsTie:
+        'Selon le certificat — la filiation d’origine prend fin, sauf les droits et devoirs que la coutume maintient et que le certificat mentionne.',
+      start:
+        'On s’adresse à l’autorité compétente inscrite au registre du Directeur de l’état civil. Si la DPJ suit l’enfant, elle doit d’abord donner son avis écrit.',
+      refs: [ccq('543.1'), ccq('577.1'), ccq('129'), lpj('131.18')],
+      sources: [
+        'ccq-book2',
+        'ccq-book1',
+        'clock-compare-qc-adoption-overview',
+        'clock-compare-dec-register',
+        'clock-compare-reg-adoption-aid',
+      ],
     },
     {
       id: 'majeur',
       name: 'Adoption d’une personne majeure',
-      forWho: 'Un adulte qui a été élevé, enfant, par la personne qui souhaite l’adopter.',
-      whoDecides: 'Le tribunal. La personne majeure doit elle-même consentir.',
-      cost: 'Frais d’avocat ou de notaire.',
-      time: 'Quelques mois.',
-      keepsTie: 'Non — la nouvelle filiation remplace l’ancienne.',
-      start: 'Une demande au tribunal, avec le consentement de la personne à adopter.',
-      refs: [{ label: 'C.c.Q., art. 545' }],
+      forWho:
+        'Un adulte élevé, quand il était mineur, par la personne qui veut l’adopter : un beau-parent, un proche, une ancienne famille d’accueil. Le tribunal peut faire exception à cette condition.',
+      whoDecides: 'Le tribunal, à partir du consentement de l’adulte et de la demande faite.',
+      cost: 'Surtout des honoraires d’avocat ou de notaire, si vous en consultez un.',
+      time: 'La loi ne fixe pas de délai précis. La période de placement de 6 mois est prévue pour les mineurs.',
+      keepsTie:
+        'Non — la nouvelle filiation remplace celle d’origine. Si l’adoptant est le conjoint d’un parent, seul le lien avec l’autre parent change.',
+      start:
+        'Une demande d’adoption au tribunal, avec le consentement écrit de l’adulte. Son conjoint marié ou uni civilement, ses enfants de 14 ans et plus, ses parents et ses grands-parents en sont avisés.',
+      refs: [ccq('545'), ccq('573'), ccq('577'), cpc('441')],
+      sources: ['ccq-book2'],
     },
   ],
   alternativesTitle: 'Ce qui n’est pas une adoption',
   alternatives: [
     {
-      id: 'tutelle-lpj',
-      name: 'Tutelle à un enfant (LPJ)',
-      forWho: 'Un enfant suivi par la DPJ qui ne peut pas retourner chez ses parents, mais pour qui l’adoption n’est pas indiquée.',
-      whoDecides: 'Le tribunal nomme le tuteur, souvent la famille d’accueil ou un proche, à la demande de la DPJ.',
-      cost: 'Gratuit. Une aide financière peut être versée au tuteur.',
-      time: 'Jusqu’aux 18 ans de l’enfant ; la DPJ peut ensuite fermer son dossier.',
-      keepsTie: 'Oui — l’enfant garde sa filiation, son nom et ses liens avec sa famille.',
-      start: 'La DPJ propose la tutelle comme projet de vie et la demande au tribunal.',
-      refs: [{ label: 'LPJ, art. 70.1' }],
-    },
-    {
       id: 'tutelle-suppletive',
       name: 'Tutelle supplétive',
-      forWho: 'Un parent qui ne peut plus exercer pleinement son rôle et veut le confier à un proche de confiance.',
-      whoDecides: 'Les parents désignent la personne ; le tribunal approuve.',
-      cost: 'Frais d’avocat ou de notaire, parfois couverts par l’aide juridique.',
-      time: 'Quelques mois ; elle peut prendre fin si la situation change.',
-      keepsTie: 'Oui — les parents restent les parents ; le tuteur exerce l’autorité parentale avec eux ou à leur place.',
-      start: 'Une demande au tribunal, faite par le parent avec la personne choisie.',
-      refs: [{ label: 'C.c.Q., art. 199.1' }],
+      forWho:
+        'Un parent qui ne peut pas jouer pleinement son rôle, ou qui s’est désengagé, et un proche prêt à prendre le relais (conjoint du parent, grand-parent, tante, oncle, membre de la famille d’accueil…).',
+      whoDecides:
+        'Le parent désigne la personne et le tribunal doit l’autoriser. Le tribunal peut le faire même sans l’accord d’un parent, par exemple si son refus n’est pas justifié par l’intérêt de l’enfant.',
+      cost: 'Quelques frais de documents (certificat de police, déclaration sous serment), plus un avocat ou un notaire au besoin. Les parents paient les besoins de base de l’enfant.',
+      time: 'Le tuteur entre en fonction dès que le tribunal le nomme. La tutelle prend fin aux 18 ans de l’enfant, ou plus tôt si un parent est rétabli.',
+      keepsTie:
+        'Oui — les parents restent les parents. Selon le cas, ils partagent leur rôle avec le tuteur ou leur rôle est suspendu.',
+      start:
+        'Le parent dépose une demande au tribunal du district où vit l’enfant. Dès 10 ans, l’enfant doit consentir ; dès 14 ans, son refus bloque la tutelle.',
+      refs: [ccq('199.1'), ccq('199.3'), ccq('199.4'), ccq('199.6'), ccq('199.8')],
+      sources: ['ccq-book1', 'clock-compare-qc-suppletive'],
+    },
+    {
+      id: 'tutelle-lpj',
+      name: 'Tutelle demandée par la DPJ',
+      forWho:
+        'Un enfant suivi par la DPJ qui ne peut pas retourner chez lui, et la personne qui en prend soin (un proche ou la famille d’accueil), prête à s’engager jusqu’à ses 18 ans.',
+      whoDecides: 'Le tribunal, à la demande de la DPJ ou de la personne qu’elle recommande comme tuteur.',
+      cost: 'Le tuteur peut recevoir une aide financière mensuelle si l’enfant lui était confié depuis au moins 6 mois de suite. Demande dans les 60 jours du jugement.',
+      time: 'Jusqu’aux 18 ans de l’enfant. L’aide peut durer jusqu’à 21 ans si le jeune poursuit certaines études et que le tuteur subvient encore à ses besoins.',
+      keepsTie:
+        'Oui — l’enfant garde sa filiation et son nom. Le tuteur exerce l’autorité parentale, et le tribunal peut prévoir des contacts avec la famille.',
+      start: 'La DPJ propose la tutelle comme projet de vie. Une fois le tuteur nommé, la DPJ ferme son dossier.',
+      refs: [lpj('70.1'), lpj('70.2'), lpj('70.3'), lpj('70.6'), ccq('207')],
+      sources: ['lpj', 'ccq-book1', 'clock-compare-reg-tutorship-aid', 'clock-compare-msss-life-plan'],
     },
     {
       id: 'placement-majorite',
       name: 'Placement jusqu’à la majorité',
-      forWho: 'Un enfant qui ne peut pas retourner chez ses parents et qui a besoin d’un milieu stable jusqu’à 18 ans.',
-      whoDecides: 'La Cour du Québec, chambre de la jeunesse, sur recommandation de la DPJ.',
-      cost: 'Gratuit pour les parents ; la famille d’accueil est soutenue et compensée.',
-      time: 'Jusqu’aux 18 ans de l’enfant, avec un suivi de la DPJ.',
-      keepsTie: 'Oui — la filiation demeure et des contacts peuvent être prévus.',
-      start: 'Le tribunal l’ordonne lorsque la durée maximale d’un placement temporaire est atteinte.',
-      refs: [{ label: 'LPJ, art. 91' }, { label: 'LPJ, art. 53.0.1' }],
+      forWho:
+        'Un enfant suivi par la DPJ qui ne peut pas retourner chez lui en sécurité, quand la tutelle ou l’adoption ne conviennent pas.',
+      whoDecides: 'Le tribunal, sur recommandation de la DPJ, par exemple quand la durée maximale de placement est atteinte.',
+      cost: 'La famille d’accueil reçoit une rétribution pour l’enfant. Un proche peut être reconnu comme famille d’accueil de proximité.',
+      time: 'Jusqu’aux 18 ans. Un plan de transition se prépare dans les 2 années avant, et le jeune peut parfois rester dans son milieu ensuite.',
+      keepsTie:
+        'Oui — la filiation demeure. Les parents gardent les droits que le tribunal ne leur retire pas, et des contacts peuvent être prévus.',
+      start: 'La DPJ recommande ce projet de vie et le tribunal l’ordonne quand un retour à la maison n’est pas possible.',
+      refs: [lpj('91'), lpj('91.1'), lpj('57.2.2'), lpj('64.1')],
+      sources: [
+        'lpj',
+        'clock-compare-msss-life-plan',
+        'clock-compare-cdpdj-stability',
+        'clock-compare-bill15',
+        'clock-compare-qc-foster-process',
+      ],
     },
     {
-      id: 'proximite',
+      id: 'placement-proche',
       name: 'Placement chez un proche',
-      forWho: 'Un enfant qui doit quitter la maison un temps et peut vivre chez une personne qu’il connaît.',
-      whoDecides: 'La DPJ, avec l’accord des parents, ou le tribunal.',
-      cost: 'Gratuit ; la personne peut être compensée comme famille d’accueil de proximité.',
-      time: 'Temporaire, dans les limites de durée prévues par la loi selon l’âge de l’enfant.',
-      keepsTie: 'Oui — l’enfant reste l’enfant de ses parents, qui gardent en général l’autorité parentale.',
-      start: 'La DPJ évalue la personne proposée avant que l’enfant emménage chez elle.',
-      refs: [{ label: 'LPJ, art. 4' }],
+      forWho:
+        'Un enfant suivi par la DPJ qui doit quitter la maison un temps et peut vivre chez un grand-parent ou une autre personne importante pour lui.',
+      whoDecides: 'La DPJ, avec l’accord des parents et de l’enfant de 14 ans et plus, ou le tribunal.',
+      cost: 'Le proche peut être reconnu comme famille d’accueil de proximité et recevoir alors une rétribution.',
+      time: 'Temporaire. Il compte dans la durée maximale de placement : 12, 18 ou 24 mois selon l’âge de l’enfant.',
+      keepsTie:
+        'Oui — l’enfant reste l’enfant de ses parents. Ils gardent leurs droits et leurs devoirs, sauf si le tribunal leur en retire une partie.',
+      start:
+        'La loi donne la priorité aux grands-parents et aux autres proches avant une famille d’accueil. La DPJ évalue la personne proposée.',
+      refs: [lpj('4'), lpj('54'), lpj('91'), lpj('11.4')],
+      sources: ['lpj', 'qc-dpj-steps', 'clock-compare-msss-ri-rtf', 'clock-compare-bill15'],
+    },
+    {
+      id: 'garde-tiers',
+      name: 'Délégation ou garde confiée à un proche',
+      forWho:
+        'Des parents qui confient à un proche les soins de tous les jours, ou un proche qui demande au tribunal la garde de l’enfant, dans son intérêt.',
+      whoDecides: 'Les parents, pour une délégation. Le tribunal, si un proche demande la garde : la loi donne la priorité aux parents.',
+      cost: 'Une délégation se fait sans tribunal. Une demande de garde entraîne surtout des honoraires d’avocat ; renseignez-vous sur l’aide juridique.',
+      time: 'La loi ne fixe pas de durée : elle dépend de l’entente ou de la décision du tribunal.',
+      keepsTie:
+        'Oui — les parents restent les parents. Ils participent aux grandes décisions et doivent contribuer aux besoins de l’enfant selon leurs moyens.',
+      start:
+        'Les parents délèguent la garde, la surveillance ou l’éducation de l’enfant ; ou le proche dépose une demande de garde au tribunal.',
+      refs: [ccq('601'), ccq('605')],
+      sources: ['ccq-book2', 'clock-compare-educaloi-third-party', 'csj'],
     },
   ],
 }

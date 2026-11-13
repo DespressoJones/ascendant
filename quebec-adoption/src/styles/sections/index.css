@@ -1,0 +1,12 @@
+/* One stylesheet per section, imported in page order. */
+@import './hero.css';
+@import './principles.css';
+@import './paths.css';
+@import './clock.css';
+@import './compare.css';
+@import './actors.css';
+@import './myths.css';
+@import './rights.css';
+@import './after.css';
+@import './glossary.css';
+@import './help.css';

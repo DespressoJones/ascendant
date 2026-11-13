@@ -1,0 +1,16 @@
+import type { Content } from '../types'
+import { ui } from './ui'
+import { hero } from './hero'
+import { principles } from './principles'
+import { paths } from './paths'
+import { clock } from './clock'
+import { compare } from './compare'
+import { actors } from './actors'
+import { myths } from './myths'
+import { rights } from './rights'
+import { after } from './after'
+import { glossary } from './glossary'
+import { help } from './help'
+import { footer } from './footer'
+
+export const en: Content = { lang: 'en', ui, hero, principles, paths, clock, compare, actors, myths, rights, after, glossary, help, footer }

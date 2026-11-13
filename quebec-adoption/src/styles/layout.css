@@ -1,0 +1,100 @@
+/* Shared page-level layout: main, bullets, footer. */
+main {
+  position: relative;
+  outline: none;
+}
+main:focus {
+  outline: none;
+}
+
+.bullets {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: 0.45rem;
+}
+.bullets li {
+  position: relative;
+  padding-left: 1.3em;
+}
+.bullets li::before {
+  content: '';
+  position: absolute;
+  left: 0.1em;
+  top: 0.7em;
+  width: 0.55em;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--atoca);
+}
+
+.icon.flip-up {
+  transform: rotate(-90deg);
+}
+
+/* ================================================================== footer */
+.site-footer {
+  position: relative;
+  z-index: 2;
+  padding-block: var(--space-2xl) calc(var(--space-l) + env(safe-area-inset-bottom, 0px));
+  background: var(--birch-2);
+  border-top: 1px solid var(--line);
+}
+.footer-grid {
+  display: grid;
+  gap: var(--space-xl);
+}
+@media (min-width: 900px) {
+  .footer-grid {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr);
+  }
+}
+.footer-h {
+  font-size: var(--step-2);
+  font-stretch: 82%;
+  font-weight: 720;
+  margin-bottom: var(--space-s);
+}
+.footer-note {
+  display: grid;
+  gap: var(--space-s);
+  align-content: start;
+}
+.footer-note .badge {
+  justify-self: start;
+}
+.footer-disclaimer {
+  max-width: 52ch;
+  color: var(--spruce-ink-2);
+}
+.sources-list {
+  margin-top: var(--space-s);
+  padding-left: 1.6em;
+  display: grid;
+  gap: 0.35rem;
+  font-size: var(--step--1);
+  columns: 1;
+}
+.sources-list li::marker {
+  font-family: var(--font-mono);
+  color: var(--atoca-text);
+  font-size: 0.85em;
+}
+.sources-list a {
+  text-decoration-color: var(--line-strong);
+  overflow-wrap: anywhere;
+}
+.sources-list li:target {
+  background: var(--atoca-soft);
+  border-radius: 4px;
+}
+.footer-bottom {
+  margin-top: var(--space-2xl);
+  padding-top: var(--space-m);
+  border-top: 1px solid var(--line);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-s);
+}

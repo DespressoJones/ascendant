@@ -1,0 +1,130 @@
+/*
+  LE FIL ROUGE: design tokens
+  Layout concept: one red thread ("le fil rouge") runs the full height of the page and every
+  section is a station it passes through. Decisive legal moments are knots on the thread.
+
+  Palette, from the subject's world:
+    birch   : pale birch-bark paper, with a faint green bias
+    spruce  : boreal spruce for ink and deep surfaces
+    atoca   : Québec cranberry red, used only for the thread and the single accent
+    ice     : St. Lawrence winter blue for calm highlight panels
+    maple   : amber reserved for deadlines and cautions (semantic, not decorative)
+*/
+
+:root {
+  /* ---- colour (light) ---- */
+  --birch: #f1f4ef;
+  --birch-2: #e5ebe3;
+  --birch-3: #d8e0d6;
+  --spruce-ink: #10201c;
+  --spruce-ink-2: #3a4a45;
+  --spruce-ink-3: #5f6e69;
+  --spruce: #1d4840;
+  --spruce-soft: rgb(29 72 64 / 0.08);
+  --line: rgb(16 32 28 / 0.14);
+  --line-strong: rgb(16 32 28 / 0.28);
+  --atoca: #c62f45;
+  --atoca-text: #a3182e;
+  --atoca-soft: rgb(198 47 69 / 0.12);
+  --on-atoca: #fff7f5;
+  --ice: #d6e6ec;
+  --ice-ink: #17394a;
+  --maple: #9a5a00;
+  --maple-soft: rgb(196 122 0 / 0.14);
+  --card: #fbfcf9;
+  --shadow: 0 1px 0 rgb(16 32 28 / 0.04), 0 18px 40px -24px rgb(16 32 28 / 0.35);
+  --grain-opacity: 0.05;
+
+  /* ---- type ---- */
+  --font-display: 'Bricolage Grotesque', 'Arial Narrow', 'Helvetica Neue', system-ui, sans-serif;
+  --font-body: 'Atkinson Hyperlegible Next', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  /* fluid modular scale (≈1.25 on mobile → ≈1.4 on desktop) */
+  --step--2: clamp(0.72rem, 0.7rem + 0.1vw, 0.78rem);
+  --step--1: clamp(0.84rem, 0.81rem + 0.15vw, 0.92rem);
+  --step-0: clamp(1.06rem, 1rem + 0.25vw, 1.19rem);
+  --step-1: clamp(1.25rem, 1.14rem + 0.5vw, 1.55rem);
+  --step-2: clamp(1.55rem, 1.32rem + 1vw, 2.2rem);
+  --step-3: clamp(1.95rem, 1.5rem + 2vw, 3.3rem);
+  --step-4: clamp(2.4rem, 1.6rem + 3.6vw, 5.2rem);
+  --step-5: clamp(2.9rem, 1.4rem + 7vw, 9.4rem);
+
+  /* ---- space ---- */
+  --space-3xs: 0.25rem;
+  --space-2xs: 0.5rem;
+  --space-xs: 0.75rem;
+  --space-s: 1rem;
+  --space-m: 1.5rem;
+  --space-l: 2.25rem;
+  --space-xl: clamp(2.5rem, 2rem + 2.5vw, 4rem);
+  --space-2xl: clamp(4rem, 3rem + 5vw, 8rem);
+  --space-3xl: clamp(6rem, 4rem + 9vw, 13rem);
+
+  --measure: 64ch;
+  --wrap: 1240px;
+  --radius-s: 6px;
+  --radius-m: 14px;
+  --radius-l: 28px;
+  --header-h: 64px;
+
+  /* ---- motion ---- */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --dur-1: 160ms;
+  --dur-2: 320ms;
+  --dur-3: 640ms;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --birch: #0b1513;
+    --birch-2: #12201d;
+    --birch-3: #1a2c28;
+    --spruce-ink: #e6eee9;
+    --spruce-ink-2: #b4c3bd;
+    --spruce-ink-3: #8a9a94;
+    --spruce: #8fd0c0;
+    --spruce-soft: rgb(143 208 192 / 0.08);
+    --line: rgb(230 238 233 / 0.13);
+    --line-strong: rgb(230 238 233 / 0.26);
+    --atoca: #ff4f66;
+    --atoca-text: #ff7a8b;
+    --atoca-soft: rgb(255 79 102 / 0.14);
+    --on-atoca: #22050a;
+    --ice: #142a31;
+    --ice-ink: #bfe0ea;
+    --maple: #f3b24e;
+    --maple-soft: rgb(243 178 78 / 0.14);
+    --card: #101d1a;
+    --shadow: 0 1px 0 rgb(0 0 0 / 0.2), 0 22px 50px -28px rgb(0 0 0 / 0.8);
+    --grain-opacity: 0.07;
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme='dark'] {
+  --birch: #0b1513;
+  --birch-2: #12201d;
+  --birch-3: #1a2c28;
+  --spruce-ink: #e6eee9;
+  --spruce-ink-2: #b4c3bd;
+  --spruce-ink-3: #8a9a94;
+  --spruce: #8fd0c0;
+  --spruce-soft: rgb(143 208 192 / 0.08);
+  --line: rgb(230 238 233 / 0.13);
+  --line-strong: rgb(230 238 233 / 0.26);
+  --atoca: #ff4f66;
+  --atoca-text: #ff7a8b;
+  --atoca-soft: rgb(255 79 102 / 0.14);
+  --on-atoca: #22050a;
+  --ice: #142a31;
+  --ice-ink: #bfe0ea;
+  --maple: #f3b24e;
+  --maple-soft: rgb(243 178 78 / 0.14);
+  --card: #101d1a;
+  --shadow: 0 1px 0 rgb(0 0 0 / 0.2), 0 22px 50px -28px rgb(0 0 0 / 0.8);
+  --grain-opacity: 0.07;
+  color-scheme: dark;
+}

@@ -1,1 +1,800 @@
-/* help section */
+/* ==================================================================
+   HELP: the last station.
+     1) the SOS banner (phone disc with resting pulse, dial keys)
+     2) the contact board (urgent row first, big selectable numbers, sewn on copy)
+     3) the end of the thread (final knot + closing line)
+   ================================================================== */
+.help .section-body {
+  display: grid;
+  gap: var(--space-xl);
+}
+
+/* ================================================================== 1) SOS banner */
+.help-sos {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-areas:
+    'ring text'
+    'dial dial';
+  align-items: center;
+  gap: var(--space-m) var(--space-m);
+  padding: clamp(1.25rem, 0.7rem + 2.4vw, 2.75rem);
+  border-radius: var(--radius-l);
+  background:
+    radial-gradient(90% 160% at 0% 50%, var(--atoca-soft), transparent 62%),
+    var(--card);
+  box-shadow:
+    inset 0 0 0 1px var(--line),
+    var(--shadow);
+  overflow: clip;
+  isolation: isolate;
+}
+@media (min-width: 900px) {
+  .help-sos {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    grid-template-areas: 'ring text dial';
+    gap: var(--space-l);
+  }
+}
+
+/* phone disc + rings */
+.help-sos-ring {
+  grid-area: ring;
+  align-self: start;
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: clamp(60px, 2.6rem + 3.6vw, 116px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  color: var(--atoca-text);
+  background: var(--atoca-soft);
+  box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--atoca) 45%, transparent);
+  --pulse: 1.6;
+}
+@media (min-width: 900px) {
+  .help-sos-ring {
+    align-self: center;
+    --pulse: 2.1;
+  }
+}
+.help-sos-ring .icon {
+  position: relative;
+  width: 44%;
+  height: 44%;
+  stroke-width: 1.5;
+}
+.help-sos-ring::before,
+.help-sos-ring::after,
+.help-sos-burst {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1.5px var(--atoca);
+  opacity: 0;
+  pointer-events: none;
+}
+.help-sos.is-live .help-sos-ring::before {
+  animation: help-pulse 3.6s cubic-bezier(0.2, 0.7, 0.3, 1) infinite;
+}
+.help-sos.is-live .help-sos-ring::after {
+  animation: help-pulse 3.6s cubic-bezier(0.2, 0.7, 0.3, 1) 1.8s infinite;
+}
+.help-sos.is-away .help-sos-ring::before,
+.help-sos.is-away .help-sos-ring::after {
+  animation-play-state: paused;
+}
+@keyframes help-pulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  70%,
+  100% {
+    transform: scale(var(--pulse, 2));
+    opacity: 0;
+  }
+}
+
+/* the sentence */
+.help-sos-text {
+  grid-area: text;
+  display: grid;
+  justify-items: start;
+  gap: 0.7rem;
+  min-width: 0;
+}
+.help-sos-label {
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: var(--step--2);
+}
+.help-sos-dot {
+  width: 0.55em;
+  height: 0.55em;
+  border-radius: 50%;
+  background: currentColor;
+}
+.help-sos-line {
+  font-family: var(--font-display);
+  font-size: clamp(1.7rem, 1.05rem + 2.9vw, 3.6rem);
+  font-weight: 760;
+  font-stretch: 80%;
+  line-height: 0.98;
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+}
+.help-sos-q,
+.help-sos-a {
+  display: block;
+}
+.help-sos-a {
+  color: var(--spruce-ink-2);
+}
+.help-sos-num {
+  color: var(--atoca-text);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* the dial keys (one tel: link) */
+.help-sos-dial {
+  grid-area: dial;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-xs) var(--space-m);
+  justify-self: start;
+  text-decoration: none;
+  border-radius: 999px;
+  -webkit-tap-highlight-color: transparent;
+}
+@media (min-width: 900px) {
+  .help-sos-dial {
+    flex-direction: column;
+    align-items: center;
+    justify-self: end;
+  }
+}
+.help-sos-keys {
+  display: flex;
+  gap: clamp(0.45rem, 0.3rem + 0.5vw, 0.8rem);
+}
+.help-sos-key {
+  display: grid;
+  place-items: center;
+  width: clamp(58px, 2.6rem + 2.8vw, 96px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  font-family: var(--font-display);
+  font-size: clamp(1.9rem, 1.2rem + 2.3vw, 3.5rem);
+  font-weight: 760;
+  font-stretch: 80%;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  color: var(--atoca-text);
+  background: var(--card);
+  box-shadow:
+    inset 0 0 0 1.5px var(--atoca),
+    0 3px 0 0 color-mix(in srgb, var(--atoca) 30%, transparent);
+  transition:
+    background-color var(--dur-2) linear,
+    color var(--dur-2) linear,
+    box-shadow var(--dur-2) var(--ease-out),
+    translate var(--dur-2) var(--ease-out);
+  transition-delay: calc(var(--k, 0) * 70ms);
+}
+.help-sos-dial:hover .help-sos-key,
+.help-sos-dial:focus-visible .help-sos-key {
+  color: var(--on-atoca);
+  background: var(--atoca);
+}
+.help-sos-dial:active .help-sos-key {
+  translate: 0 3px;
+  box-shadow:
+    inset 0 0 0 1.5px var(--atoca),
+    0 0 0 0 transparent;
+  transition-delay: 0ms;
+}
+.help-sos-dial:focus-visible {
+  outline-offset: 6px;
+}
+.help-sos-note {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  font-family: var(--font-mono);
+  font-size: var(--step--2);
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--spruce-ink-3);
+}
+.help-sos-note .icon {
+  width: 1.3em;
+  height: 1.3em;
+  color: var(--atoca-text);
+}
+
+/* ================================================================== 2) the board */
+.help-tier {
+  display: grid;
+  gap: var(--space-m);
+}
+.help-tier-title {
+  display: flex;
+  align-items: center;
+  gap: 0.75em;
+  font-family: var(--font-mono);
+  font-size: var(--step--1);
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--spruce-ink);
+}
+.help-tier-mark {
+  flex: none;
+  width: 0.7em;
+  height: 0.7em;
+  border-radius: 50%;
+  background: var(--atoca);
+  box-shadow: 0 0 0 4px var(--atoca-soft);
+}
+.help-tier--later .help-tier-mark {
+  background: transparent;
+  box-shadow: inset 0 0 0 1.5px var(--spruce-ink-3);
+}
+.help-tier-count {
+  color: var(--spruce-ink-3);
+  font-weight: 500;
+}
+.help-tier-rule {
+  flex: 1;
+  min-width: 1.5rem;
+  height: 1px;
+  background: var(--line);
+}
+
+.help-grid {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(0.75rem, 0.5rem + 0.8vw, 1.25rem);
+}
+@media (min-width: 720px) {
+  .help-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .help-card {
+    grid-column: span var(--ts, 1);
+  }
+}
+@media (min-width: 1100px) {
+  .help-grid {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+  .help-card {
+    grid-column: span var(--cs, 2);
+  }
+}
+
+/* ---- card */
+.help-card {
+  container: help-card / inline-size;
+  position: relative;
+  display: flex;
+  min-width: 0;
+  border-radius: var(--radius-m);
+  background: var(--card);
+  box-shadow:
+    inset 0 0 0 1px var(--line),
+    var(--shadow);
+  transition:
+    translate var(--dur-3) var(--ease-out),
+    box-shadow var(--dur-3) var(--ease-out);
+}
+/* urgent: an atoca seam down the left edge */
+.help-card.is-urgent::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  border-radius: var(--radius-m) 0 0 var(--radius-m);
+  background: var(--atoca);
+}
+/* rim light that follows the pointer (position set in JS) */
+.help-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1.5px;
+  background: radial-gradient(240px circle at var(--mx, 50%) var(--my, 0%), var(--atoca), transparent 70%);
+  -webkit-mask:
+    linear-gradient(var(--spruce-ink) 0 0) content-box,
+    linear-gradient(var(--spruce-ink) 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(var(--spruce-ink) 0 0) content-box exclude,
+    linear-gradient(var(--spruce-ink) 0 0);
+  opacity: 0;
+  transition: opacity var(--dur-2) linear;
+  pointer-events: none;
+}
+@media (hover: hover) and (pointer: fine) {
+  .help-card:hover {
+    translate: 0 -5px;
+    box-shadow:
+      inset 0 0 0 1px var(--line-strong),
+      0 2px 0 color-mix(in srgb, var(--spruce-ink) 4%, transparent),
+      0 34px 60px -30px color-mix(in srgb, var(--spruce-ink) 42%, transparent);
+  }
+  .help-card:hover::after {
+    opacity: 0.7;
+  }
+}
+
+.help-card-in {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-s);
+  min-width: 0;
+  padding: clamp(1.25rem, 0.95rem + 1vw, 1.9rem);
+}
+.help-card.is-urgent .help-card-in {
+  padding-left: calc(clamp(1.25rem, 0.95rem + 1vw, 1.9rem) + 4px);
+}
+.help-card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-s);
+  min-height: 1.9rem;
+}
+.help-hours {
+  border-radius: 0.8rem;
+  font-size: var(--step--2);
+  white-space: normal;
+  text-wrap: balance;
+  max-width: 100%;
+}
+.help-hours-t {
+  min-width: 0;
+}
+.help-hours .icon {
+  width: 1.25em;
+  height: 1.25em;
+}
+.help-card-num {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55em;
+  padding-top: 0.3em;
+  font-family: var(--font-mono);
+  font-size: var(--step--2);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--atoca-text);
+}
+.help-card-num::before {
+  content: '';
+  width: 1.3em;
+  height: 2px;
+  border-radius: 2px;
+  background: currentColor;
+}
+.help-card-main {
+  display: grid;
+  gap: 0.5rem;
+}
+.help-card-name {
+  font-size: clamp(1.2rem, 1.08rem + 0.45vw, 1.5rem);
+  font-stretch: 85%;
+  font-weight: 730;
+  line-height: 1.08;
+  letter-spacing: -0.018em;
+  text-wrap: balance;
+}
+.help-card.is-urgent .help-card-name {
+  font-size: clamp(1.35rem, 1.15rem + 0.75vw, 1.85rem);
+}
+.help-card-desc {
+  font-size: 1rem;
+  line-height: 1.55;
+  color: var(--spruce-ink-2);
+  max-width: 60ch;
+}
+.help-card-desc strong {
+  color: var(--spruce-ink);
+}
+
+/* ---- reach: the number (or the website), then the actions */
+.help-reach {
+  margin-top: auto;
+  display: grid;
+  gap: var(--space-s);
+  padding-top: var(--space-s);
+  border-top: 1px solid var(--line);
+}
+.help-num {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.15rem 0.6rem;
+  padding-bottom: 14px;
+  font-family: var(--font-mono);
+  font-size: clamp(1.45rem, 8.6cqi, 2.3rem);
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.04em;
+  font-variant-numeric: tabular-nums;
+  color: var(--spruce-ink);
+}
+.help-card.is-urgent .help-num {
+  font-size: clamp(1.55rem, 9.4cqi, 2.6rem);
+}
+.help-num-main {
+  position: relative;
+  display: inline-block;
+  max-width: 100%;
+  white-space: nowrap;
+}
+.help-num-main.is-long {
+  white-space: normal;
+  font-size: 0.8em;
+}
+.help-num-digits {
+  -webkit-user-select: all;
+  user-select: all;
+  cursor: text;
+}
+.help-num-digits::selection,
+.help-num-digits *::selection {
+  background: var(--atoca);
+  color: var(--on-atoca);
+}
+.help-ch {
+  will-change: transform;
+}
+.help-num-extra {
+  font-size: 0.5em;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: var(--spruce-ink-3);
+}
+
+/* the seam under the number: dotted ghost, sewn red on copy */
+.help-stitch {
+  position: absolute;
+  left: 0;
+  bottom: -15px;
+  width: 100%;
+  height: 14px;
+  overflow: visible;
+  pointer-events: none;
+}
+.help-stitch-ghost {
+  stroke: var(--line-strong);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-dasharray: 1.5 6;
+  transition: stroke var(--dur-2) linear;
+}
+.help-card:hover .help-stitch-ghost {
+  stroke: color-mix(in srgb, var(--atoca) 55%, var(--line-strong));
+}
+.help-card.is-sewn .help-stitch-ghost {
+  stroke: transparent;
+}
+.help-stitch-live line {
+  stroke: var(--atoca);
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+}
+.help-stitch-knot {
+  fill: var(--atoca);
+  opacity: 0;
+}
+.help-stitch-needle {
+  opacity: 0;
+}
+.help-stitch-halo {
+  fill: var(--atoca-soft);
+}
+.help-stitch-eye {
+  fill: var(--atoca);
+}
+
+/* ---- actions */
+.help-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+.help .help-actions .btn {
+  min-height: 44px;
+  padding: 0.5em 1.05em;
+  gap: 0.5em;
+  font-size: var(--step--1);
+}
+.help .help-actions .btn .icon {
+  width: 1.15em;
+  height: 1.15em;
+}
+.help-site-host {
+  position: relative;
+  font-family: var(--font-mono);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+.help-site--inline {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45em;
+  min-height: 44px;
+  padding-inline: 0.35em;
+  margin-left: auto;
+  font-size: var(--step--1);
+  color: var(--spruce-ink-2);
+  text-decoration: none;
+  border-radius: 6px;
+}
+.help-site--inline .help-site-host {
+  background: linear-gradient(var(--line-strong), var(--line-strong)) 0 100% / 100% 1px no-repeat;
+  padding-bottom: 0.1em;
+  transition:
+    background-size var(--dur-3) var(--ease-out),
+    color var(--dur-2) linear;
+}
+.help-site--inline .icon {
+  width: 1.05em;
+  height: 1.05em;
+  color: var(--atoca-text);
+  transition: translate var(--dur-2) var(--ease-out);
+}
+.help-site--inline:hover {
+  color: var(--spruce-ink);
+}
+/* narrow cards: the site link sits on its own line, under the buttons, aligned left */
+@container help-card (max-width: 460px) {
+  .help-site--inline {
+    flex-basis: 100%;
+    justify-content: flex-start;
+    margin-left: 0;
+    padding-inline: 0;
+  }
+}
+.help-site--inline:hover .help-site-host {
+  background-image: linear-gradient(var(--atoca), var(--atoca));
+}
+.help-site--inline:hover .icon,
+.help-site--big:hover .icon {
+  translate: 2px -2px;
+}
+
+/* copy: the icon folds into a check, the label rolls, the fill stays atoca for a moment */
+.help-copy {
+  padding-left: 0.95em;
+}
+.help-copy-ico {
+  position: relative;
+  display: grid;
+  width: 1.15em;
+  height: 1.15em;
+  flex: none;
+}
+.help .help-copy-ico .icon {
+  grid-area: 1 / 1;
+  width: 100%;
+  height: 100%;
+  transition:
+    transform 0.5s var(--ease-spring),
+    opacity 0.25s linear;
+}
+.help-copy-check {
+  stroke-width: 2.3;
+}
+.help-copy-check path {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  transition: stroke-dashoffset 0.5s var(--ease-out) 0.14s;
+}
+.help-copy.is-done .help-copy-glyph {
+  transform: scale(0.3) rotate(-120deg);
+  opacity: 0;
+}
+.help-copy.is-done .help-copy-check path {
+  stroke-dashoffset: 0;
+}
+.help-copy-label {
+  position: relative;
+  display: grid;
+  overflow: hidden;
+  transition: width 0.5s var(--ease-out);
+  /* a little room so descenders survive the mask */
+  padding-block: 0.1em;
+  margin-block: -0.1em;
+}
+.help-copy-label > span {
+  grid-area: 1 / 1;
+  white-space: nowrap;
+  transition:
+    transform 0.5s var(--ease-out),
+    opacity 0.3s linear;
+}
+.help-copy-l2 {
+  position: absolute;
+  left: 0;
+  top: 0.1em;
+  transform: translateY(105%);
+  opacity: 0;
+}
+.help-copy.is-done .help-copy-l1 {
+  transform: translateY(-105%);
+  opacity: 0;
+}
+.help-copy.is-done .help-copy-l2 {
+  transform: none;
+  opacity: 1;
+}
+.help-copy.is-done {
+  color: var(--on-atoca);
+}
+.help-copy.is-done::before {
+  transform: translateY(0);
+}
+.help-copy:active {
+  scale: 0.96;
+}
+.help-copy.is-burst {
+  animation: help-burst 0.75s var(--ease-out);
+}
+@keyframes help-burst {
+  from {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--atoca) 65%, transparent);
+  }
+  to {
+    box-shadow: 0 0 0 12px color-mix(in srgb, var(--atoca) 0%, transparent);
+  }
+}
+
+/* no phone: the website takes the number's place */
+.help-reach.is-web {
+  align-content: end;
+}
+.help-site--big {
+  display: inline-flex;
+  align-items: center;
+  justify-self: start;
+  gap: 0.5em;
+  min-height: 44px;
+  max-width: 100%;
+  font-size: clamp(1.15rem, 6cqi, 1.6rem);
+  font-weight: 600;
+  color: var(--spruce-ink);
+  text-decoration: none;
+}
+.help-site--big .help-site-host {
+  overflow-wrap: anywhere;
+  background: linear-gradient(var(--atoca), var(--atoca)) 0 100% / 100% 2px no-repeat;
+  padding-bottom: 0.12em;
+  transition:
+    background-size var(--dur-3) var(--ease-out),
+    color var(--dur-2) linear;
+}
+.help-site--big .icon {
+  width: 0.95em;
+  height: 0.95em;
+  color: var(--atoca-text);
+  transition: translate var(--dur-2) var(--ease-out);
+}
+.help-site--big:hover .help-site-host {
+  color: var(--atoca-text);
+}
+
+
+/* wide cards (a lone card, or the last of an odd tablet row): text left, ways in right */
+@container help-card (min-width: 620px) {
+  .help-card-in {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+      'top top'
+      'main reach';
+    column-gap: var(--space-l);
+    align-items: end;
+  }
+  .help-card-top {
+    grid-area: top;
+  }
+  .help-card-main {
+    grid-area: main;
+    align-self: start;
+  }
+  .help-reach {
+    grid-area: reach;
+    border-top: 0;
+    padding-top: 0;
+  }
+  .help-num,
+  .help-card.is-urgent .help-num {
+    font-size: clamp(1.5rem, 4.6cqi, 2.6rem);
+  }
+  .help-reach {
+    max-width: 30rem;
+  }
+}
+
+/* ================================================================== 3) the end of the thread */
+.help-end {
+  position: relative;
+  display: grid;
+  justify-items: start;
+  padding-top: clamp(3rem, 2rem + 4vw, 6.5rem);
+}
+@media (min-width: 720px) {
+  .help-end {
+    justify-items: center;
+    text-align: center;
+  }
+}
+.help-tail {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 1px;
+  height: 1px;
+}
+.help-knot {
+  display: block;
+  width: 1px;
+  height: 1px;
+}
+.help-closing {
+  margin-top: clamp(2rem, 1.6rem + 1.5vw, 3rem);
+  max-width: 22ch;
+  font-family: var(--font-display);
+  font-size: clamp(1.9rem, 1.3rem + 2.4vw, 3.4rem);
+  font-weight: 760;
+  font-stretch: 80%;
+  line-height: 0.98;
+  letter-spacing: -0.035em;
+  color: var(--spruce-ink-2);
+  text-wrap: balance;
+  transition: color 1.2s linear;
+}
+.help-closing > span {
+  display: block;
+}
+.help-closing-b {
+  color: var(--atoca-text);
+}
+.help-knot.is-sewn + .help-closing {
+  color: var(--spruce-ink);
+}
+
+/* ================================================================== reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .help-sos.is-live .help-sos-ring::before,
+  .help-sos.is-live .help-sos-ring::after,
+  .help-copy.is-burst {
+    animation: none;
+  }
+  .help-card,
+  .help-sos-key,
+  .help .help-copy-ico .icon,
+  .help-copy-check path,
+  .help-copy-label > span {
+    transition: none;
+  }
+}

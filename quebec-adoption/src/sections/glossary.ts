@@ -23,7 +23,7 @@ import type { Content, GlossaryTerm, Lang } from '../content/types'
 import type { SectionDef } from './shared'
 import { sectionShell, para } from './shared'
 import { h, rich, s, clamp } from '../core/dom'
-import { gsap, Flip, ScrollTrigger, motion, ease, scope, onTeardown, scrollToTarget } from '../core/motion'
+import { gsap, Flip, ScrollTrigger, motion, ease, scope, onTeardown, getLenis } from '../core/motion'
 import { icon } from '../core/icons'
 
 /* Small UI words this section needs that are not in the content contract (see the final report). */
@@ -32,10 +32,10 @@ const UI = {
     clear: 'Effacer la recherche',
     rail: 'Aller à une lettre',
     list: 'Termes du glossaire',
-    inOther: 'En anglais : ',
+    inOther: 'En anglais\u00a0: ',
     of: 'sur',
     end: 'Fin du glossaire',
-    tryLabel: 'Essayez :',
+    tryLabel: 'Essayez\u00a0:',
   },
   en: {
     clear: 'Clear search',
@@ -199,9 +199,9 @@ function untiedThread() {
     s(
       'g',
       { class: 'glossary-untied-fray' },
-      s('path', { d: 'M 194 98 q 4 -0.5 6.5 -4.5' }),
-      s('path', { d: 'M 194 98 q 5 1 9.5 -0.5' }),
-      s('path', { d: 'M 194 98 q 2.5 2.5 3.5 6.5' }),
+      s('path', { d: 'M 186.5 96.6 c 3 -1 6 -4.5 6 -9' }),
+      s('path', { d: 'M 190.5 97.6 c 4 0.2 8.5 -1.2 11 -4.6' }),
+      s('path', { d: 'M 193.5 98 c 3.5 1.2 6.5 4 7 8.5' }),
     ),
     s('circle', { class: 'glossary-untied-bead', cx: 8, cy: 64, r: 4 }),
   )
@@ -421,13 +421,13 @@ function searchThread(svg: SVGSVGElement, path: SVGPathElement) {
     for (let i = 0; i < N; i++) {
       const f = i / (N - 1)
       let x = x0 + f * span
-      // a gentle sag along the pinned part, growing toward the free end
-      let y = Y + u[i] + sl * 5 * Math.sin(Math.PI * Math.min(1, f / 0.86))
-      if (f > 0.66) {
+      // the whole thread goes slack: a soft sag with a little irregular looseness
+      let y = Y + u[i] + sl * (6 * Math.sin(Math.PI * Math.min(1, f / 0.9)) + 1.6 * Math.sin(f * 23) * f)
+      if (f > 0.58) {
         // the loose end: slips back off its pin and droops, with a last little curl
-        const g = (f - 0.66) / 0.34
-        x -= sl * span * 0.07 * g * g
-        y += sl * (20 * g * g + 5 * Math.sin(g * Math.PI * 1.5) * g)
+        const g = (f - 0.58) / 0.42
+        x -= sl * span * (0.085 * g * g + 0.012 * Math.sin(g * Math.PI))
+        y += sl * (25 * Math.pow(g, 2.3) + 4 * Math.sin(g * Math.PI * 2) * g)
       }
       d += `${i ? ' L' : 'M'} ${x.toFixed(1)} ${y.toFixed(1)}`
     }
@@ -688,7 +688,9 @@ function enhance(el: HTMLElement, c: Content) {
     if (btn) revealInRail(btn, animate)
   }
 
-  const visibleHeaders = () => headerEls.filter((hd) => hd.style.display !== 'none')
+  /** letters that currently have results (state, not style: Flip briefly re-shows leaving rows) */
+  const shownLetters = new Set(headerEls.map((hd) => hd.dataset.letter!))
+  const visibleHeaders = () => headerEls.filter((hd) => shownLetters.has(hd.dataset.letter!))
 
   const syncPane = () => {
     const top = pane.scrollTop
@@ -785,7 +787,7 @@ function enhance(el: HTMLElement, c: Content) {
   /* ---------------------------------------------------------------- rail: jump, roving focus, magnifier */
   const jump = (L: string, focusHeading: boolean) => {
     const hd = headers.get(L)
-    if (!hd || hd.style.display === 'none') return
+    if (!hd || !shownLetters.has(L)) return
     setActive(L)
     scrollPaneTo(hd.offsetTop - padTop())
     if (focusHeading) hd.focus({ preventScroll: true })
@@ -998,8 +1000,10 @@ function enhance(el: HTMLElement, c: Content) {
         r.vis = r.next
         r.el.style.display = r.vis ? '' : 'none'
       }
+      shownLetters.clear()
       for (const hd of headerEls) {
         const m = perLetter.get(hd.dataset.letter!) ?? 0
+        if (m) shownLetters.add(hd.dataset.letter!)
         if (hd.style.display !== 'none' && !m) leaving.push(hd)
         hd.style.display = m ? '' : 'none'
         const cnt = hd.querySelector('.glossary-letter-count')
@@ -1033,7 +1037,10 @@ function enhance(el: HTMLElement, c: Content) {
           onLeave: (els) => gsap.to(els, { autoAlpha: 0, duration: 0.22, ease: 'power1.in' }),
           onComplete: () => {
             gsap.set(gone, { clearProps: 'opacity,visibility' })
-            if (flipTl === tl) flipTl = null
+            if (flipTl === tl) {
+              flipTl = null
+              syncPane()
+            }
           },
         })
         const tl = flipTl
@@ -1041,6 +1048,7 @@ function enhance(el: HTMLElement, c: Content) {
         if (!n && !wasEmpty) drawUntied()
       }
       active = ''
+      if (!n) btns.forEach((b) => b.removeAttribute('aria-current'))
       syncPane()
     }
 
@@ -1085,7 +1093,12 @@ function enhance(el: HTMLElement, c: Content) {
     assisted = true
     const r = panel.getBoundingClientRect()
     const headerH = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-h')) || 64
-    if (r.top < headerH - 2 || r.bottom > innerHeight + 2) scrollToTarget(panel)
+    if (r.top >= headerH - 4 && r.bottom <= innerHeight + 4) return
+    // exact target (panel just under the header): scrollToTarget(el) also adds the page's scroll-padding
+    const y = Math.max(0, r.top + window.scrollY - headerH - 12)
+    const lenis = getLenis()
+    if (lenis) lenis.scrollTo(y, { duration: 0.9 })
+    else window.scrollTo({ top: y, behavior: motion.reduced ? 'auto' : 'smooth' })
   }
 
   let lastLen = 0

@@ -100,19 +100,25 @@ export function initCounters(root: ParentNode = document) {
       el.textContent = fmt(target)
       continue
     }
+    // The final value stays on screen at rest (thumbnails, no-scroll readers); it counts up from 0
+    // only once the number actually comes into view.
     const obj = { v: 0 }
-    el.textContent = fmt(0)
+    el.textContent = fmt(target)
     ScrollTrigger.create({
       trigger: el,
-      start: 'top 92%',
+      start: 'top bottom-=24',
       once: true,
       onEnter: () =>
-        gsap.to(obj, {
-          v: target,
-          duration: 1.6,
-          ease: 'power3.out',
-          onUpdate: () => (el.textContent = fmt(obj.v)),
-        }),
+        gsap.fromTo(
+          obj,
+          { v: 0 },
+          {
+            v: target,
+            duration: 1.6,
+            ease: 'power3.out',
+            onUpdate: () => (el.textContent = fmt(obj.v)),
+          },
+        ),
     })
   }
 }

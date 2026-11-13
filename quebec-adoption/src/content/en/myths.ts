@@ -1,5 +1,10 @@
-// DRAFT — replaced by researched content
-import type { Myths } from '../types'
+// Researched content — verified 2026-11-13
+import type { LegalRef, Myths } from '../types'
+
+const LQ = 'https://www.legisquebec.gouv.qc.ca/en/document/cs/'
+const se = (a: string) => `#se:${a.replace(/\./g, '_')}`
+const ccq = (a: string): LegalRef => ({ label: `C.C.Q., art. ${a}`, url: `${LQ}CCQ-1991${se(a)}` })
+const ypa = (a: string): LegalRef => ({ label: `YPA, s. ${a}`, url: `${LQ}P-34.1${se(a)}` })
 
 /*
  * Writing guide for this section (read by the "myths" board):
@@ -7,13 +12,21 @@ import type { Myths } from '../types'
  *  - myth: ONE sentence, as people say it, 45–95 characters. No quotation marks (added by the page).
  *  - fact: 1–3 short sentences, 150–300 characters. Start with the verdict ("No.", "False.", "Not necessarily.").
  *    **bold** the single idea a stressed reader must retain.
- *  - refs: 0–3 short chips ("C.C.Q., art. 557"). Longer facts + 3 refs make every card in that row taller.
+ *  - refs: 0–3 short chips. Ids are English slugs shared by FR and EN.
+ *
+ * Not stated on purpose (could not be confirmed): any fee amount for a domestic adoption, any upper age
+ * limit used in practice by a regional adoption service, the number of domestic adoptions per year.
+ * Fact-check 2026-11-13: "free" domestic adoption is UNVERIFIED (Québec.ca simply lists no fee), so the cost
+ * myth is scoped to DPJ adoptions and answered with what official sources say. Art. 579: a child of 10 to 13
+ * who refuses can be overridden by the court; from 14 the child's consent is always required.
  */
+const S = 'hero-principles-myths-rights-'
+
 export const myths: Myths = {
   eyebrow: 'Myths & facts',
   title: 'Untangling fact from fiction.',
   lede:
-    'Some beliefs about adoption and the DPJ frighten people for no reason. Others give false hope. Tap a myth: it fades away and the fact takes its place, with its source.',
+    'Some beliefs about adoption and the DPJ (Director of Youth Protection) frighten people for no reason. Others give false hope. Tap a myth: it fades away and the fact takes its place, with its source.',
   hint: 'Tap a myth to make it disappear',
   mythLabel: 'Myth',
   factLabel: 'Fact',
@@ -22,60 +35,97 @@ export const myths: Myths = {
     {
       id: 'dpj-removal',
       myth: 'If the DPJ gets involved, my children will automatically be taken away.',
-      fact: 'No. The law requires every decision to aim first at **keeping the child in their family**, with support if needed. Placement is a last resort, used when the child’s safety or development cannot be ensured any other way.',
-      refs: [{ label: 'YPA, s. 4' }],
+      fact: 'No. The law first asks that **the child stay with their family**, if that is in the child’s interest. In 2025–2026, 52.1% of the children the DPJ took charge of stayed with their family, and 18.3% were entrusted to a person who matters to them.',
+      refs: [ypa('4')],
+      sources: ['lpj', `${S}bill15`, `${S}dpj-bilan-2026`],
     },
     {
-      id: 'withdrawal',
+      id: 'prenatal-alert',
+      myth: 'If the DPJ knows me, they will be alerted before my baby is born.',
+      fact: 'No. Since April 2023, the DPJ **no longer receives reports before a baby is born**. Preventive services during pregnancy are offered instead. The duty to report a situation applies from the birth.',
+      sources: [`${S}birth-alerts`],
+    },
+    {
+      id: 'placement-adoption',
+      myth: 'After 12 months in foster care, my baby will automatically be adopted.',
+      fact: 'No. When the maximum period is reached, the court must, with some exceptions, choose **a stable life plan**. Adoption is only one option. It requires the parents’ consent or a judgment declaring the child eligible for adoption, which the parents can contest.',
+      refs: [ypa('91.1'), ccq('544'), ccq('559')],
+      sources: ['lpj', 'ccq-book2', `${S}msss-life-plan`],
+    },
+    {
+      id: 'consent-withdrawal',
       myth: 'Once you sign consent to adoption, you can never change your mind.',
-      fact: 'False. A parent who consented can **withdraw it within 30 days**: the child must then be returned to them, without formality. After that, they can still ask the court to return the child, as long as no placement order has been made.',
-      refs: [{ label: 'C.C.Q., art. 557' }, { label: 'C.C.Q., art. 558' }],
+      fact: 'False. You have **30 days after signing** to withdraw your consent, in writing before two witnesses, and the child must be returned to you. After that, only the court can order the child’s return, and only before the placement order.',
+      refs: [ccq('557'), ccq('548'), ccq('558')],
+      sources: ['ccq-book2', 'educaloi-adopt'],
     },
     {
-      id: 'who-can-adopt',
-      myth: 'You have to be a married couple to adopt.',
-      fact: 'No. **Any adult** can adopt, alone or with another person, whatever their marital status or sexual orientation. What matters is the child’s interest and the assessment of your plan.',
-      refs: [{ label: 'C.C.Q., art. 546' }],
+      id: 'birth-parents',
+      myth: 'A parent who places their child for adoption doesn’t love them.',
+      fact: 'False. This choice is often made through pain, and it can leave **a lasting grief**. The adoption service can inform you and support you while you think it over, with no commitment. After signing, you still have 30 days to change your mind.',
+      refs: [ccq('548'), ccq('557')],
+      sources: ['qc-adoption-about', 'msss-origins-guide'],
     },
     {
       id: 'origins',
       myth: 'An adopted person will never be able to find out where they come from.',
-      fact: 'False. An adopted person has the right to obtain **their original name and the names of their birth parents**, and information to reach them. Under 14, they need their parents’ agreement. A birth parent may, however, have registered a refusal.',
-      refs: [{ label: 'C.C.Q., art. 583' }],
+      fact: 'False. They have the right to obtain **the names of their birth parents** and a copy of their original act of birth (under 14, with their parents’ agreement). A refusal to disclose identity ends when they turn 18. Either side can still refuse contact.',
+      refs: [ccq('583'), ccq('583.4'), ccq('583.6')],
+      sources: ['ccq-book2', `${S}qc-origins-pl2`, 'qc-origins'],
     },
     {
-      id: 'banque-mixte',
-      myth: 'In the Banque-mixte program, the foster family is sure to adopt the child.',
-      fact: 'Not necessarily. The family welcomes the child **with a view to a possible adoption**. Adoption only happens if the child becomes legally adoptable. Until then, the child often keeps in touch with their parents, and may go back to live with them.',
-    },
-    {
-      id: 'only-option',
-      myth: 'When a child can’t live with their parents, adoption is the only solution.',
-      fact: 'No. The law provides several **life plans**: returning to the family, placement with a relative, tutorship, adoption or a long-term placement. The one chosen is the one that best meets the child’s needs.',
-      refs: [{ label: 'YPA, s. 4' }],
-    },
-    {
-      id: 'birth-parents',
-      myth: 'Parents who place their child for adoption don’t care about them.',
-      fact: 'That is rarely true. Placing a child for adoption is often **an act of protection**, made through pain. These parents have rights: to be informed, to be supported and to take the time to decide.',
-      refs: [{ label: 'C.C.Q., art. 557' }],
-    },
-    {
-      id: 'grandparents',
-      myth: 'Grandparents have no say when the DPJ is involved.',
-      fact: 'They can play a big part. If the child cannot stay with their parents, the law looks first to **the extended family** and the people who matter to the child. Ties with grandparents can be kept up when it is in the child’s interest.',
-      refs: [{ label: 'YPA, s. 4' }, { label: 'C.C.Q., art. 611' }],
+      id: 'open-adoption',
+      myth: 'In Québec, adoption always cuts off all contact with the birth family.',
+      fact: 'Not necessarily. If it is in the child’s interest, the adoptive family and the birth family can **agree in writing** to share news or keep in touch. If they disagree, the court can decide. From age 14, the child must agree and can end it.',
+      refs: [ccq('579')],
+      sources: ['ccq-book2', `${S}qc-contact-agreement`],
     },
     {
       id: 'child-voice',
-      myth: 'The child has no say in their own adoption.',
-      fact: 'Quite the opposite. From **age 10**, the child must consent to their adoption, unless they are unable to express their wishes. At **14 and over**, their refusal prevents the adoption.',
-      refs: [{ label: 'C.C.Q., art. 549' }, { label: 'C.C.Q., art. 550' }],
+      myth: 'The child has no say at all in their own adoption.',
+      fact: 'False. From **age 10**, the child must consent to their adoption, unless they are unable to express their wishes. If a child under 14 refuses, the court can wait or go ahead anyway. At **14 and over**, their refusal stops the adoption.',
+      refs: [ccq('549'), ccq('550')],
+      sources: ['ccq-book2'],
+    },
+    {
+      id: 'grandparents',
+      myth: 'Grandparents can do nothing if the child can’t stay with their parents.',
+      fact: 'False. If it is in the child’s interest, the law says the child goes **first** to the people who matter most to them, including grandparents. A grandparent can also become the child’s tutor, without cutting ties with the parents, or adopt with a special consent.',
+      refs: [ypa('4'), ccq('199.1'), ccq('555')],
+      sources: ['lpj', 'ccq-book1', 'ccq-book2', `${S}qc-suppletive`],
+    },
+    {
+      id: 'who-can-adopt',
+      myth: 'You have to be a married man and woman to adopt.',
+      fact: 'No. **Any adult** can adopt, alone or with another person. The conditions are the same for single people and for couples who are married, in a civil union, in a parental union or common-law, same-sex or not. A child can have two mothers or two fathers.',
+      refs: [ccq('546')],
+      sources: ['ccq-book2', 'educaloi-adopt', `${S}qc-filiation`],
+    },
+    {
+      id: 'age-limit',
+      myth: 'Past a certain age, the law won’t let you adopt.',
+      fact: 'No. The law sets **no maximum age**. You must be an adult and, in general, at least 18 years older than the child. The published criteria for registering with an adoption service set no maximum either, but ask for good physical and mental health, among other things.',
+      refs: [ccq('546'), ccq('547')],
+      sources: ['ccq-book2', 'qc-adoption-legal'],
     },
     {
       id: 'cost',
-      myth: 'Adopting a child from here costs tens of thousands of dollars.',
-      fact: 'Adopting a child from Québec through the DPJ and your regional CISSS or CIUSSS is **generally free**. It is international adoption that involves significant costs: accredited body, documents, travel.',
+      myth: 'Adopting a child through the DPJ costs tens of thousands of dollars.',
+      fact: 'Not according to official sources. These adoptions go through your region’s **public adoption service**, and Québec.ca mentions no fees for it. Financial assistance even exists in some cases. High costs mostly come with international adoption. If in doubt, ask the adoption service.',
+      sources: ['qc-adoption-legal', 'qc-adoption-about', `${S}reg-adoption-aid`, `${S}qc-intl-costs`],
+    },
+    {
+      id: 'banque-mixte',
+      myth: 'In the Banque mixte program, the foster family is sure to adopt the child.',
+      fact: 'No. The parents are at high risk of not being able to care for the child, but **going back to them is still possible**: the DPJ must plan for that return while preparing another plan just in case. Adoption requires the parents’ consent or a judgment declaring the child eligible.',
+      refs: [ypa('4.2'), ccq('544'), ccq('559')],
+      sources: ['lpj', 'qc-adoption-about', 'educaloi-adopt'],
+    },
+    {
+      id: 'international',
+      myth: 'Adopting from abroad is simpler and faster than adopting here.',
+      fact: 'Not right now. Since November 26, 2024, **no new file** can be opened with a certified body, for an indefinite period. In 2025, only 17 children arrived in Québec through international adoption, compared with 35 in 2024.',
+      sources: [`${S}sasie-stats-2025`],
     },
   ],
 }

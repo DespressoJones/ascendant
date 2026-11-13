@@ -1,54 +1,53 @@
-// DRAFT — replaced by researched content
-import type { Principles } from '../types'
+// Researched content — verified 2026-11-13
+import type { LegalRef, Principles } from '../types'
 
-const CCQ = 'https://www.legisquebec.gouv.qc.ca/fr/document/lc/CCQ-1991'
-const LPJ = 'https://www.legisquebec.gouv.qc.ca/fr/document/lc/P-34.1'
+const LQ = 'https://www.legisquebec.gouv.qc.ca/fr/document/lc/'
+const se = (a: string) => `#se:${a.replace(/\./g, '_')}`
+const ccq = (a: string): LegalRef => ({ label: `C.c.Q., art. ${a}`, url: `${LQ}CCQ-1991${se(a)}` })
+const lpj = (a: string): LegalRef => ({ label: `LPJ, art. ${a}`, url: `${LQ}P-34.1${se(a)}` })
 
 /*
  * Writing guide for this section (renderer: sections/principles.ts)
  *  - 3 items read best (4 also fit). The title says how many: keep it in sync.
- *  - title: a 4–7 word statement, about 25–45 characters. Wrap the key words in **bold**:
- *    they get a red running stitch when the statement is being read.
+ *  - title: a 4–7 word statement, about 25–45 characters. Wrap the key words in **bold**.
  *  - body: 2–3 plain sentences, about 220–380 characters.
  *  - refs: 1–4 chips.
  *  - id: an English slug, the same in FR and EN. It picks the icon (see ICONS in the renderer).
+ *
+ * Checked against: C.c.Q. arts. 33, 34, 543, 577 (consolidation à jour au 9 septembre 2026);
+ * LPJ arts. 3, 4, 4.1, 4.4, 5, 6.1, 6.2, 11.4 (L.Q. 2022, c. 11) and 53.0.1, 91.1 (L.Q. 2017, c. 18; 2022, c. 11).
  */
 export const principles: Principles = {
   eyebrow: 'L’essentiel',
-  title: 'Trois choses à savoir d’abord',
+  title: 'Quatre choses à savoir d’abord',
   items: [
     {
       id: 'child-interest',
       title: 'L’**intérêt de l’enfant** passe en premier.',
       body:
-        'Toute décision qui concerne un enfant, qu’elle vienne de la DPJ, d’un service d’adoption ou d’un juge, doit être prise dans son intérêt et dans le respect de ses droits. On tient compte de ses besoins, de son âge, de sa santé et de son milieu familial. Devant le tribunal, l’enfant a le droit d’être entendu si son âge et son discernement le permettent.',
-      refs: [
-        { label: 'C.c.Q., art. 33', url: `${CCQ}#se:33` },
-        { label: 'C.c.Q., art. 34', url: `${CCQ}#se:34` },
-        { label: 'LPJ, art. 3', url: `${LPJ}#se:3` },
-      ],
+        'Toute décision qui concerne un enfant doit être prise dans son intérêt et dans le respect de ses droits. On tient compte de ses besoins, de son âge, de sa santé et de son milieu familial. Une adoption n’est possible que si elle sert cet intérêt, et devant le tribunal, l’enfant a le droit d’être entendu si son âge et sa maturité le permettent.',
+      refs: [ccq('33'), ccq('34'), ccq('543'), lpj('3')],
     },
     {
       id: 'family-first',
       title: 'La **famille** d’abord, quand c’est sécuritaire.',
       body:
-        'La protection de la jeunesse cherche d’abord à garder l’enfant avec ses parents, avec du soutien. Si ce n’est pas possible, la priorité va aux personnes les plus importantes pour lui, comme ses grands-parents ou d’autres proches, puis à une famille d’accueil. Les frères et sœurs restent ensemble autant que possible.',
-      refs: [
-        { label: 'LPJ, art. 4', url: `${LPJ}#se:4` },
-        { label: 'LPJ, art. 4.1', url: `${LPJ}#se:4_1` },
-      ],
+        'La loi demande d’abord de garder l’enfant avec ses parents, si c’est dans son intérêt. Sinon, il est confié en priorité aux personnes qui comptent le plus pour lui, comme ses grands-parents ou d’autres proches, puis à un milieu qui ressemble le plus possible à une famille. On cherche aussi à garder les frères et sœurs ensemble.',
+      refs: [lpj('4'), lpj('4.1')],
     },
     {
-      id: 'adoption-permanent',
-      title: 'L’adoption est **permanente**. D’autres options existent.',
+      id: 'time-stability',
+      title: 'Pour un enfant, le **temps** compte.',
       body:
-        'Le jugement d’adoption crée un nouveau lien de filiation, pour la vie, et met fin aux liens juridiques avec la famille d’origine. C’est pourquoi elle n’est possible que si elle sert l’intérêt de l’enfant, et que d’autres solutions existent, comme la tutelle supplétive. Un parent qui a signé un consentement a **30 jours** pour changer d’avis.',
-      refs: [
-        { label: 'C.c.Q., art. 543', url: `${CCQ}#se:543` },
-        { label: 'C.c.Q., art. 577', url: `${CCQ}#se:577` },
-        { label: 'C.c.Q., art. 557', url: `${CCQ}#se:557` },
-        { label: 'C.c.Q., art. 199.1', url: `${CCQ}#se:199_1` },
-      ],
+        'Un enfant ne vit pas le temps comme un adulte. S’il vit hors de chez lui, la loi fixe une durée maximale de 12, 18 ou 24 mois selon son âge. Ensuite, si le retour n’est pas possible, le tribunal doit, sauf exception, lui assurer une stabilité durable. Ce projet de vie peut être un proche ou une famille d’accueil jusqu’à 18 ans, la tutelle ou l’adoption.',
+      refs: [lpj('4.4'), lpj('53.0.1'), lpj('91.1')],
+    },
+    {
+      id: 'parents-rights',
+      title: 'Les **parents ont des droits**, eux aussi.',
+      body:
+        'Une intervention de la DPJ ne retire pas aux parents leurs droits et devoirs, sauf exception prévue par la loi. Vous avez le droit de recevoir des explications claires, d’être écouté, d’être accompagné par une personne de votre choix et de consulter une avocate ou un avocat. Si vous n’êtes pas d’accord, c’est le tribunal qui décide.',
+      refs: [lpj('11.4'), lpj('6.1'), lpj('6.2'), lpj('5')],
     },
   ],
 }

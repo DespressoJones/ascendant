@@ -212,7 +212,7 @@ function dossierLace(el: HTMLElement) {
       const last = i === all.length - 1
       // between holes the lace hugs the cards' left margin; the last run dips under the stack
       d += last
-        ? ` C ${a.x - 40} ${a.y + Math.max(160, k * 1.6)}, ${c.x - 220} ${c.y + 6}, ${c.x} ${c.y}`
+        ? ` C ${a.x - 60} ${a.y + Math.max(200, k * 2.4)}, ${c.x - 10} ${c.y - 10}, ${c.x} ${c.y}`
         : i === 1
           ? ` C ${a.x - 120} ${a.y + 30}, ${c.x + 40} ${c.y - 90}, ${c.x} ${c.y}`
           : ` C ${a.x - 55} ${a.y + k * 0.6}, ${c.x - 55} ${c.y - k * 0.6}, ${c.x} ${c.y}`
@@ -265,6 +265,9 @@ function enhance(el: HTMLElement) {
   const ro = new ResizeObserver(() => lace.draw())
   const dossierEl = el.querySelector<HTMLElement>('.dossier')
   if (dossierEl) ro.observe(dossierEl)
+  // the lace ends on the string, which moves when the headline reflows (fonts, resize)
+  ro.observe(el.querySelector<HTMLElement>('.hero-inner') ?? el)
+  document.fonts?.ready.then(() => lace.draw())
   onTeardown(() => ro.disconnect())
   dossierParallax(el, lace.draw)
 

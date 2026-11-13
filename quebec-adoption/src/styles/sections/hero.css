@@ -200,7 +200,7 @@
 .dossier {
   position: relative;
   display: none;
-  height: 500px;
+  height: 570px;
 }
 @media (min-width: 1000px) {
   .dossier {
@@ -217,8 +217,8 @@
   --rot: calc((var(--i) - 1.5) * 2.4deg);
   position: absolute;
   left: calc(4% + var(--i) * 7%);
-  top: calc(var(--i) * 118px);
-  width: min(300px, 74%);
+  top: calc(var(--i) * 132px);
+  width: min(330px, 80%);
   display: grid;
   gap: 0.25rem;
   padding: 1rem 1.2rem 1.05rem 3.1rem;

@@ -1,50 +1,76 @@
-// DRAFT — replaced by researched content
-import type { Rights } from '../types'
+// Researched content — verified 2026-11-13
+import type { LegalRef, Rights } from '../types'
+
+const LQ = 'https://www.legisquebec.gouv.qc.ca/en/document/cs/'
+const se = (a: string) => `#se:${a.replace(/\./g, '_')}`
+const ccq = (a: string): LegalRef => ({ label: `C.C.Q., art. ${a}`, url: `${LQ}CCQ-1991${se(a)}` })
+const ypa = (a: string): LegalRef => ({ label: `YPA, s. ${a}`, url: `${LQ}P-34.1${se(a)}` })
+const adoptionAid: LegalRef = {
+  label: 'O.C. 1915-2023',
+  url: 'https://www.publicationsduquebec.gouv.qc.ca/fileadmin/gazette/pdf_encrypte/lois_reglements/2024F/82291.pdf',
+}
+const legalAidMinors: LegalRef = {
+  label: 'Legal Aid Act, s. 4.0.1',
+  url: `${LQ}A-14${se('4.0.1')}`,
+}
+const legalAid: LegalRef = { label: 'Legal aid', url: 'https://www.csj.qc.ca/admissibilite/' }
+const qpip: LegalRef = {
+  label: 'QPIP',
+  url: 'https://www.quebec.ca/famille-et-soutien-aux-personnes/grossesse-parentalite/aide-financiere-prestations/regime-quebecois-assurance-parentale/adoption/choix-regime',
+}
 
 /*
  * Writing guide for this section (read by the "rights" switcher):
- *  - 3 to 6 groups; 5 is ideal. `who` is the pill label, the panel title AND the giant outline word
+ *  - 3 to 6 groups. `who` is the pill label, the panel title AND the giant outline word
  *    behind the list (desktop): keep it 6–30 characters, no final period.
- *  - 4 to 9 items per group; 5–7 reads best. Each item states ONE right, as a verb phrase
- *    ("Be heard…", "Withdraw…"), 60–120 characters. **Bold** the core of the right (2–5 words).
- *    No links in item text: put them on the refs.
- *  - refs: 0–3 short chips per item ("C.C.Q., art. 557", "YPA, s. 9").
+ *  - 4 to 9 items per group (here 6). Each item states ONE right, as a verb phrase, 60–120 characters.
+ *    **Bold** the core of the right (2–5 words). No links in item text: put them on the refs.
+ *  - refs: 0–3 short chips per item.
+ *  - Group ids are shared by FR and EN (deep link #rights-<id>).
+ *
+ * Checked against: C.C.Q. (consolidation current to September 9, 2026) arts. 33, 34, 199.1, 548–550, 555,
+ * 557, 569, 579, 583, 583.4, 611 (art. 611 was rewritten in 2022: the old "serious reasons" rule is gone);
+ * YPA ss. 3, 4, 4.3, 6.1, 9.1, 11.4 (S.Q. 2022, c. 11), 7, 9, 81, 83 (S.Q. 2017, c. 18), 78 (2022, c. 11),
+ * 5, 52, 54, 70.1, 71.3.6, 74.2, 91; O.C. 1915-2023 (adoption financial assistance: s. 1, 6 continuous months
+ * before the placement order; s. 3, apply within 60 days); Legal Aid Act, s. 4.0.1 (S.Q. 2022, c. 22, s. 128:
+ * free legal aid for every minor).
+ * Fact-check 2026-11-13: arts. 579 and 611 require the consent of a child of 10 to 13, but the court decides
+ * if that child refuses or the adults disagree; only from 14 is the child’s consent always required.
  */
 export const rights: Rights = {
   eyebrow: 'Your rights',
   title: 'Your rights, whoever you are.',
   lede:
-    'Parent, child, foster family, grandparent or adopted person: the law protects you too. Choose your situation to see, in plain words, what you are entitled to and where it is written.',
+    'Parent, child, foster or adoptive family, grandparent or relative: the law protects you too. Choose your situation to see, in plain words, what you are entitled to and where it is written.',
   groups: [
     {
       id: 'parents',
-      who: 'Parents',
+      who: 'The child’s parents',
       icon: 'heart-hand',
       items: [
         {
-          text: '**Be informed, consulted and heard** before any decision about your child.',
-          refs: [{ label: 'YPA, s. 6.1' }],
+          text: '**Get clear explanations** and give your point of view before decisions that affect you are made.',
+          refs: [ypa('6.1'), ypa('4.3')],
         },
         {
-          text: '**Bring a person of your choice** with you to meetings with youth protection (DPJ).',
-          refs: [{ label: 'YPA, s. 6.2' }],
+          text: '**Consult a lawyer.** Legal aid can pay all or part of the cost, depending on your financial situation.',
+          refs: [ypa('5'), legalAid],
         },
         {
-          text: '**Have a lawyer** in court. Legal aid may be free, depending on your income.',
+          text: '**Refuse an agreement** proposed by the DPJ (Director of Youth Protection) or contest its decision: the court then decides.',
+          refs: [ypa('52'), ypa('74.2')],
         },
         {
-          text: '**Refuse a measure** the DPJ proposes: the court then makes the decision.',
+          text: '**Change your mind within 30 days** of signing a consent to adoption, without having to explain why.',
+          refs: [ccq('557'), ccq('548')],
         },
         {
-          text: '**Withdraw your consent** to adoption within 30 days, without having to give a reason.',
-          refs: [{ label: 'C.C.Q., art. 557' }],
+          text: '**Protect your identity** until the child turns 18, by registering a refusal within 30 days after the birth.',
+          refs: [ccq('583.4')],
         },
         {
-          text: '**Keep your rights and duties as a parent**, unless the law or the court decides otherwise.',
-          refs: [{ label: 'YPA, s. 11.4' }],
-        },
-        {
-          text: '**Make a complaint** if the services you receive do not respect your rights.',
+          text: '**Arrange news or contact** after the adoption, in writing, if it is in the child’s interest.',
+          refs: [ccq('579')],
         },
       ],
     },
@@ -54,109 +80,90 @@ export const rights: Rights = {
       icon: 'leaf',
       items: [
         {
-          text: 'Every decision is made **in their interest** and with respect for their rights.',
-          refs: [{ label: 'C.C.Q., art. 33' }, { label: 'YPA, s. 3' }],
+          text: 'Have every decision made **in their interest** and with respect for their rights.',
+          refs: [ccq('33'), ypa('3')],
         },
         {
-          text: '**Be heard**, and have their opinion count, according to their age and maturity.',
-          refs: [{ label: 'C.C.Q., art. 34' }],
+          text: '**Be heard** by the court before it decides, if their age and maturity allow it.',
+          refs: [ccq('34')],
         },
         {
-          text: '**Have their own lawyer** in court, free of charge.',
-          refs: [{ label: 'YPA, s. 78' }],
+          text: '**Have their own lawyer** in youth protection court, free of charge.',
+          refs: [ypa('78'), legalAidMinors],
         },
         {
-          text: '**Stay in touch** with their parents, brothers and sisters and the people who matter, unless the court decides otherwise.',
-          refs: [{ label: 'YPA, s. 9' }],
+          text: 'If placed, **stay in touch** with their parents, brothers and sisters and the people who matter, with some exceptions.',
+          refs: [ypa('9'), ypa('9.1')],
         },
         {
-          text: '**Be prepared** before moving to a new home.',
-          refs: [{ label: 'YPA, s. 7' }],
+          text: 'From age 10, **agree or refuse** to be adopted. At 14 and over, their refusal stops the adoption.',
+          refs: [ccq('549'), ccq('550')],
         },
         {
-          text: 'From age 10, **agree to their own adoption**. From 14, their refusal stops it.',
-          refs: [{ label: 'C.C.Q., art. 549' }, { label: 'C.C.Q., art. 550' }],
+          text: 'Once adopted, **learn about their origins** under the rules of the law: birth parents’ names, original act of birth.',
+          refs: [ccq('583')],
         },
       ],
     },
     {
       id: 'carers',
-      who: 'Foster & adoptive families',
+      who: 'Adoptive & foster parents',
       icon: 'home',
       items: [
         {
-          text: '**Attend the hearings** about the child in your care and testify, with a lawyer.',
-          refs: [{ label: 'YPA, s. 83' }],
+          text: '**Attend the hearings** about the child in your care and testify, with a lawyer if you wish.',
+          refs: [ypa('83')],
         },
         {
-          text: 'On request, receive **a summary of the child’s history** once the adoption placement order is made.',
-          refs: [{ label: 'YPA, s. 71.3.6' }],
+          text: '**Be consulted** before the child in your care is transferred to another foster setting, with some exceptions.',
+          refs: [ypa('7')],
         },
         {
-          text: '**Get support** from the health establishment: follow-up, training and payment for foster families.',
+          text: '**Exercise parental authority** from the placement order. The child can then no longer be returned to the parents.',
+          refs: [ccq('569')],
         },
         {
-          text: '**Adoption benefits** from the QPIP, to welcome the child home.',
+          text: 'On request, receive **a summary of the child’s background** as soon as the placement order is made.',
+          refs: [ypa('71.3.6')],
         },
         {
-          text: '**Be told clearly** that in the Banque-mixte program, the child may go back to their family until adoption becomes possible.',
+          text: '**Apply for financial assistance** within 60 days of the placement order, if the DPJ had entrusted the child to you for at least 6 months in a row.',
+          refs: [adoptionAid],
+        },
+        {
+          text: '**Receive QPIP adoption benefits**, including welcome and support weeks, if you are eligible.',
+          refs: [qpip],
         },
       ],
     },
     {
       id: 'kin',
-      who: 'Grandparents & kin',
+      who: 'Grandparents & relatives',
       icon: 'family',
       items: [
         {
-          text: '**Keep a relationship** with your grandchild: the parents cannot block it without serious reasons.',
-          refs: [{ label: 'C.C.Q., art. 611' }],
+          text: '**Be considered first** if the child cannot stay with their parents, before a foster family.',
+          refs: [ypa('4')],
         },
         {
-          text: '**Be considered first** if the child has to live away from their parents.',
-          refs: [{ label: 'YPA, s. 4' }],
+          text: '**Become a kinship foster family**, after an assessment, to take in the child with support.',
+          refs: [ypa('54'), ypa('91')],
         },
         {
-          text: '**Ask to be heard** by the court when youth protection is involved.',
-          refs: [{ label: 'YPA, s. 81' }],
+          text: '**Ask to testify** in court if you have useful information about the child, with a lawyer if you wish.',
+          refs: [ypa('81')],
         },
         {
-          text: '**Become a kinship foster family** and get support to care for the child.',
+          text: '**Keep ties** with your grandchild if it is in their interest. If there is disagreement, the court decides. From age 14, the child must agree.',
+          refs: [ccq('611')],
         },
         {
-          text: '**Apply for tutorship** of the child, an option that keeps their legal tie with their parents.',
-          refs: [{ label: 'C.C.Q., art. 199.1' }],
+          text: '**Become the child’s tutor** by court decision, at the request of a parent or the DPJ, without cutting their bond with their parents.',
+          refs: [ccq('199.1'), ypa('70.1')],
         },
         {
-          text: '**Adopt the child** through special consent, if it is in their interest.',
-          refs: [{ label: 'C.C.Q., art. 555' }],
-        },
-      ],
-    },
-    {
-      id: 'adoptees',
-      who: 'Adopted people',
-      icon: 'key',
-      items: [
-        {
-          text: '**Know your origins**, to the extent provided by law.',
-          refs: [{ label: 'Charter, s. 39.1' }],
-        },
-        {
-          text: 'Get **a summary of your background**: health, family history, the context of your adoption.',
-          refs: [{ label: 'C.C.Q., art. 583' }],
-        },
-        {
-          text: '**Learn the names** of your birth parents, unless a refusal is still in effect.',
-          refs: [{ label: 'C.C.Q., art. 583' }, { label: 'C.C.Q., art. 583.4' }],
-        },
-        {
-          text: 'Get **a copy of your original act of birth**.',
-          refs: [{ label: 'C.C.Q., art. 583' }],
-        },
-        {
-          text: '**Refuse all contact**, or allow it on your own terms, at any time.',
-          refs: [{ label: 'C.C.Q., art. 583.6' }],
+          text: '**Adopt the child** if the parents give you a special consent: grandparents, aunts, uncles, brothers and sisters.',
+          refs: [ccq('555')],
         },
       ],
     },

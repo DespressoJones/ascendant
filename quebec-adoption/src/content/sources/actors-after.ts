@@ -195,8 +195,8 @@ export const actorsAfter: Source[] = [
     id: 'actors-after-bill12',
     publisher: 'Publications du Québec',
     title: {
-      fr: 'L.Q. 2023, c. 13, art. 56 et 57 : nouveaux art. 81.1 et 81.2 de la Loi sur les normes du travail (en vigueur le 6 juin 2023)',
-      en: 'S.Q. 2023, c. 13, ss. 56 and 57: new ss. 81.1 and 81.2 of the Act respecting labour standards (in force June 6, 2023)',
+      fr: 'L.Q. 2023, c. 13, art. 56 à 61 : art. 81.1, 81.2 et 81.11 de la Loi sur les normes du travail, remplacés (en vigueur le 6 juin 2023)',
+      en: 'S.Q. 2023, c. 13, ss. 56 to 61: ss. 81.1, 81.2 and 81.11 of the Act respecting labour standards, as replaced (in force June 6, 2023)',
     },
     url: 'https://www.publicationsduquebec.gouv.qc.ca/fileadmin/Fichiers_client/lois_et_reglements/LoisAnnuelles/fr/2023/2023C13F.PDF',
     checked: '2026-11-13',
@@ -210,7 +210,7 @@ export const actorsAfter: Source[] = [
       fr: 'Ligne 462, point 6 : crédit d’impôt pour frais d’adoption (déclaration 2025)',
       en: 'Line 462, point 6: tax credit for adoption expenses (2025 return)',
     },
-    url: 'https://www.revenuquebec.ca/fr/citoyens/declaration-de-revenus/produire-votre-declaration-de-revenus/aide-par-ligne/451-a-480-remboursement-ou-solde-a-payer/ligne-462/point-6/',
+    url: 'https://www.revenuquebec.ca/fr/citoyens/declaration-de-revenus/produire-votre-declaration-de-revenus/comment-remplir-votre-declaration-de-revenus/aide-par-ligne/451-a-480-remboursement-ou-solde-a-payer/ligne-462/point-6/',
     checked: '2026-11-13',
   },
   {

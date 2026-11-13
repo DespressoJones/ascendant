@@ -1,54 +1,53 @@
-// DRAFT — replaced by researched content
-import type { Principles } from '../types'
+// Researched content — verified 2026-11-13
+import type { LegalRef, Principles } from '../types'
 
-const CCQ = 'https://www.legisquebec.gouv.qc.ca/en/document/cs/CCQ-1991'
-const YPA = 'https://www.legisquebec.gouv.qc.ca/en/document/cs/P-34.1'
+const LQ = 'https://www.legisquebec.gouv.qc.ca/en/document/cs/'
+const se = (a: string) => `#se:${a.replace(/\./g, '_')}`
+const ccq = (a: string): LegalRef => ({ label: `C.C.Q., art. ${a}`, url: `${LQ}CCQ-1991${se(a)}` })
+const ypa = (a: string): LegalRef => ({ label: `YPA, s. ${a}`, url: `${LQ}P-34.1${se(a)}` })
 
 /*
  * Writing guide for this section (renderer: sections/principles.ts)
  *  - 3 items read best (4 also fit). The title says how many: keep it in sync.
- *  - title: a 4–7 word statement, about 25–45 characters. Wrap the key words in **bold**:
- *    they get a red running stitch when the statement is being read.
+ *  - title: a 4–7 word statement, about 25–45 characters. Wrap the key words in **bold**.
  *  - body: 2–3 plain sentences, about 220–380 characters.
  *  - refs: 1–4 chips.
  *  - id: an English slug, the same in FR and EN. It picks the icon (see ICONS in the renderer).
+ *
+ * Checked against: C.C.Q. arts. 33, 34, 543, 577 (consolidation current to September 9, 2026);
+ * YPA ss. 3, 4, 4.1, 4.4, 5, 6.1, 6.2, 11.4 (S.Q. 2022, c. 11) and 53.0.1, 91.1 (S.Q. 2017, c. 18; 2022, c. 11).
  */
 export const principles: Principles = {
   eyebrow: 'The essentials',
-  title: 'Three things to know first',
+  title: 'Four things to know first',
   items: [
     {
       id: 'child-interest',
       title: 'The **child’s interest** comes first.',
       body:
-        'Every decision about a child, whether it comes from the DPJ, an adoption service or a judge, must be made in the child’s interest and with respect for their rights. Their needs, age, health and family environment are all taken into account. In court, the child has the right to be heard if their age and understanding allow it.',
-      refs: [
-        { label: 'C.C.Q., art. 33', url: `${CCQ}#se:33` },
-        { label: 'C.C.Q., art. 34', url: `${CCQ}#se:34` },
-        { label: 'YPA, s. 3', url: `${YPA}#se:3` },
-      ],
+        'Every decision about a child must be made in the child’s interest and with respect for their rights. Their needs, age, health and family environment are taken into account. An adoption is only possible if it serves that interest, and in court, the child has the right to be heard if their age and maturity allow it.',
+      refs: [ccq('33'), ccq('34'), ccq('543'), ypa('3')],
     },
     {
       id: 'family-first',
-      title: '**Family** first, whenever it’s safe.',
+      title: '**Family** first, when it’s safe.',
       body:
-        'Youth protection first tries to keep the child with their parents, with support. If that isn’t possible, priority goes to the people who matter most to the child, such as grandparents or other relatives, and then to a foster family. Brothers and sisters stay together whenever possible.',
-      refs: [
-        { label: 'YPA, s. 4', url: `${YPA}#se:4` },
-        { label: 'YPA, s. 4.1', url: `${YPA}#se:4_1` },
-      ],
+        'The law first asks that the child stay with their parents, if that is in the child’s interest. If not, the child goes first to the people who matter most to them, such as grandparents or other relatives, and then to a setting as close as possible to a family. Efforts are also made to keep brothers and sisters together.',
+      refs: [ypa('4'), ypa('4.1')],
     },
     {
-      id: 'adoption-permanent',
-      title: 'Adoption is **permanent**. Other options exist.',
+      id: 'time-stability',
+      title: 'For a child, **time** matters.',
       body:
-        'An adoption judgment creates a new parent–child bond for life and ends the legal ties with the family of origin. That is why it is only possible when it serves the child’s interest, and why other solutions exist, such as suppletive tutorship. A parent who signed a consent has **30 days** to change their mind.',
-      refs: [
-        { label: 'C.C.Q., art. 543', url: `${CCQ}#se:543` },
-        { label: 'C.C.Q., art. 577', url: `${CCQ}#se:577` },
-        { label: 'C.C.Q., art. 557', url: `${CCQ}#se:557` },
-        { label: 'C.C.Q., art. 199.1', url: `${CCQ}#se:199_1` },
-      ],
+        'Children do not experience time the way adults do. When a child lives away from home, the law sets a time limit of 12, 18 or 24 months, depending on their age. After that, if going home is not possible, the court must, with some exceptions, give the child lasting stability. That life plan can be a relative or a foster family until 18, tutorship, or adoption.',
+      refs: [ypa('4.4'), ypa('53.0.1'), ypa('91.1')],
+    },
+    {
+      id: 'parents-rights',
+      title: '**Parents have rights**, too.',
+      body:
+        'When the DPJ (Director of Youth Protection) steps in, parents keep their rights and duties, except where the law says otherwise. You have the right to clear explanations, to be listened to, to be accompanied by a person of your choice, and to consult a lawyer. If you disagree, the court decides.',
+      refs: [ypa('11.4'), ypa('6.1'), ypa('6.2'), ypa('5')],
     },
   ],
 }

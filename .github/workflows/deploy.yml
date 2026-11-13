@@ -23,8 +23,17 @@ jobs:
         with:
           node-version: 20
           cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            quebec-adoption/package-lock.json
       - run: npm ci
       - run: npm run build
+      # Le fil rouge (Québec adoption guide) ships alongside the app at /ascendant/quebec-adoption/
+      - run: npm ci
+        working-directory: quebec-adoption
+      - run: npm run build
+        working-directory: quebec-adoption
+      - run: cp -r quebec-adoption/dist dist/quebec-adoption
       - uses: actions/configure-pages@v5
         with:
           enablement: true

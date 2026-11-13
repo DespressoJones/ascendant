@@ -13,6 +13,8 @@ import type { Hero } from '../../src/content/types'
  * Dossier: the decisive legal moments of a domestic adoption, in real order:
  * the child becomes adoptable (C.c.Q. 544: consent of the parents or tutor, or a court declaration),
  * placement order (566, 567, 569), adoption judgment (566, 573, 577), new act of birth (129, 132; 583).
+ * Each tag names the articles that state the note (fact-check 2026-11-13: 30 days = 567, no return = 569,
+ * 6 months reducible by up to 3 = 566, new filiation = 577, original act = 583).
  */
 export const hero: Hero = {
   eyebrow: 'Guide indépendant · Québec',
@@ -48,19 +50,19 @@ export const hero: Hero = {
       note: 'Les parents consentent par écrit, ou le tribunal déclare l’enfant admissible à l’adoption.',
     },
     {
-      tag: 'C.c.Q. 566',
+      tag: 'C.c.Q. 567–569',
       title: 'Ordonnance de placement',
-      note: 'Au plus tôt 30 jours après un consentement. L’enfant ne peut plus être rendu à ses parents.',
+      note: 'Au plus tôt 30 jours après un consentement. Ensuite, l’enfant ne peut plus être rendu à ses parents.',
     },
     {
-      tag: 'C.c.Q. 577',
+      tag: 'C.c.Q. 566, 577',
       title: 'Jugement d’adoption',
-      note: 'Après au moins 6 mois de vie commune (parfois 3). Une filiation pour la vie.',
+      note: 'Après au moins 6 mois avec la famille depuis l’ordonnance (parfois 3). Les adoptants deviennent légalement ses parents.',
     },
     {
-      tag: 'C.c.Q. 132',
+      tag: 'C.c.Q. 132, 583',
       title: 'Nouvel acte de naissance',
-      note: 'Le Directeur de l’état civil le dresse. L’adopté pourra obtenir l’acte primitif.',
+      note: 'Le Directeur de l’état civil le dresse. Plus tard, l’adopté pourra obtenir l’acte primitif.',
     },
   ],
 }

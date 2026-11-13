@@ -9,6 +9,11 @@ const adoptionAid: LegalRef = {
   label: 'Décret 1915-2023',
   url: 'https://www.publicationsduquebec.gouv.qc.ca/fileadmin/gazette/pdf_encrypte/lois_reglements/2024F/82291.pdf',
 }
+const legalAidMinors: LegalRef = {
+  label: 'Loi sur l’aide juridique, art. 4.0.1',
+  url: `${LQ}A-14${se('4.0.1')}`,
+}
+const legalAid: LegalRef = { label: 'Aide juridique', url: 'https://www.csj.qc.ca/admissibilite/' }
 const rqap: LegalRef = {
   label: 'RQAP',
   url: 'https://www.quebec.ca/famille-et-soutien-aux-personnes/grossesse-parentalite/aide-financiere-prestations/regime-quebecois-assurance-parentale/adoption/choix-regime',
@@ -26,7 +31,11 @@ const rqap: LegalRef = {
  * Checked against: C.c.Q. (consolidation à jour au 9 septembre 2026) arts. 33, 34, 199.1, 548–550, 555,
  * 557, 569, 579, 583, 583.4, 611 (art. 611 was rewritten in 2022: the old "motifs graves" rule is gone);
  * LPJ arts. 3, 4, 4.3, 6.1, 9.1, 11.4 (L.Q. 2022, c. 11), 7, 9, 81, 83 (L.Q. 2017, c. 18), 78 (2022, c. 11),
- * 5, 52, 54, 70.1, 71.3.6, 74.2, 91; décret 1915-2023 (aide financière à l’adoption).
+ * 5, 52, 54, 70.1, 71.3.6, 74.2, 91; décret 1915-2023 (aide financière à l’adoption: art. 1, 6 mois continus
+ * avant l’ordonnance de placement; art. 3, demande dans les 60 jours); Loi sur l’aide juridique, art. 4.0.1
+ * (L.Q. 2022, c. 22, a. 128: aide juridique gratuite pour tout enfant mineur).
+ * Fact-check 2026-11-13: arts. 579 and 611 require the consent of a child of 10 to 13, but the court decides
+ * if that child refuses or the adults disagree; only from 14 is the child’s consent always required.
  */
 export const rights: Rights = {
   eyebrow: 'Vos droits',
@@ -44,8 +53,8 @@ export const rights: Rights = {
           refs: [lpj('6.1'), lpj('4.3')],
         },
         {
-          text: '**Consulter une avocate ou un avocat.** L’aide juridique peut couvrir les frais, selon vos revenus.',
-          refs: [lpj('5')],
+          text: '**Consulter une avocate ou un avocat.** L’aide juridique peut payer tout ou une partie des frais, selon votre situation financière.',
+          refs: [lpj('5'), legalAid],
         },
         {
           text: '**Refuser une entente** proposée par la DPJ ou contester sa décision : c’est alors le tribunal qui tranche.',
@@ -60,7 +69,7 @@ export const rights: Rights = {
           refs: [ccq('583.4')],
         },
         {
-          text: '**Garder un lien après l’adoption**, si c’est dans l’intérêt de l’enfant : nouvelles ou contacts convenus par écrit.',
+          text: '**Prévoir des nouvelles ou des contacts** après l’adoption, par écrit, si c’est dans l’intérêt de l’enfant.',
           refs: [ccq('579')],
         },
       ],
@@ -80,7 +89,7 @@ export const rights: Rights = {
         },
         {
           text: '**Avoir sa propre avocate ou son propre avocat** devant le tribunal en protection de la jeunesse, sans frais.',
-          refs: [lpj('78')],
+          refs: [lpj('78'), legalAidMinors],
         },
         {
           text: 'S’il est placé, **garder contact** avec ses parents, ses frères et sœurs et les personnes importantes, sauf exception.',
@@ -102,7 +111,7 @@ export const rights: Rights = {
       icon: 'home',
       items: [
         {
-          text: '**Être admis aux audiences** sur l’enfant qui vous est confié, y témoigner et être assisté d’un avocat.',
+          text: '**Être admis aux audiences** sur l’enfant qui vous est confié et y témoigner, avec une avocate ou un avocat si vous le voulez.',
           refs: [lpj('83')],
         },
         {
@@ -118,7 +127,7 @@ export const rights: Rights = {
           refs: [lpj('71.3.6')],
         },
         {
-          text: '**Recevoir une aide financière** si l’enfant que vous adoptez vous était confié en vertu de la LPJ depuis au moins 6 mois.',
+          text: '**Demander une aide financière** dans les 60 jours de l’ordonnance de placement, si l’enfant vous était confié par la DPJ depuis au moins 6 mois.',
           refs: [adoptionAid],
         },
         {
@@ -141,15 +150,15 @@ export const rights: Rights = {
           refs: [lpj('54'), lpj('91')],
         },
         {
-          text: '**Témoigner devant le tribunal**, sur demande, dans l’intérêt de l’enfant, avec l’aide d’un avocat si vous le voulez.',
+          text: '**Demander à témoigner** si vous avez des informations utiles sur l’enfant, avec une avocate ou un avocat si vous le voulez.',
           refs: [lpj('81')],
         },
         {
-          text: '**Garder des liens** avec votre petit-enfant, si c’est dans son intérêt. Dès 10 ans, il doit être d’accord.',
+          text: '**Garder des liens** avec votre petit-enfant, si c’est dans son intérêt. En cas de désaccord, le tribunal tranche. Dès 14 ans, il doit être d’accord.',
           refs: [ccq('611')],
         },
         {
-          text: '**Devenir tuteur de l’enfant**, à la demande d’un parent ou de la DPJ, sans couper son lien avec ses parents.',
+          text: '**Devenir tuteur de l’enfant** par décision du tribunal, à la demande d’un parent ou de la DPJ, sans couper son lien avec ses parents.',
           refs: [ccq('199.1'), lpj('70.1')],
         },
         {

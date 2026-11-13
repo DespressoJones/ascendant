@@ -9,6 +9,11 @@ const adoptionAid: LegalRef = {
   label: 'O.C. 1915-2023',
   url: 'https://www.publicationsduquebec.gouv.qc.ca/fileadmin/gazette/pdf_encrypte/lois_reglements/2024F/82291.pdf',
 }
+const legalAidMinors: LegalRef = {
+  label: 'Legal Aid Act, s. 4.0.1',
+  url: `${LQ}A-14${se('4.0.1')}`,
+}
+const legalAid: LegalRef = { label: 'Legal aid', url: 'https://www.csj.qc.ca/admissibilite/' }
 const qpip: LegalRef = {
   label: 'QPIP',
   url: 'https://www.quebec.ca/famille-et-soutien-aux-personnes/grossesse-parentalite/aide-financiere-prestations/regime-quebecois-assurance-parentale/adoption/choix-regime',
@@ -26,7 +31,11 @@ const qpip: LegalRef = {
  * Checked against: C.C.Q. (consolidation current to September 9, 2026) arts. 33, 34, 199.1, 548–550, 555,
  * 557, 569, 579, 583, 583.4, 611 (art. 611 was rewritten in 2022: the old "serious reasons" rule is gone);
  * YPA ss. 3, 4, 4.3, 6.1, 9.1, 11.4 (S.Q. 2022, c. 11), 7, 9, 81, 83 (S.Q. 2017, c. 18), 78 (2022, c. 11),
- * 5, 52, 54, 70.1, 71.3.6, 74.2, 91; O.C. 1915-2023 (adoption financial assistance).
+ * 5, 52, 54, 70.1, 71.3.6, 74.2, 91; O.C. 1915-2023 (adoption financial assistance: s. 1, 6 continuous months
+ * before the placement order; s. 3, apply within 60 days); Legal Aid Act, s. 4.0.1 (S.Q. 2022, c. 22, s. 128:
+ * free legal aid for every minor).
+ * Fact-check 2026-11-13: arts. 579 and 611 require the consent of a child of 10 to 13, but the court decides
+ * if that child refuses or the adults disagree; only from 14 is the child’s consent always required.
  */
 export const rights: Rights = {
   eyebrow: 'Your rights',
@@ -44,8 +53,8 @@ export const rights: Rights = {
           refs: [ypa('6.1'), ypa('4.3')],
         },
         {
-          text: '**Consult a lawyer.** Legal aid can cover the cost, depending on your income.',
-          refs: [ypa('5')],
+          text: '**Consult a lawyer.** Legal aid can pay all or part of the cost, depending on your financial situation.',
+          refs: [ypa('5'), legalAid],
         },
         {
           text: '**Refuse an agreement** proposed by the DPJ (Director of Youth Protection) or contest its decision: the court then decides.',
@@ -60,7 +69,7 @@ export const rights: Rights = {
           refs: [ccq('583.4')],
         },
         {
-          text: '**Keep a link after the adoption**, if it is in the child’s interest: news or contact agreed in writing.',
+          text: '**Arrange news or contact** after the adoption, in writing, if it is in the child’s interest.',
           refs: [ccq('579')],
         },
       ],
@@ -80,7 +89,7 @@ export const rights: Rights = {
         },
         {
           text: '**Have their own lawyer** in youth protection court, free of charge.',
-          refs: [ypa('78')],
+          refs: [ypa('78'), legalAidMinors],
         },
         {
           text: 'If placed, **stay in touch** with their parents, brothers and sisters and the people who matter, with some exceptions.',
@@ -102,7 +111,7 @@ export const rights: Rights = {
       icon: 'home',
       items: [
         {
-          text: '**Attend the hearings** about the child in your care, testify and be assisted by a lawyer.',
+          text: '**Attend the hearings** about the child in your care and testify, with a lawyer if you wish.',
           refs: [ypa('83')],
         },
         {
@@ -118,7 +127,7 @@ export const rights: Rights = {
           refs: [ypa('71.3.6')],
         },
         {
-          text: '**Receive financial assistance** if the child you adopt had been entrusted to you under the YPA for at least 6 months.',
+          text: '**Apply for financial assistance** within 60 days of the placement order, if the DPJ had entrusted the child to you for at least 6 months in a row.',
           refs: [adoptionAid],
         },
         {
@@ -141,15 +150,15 @@ export const rights: Rights = {
           refs: [ypa('54'), ypa('91')],
         },
         {
-          text: '**Testify in court** on request, in the child’s interest, with the help of a lawyer if you wish.',
+          text: '**Ask to testify** in court if you have useful information about the child, with a lawyer if you wish.',
           refs: [ypa('81')],
         },
         {
-          text: '**Keep ties** with your grandchild if it is in their interest. From age 10, the child must agree.',
+          text: '**Keep ties** with your grandchild if it is in their interest. If there is disagreement, the court decides. From age 14, the child must agree.',
           refs: [ccq('611')],
         },
         {
-          text: '**Become the child’s tutor**, at the request of a parent or the DPJ, without cutting their bond with their parents.',
+          text: '**Become the child’s tutor** by court decision, at the request of a parent or the DPJ, without cutting their bond with their parents.',
           refs: [ccq('199.1'), ypa('70.1')],
         },
         {

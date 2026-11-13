@@ -103,6 +103,16 @@ export const heroPrinciplesMythsRights: Source[] = [
     checked: '2026-11-13',
   },
   {
+    id: 'hero-principles-myths-rights-csj-eligibility',
+    publisher: 'Commission des services juridiques',
+    title: {
+      fr: 'Admissibilité à l’aide juridique (volet gratuit, volet contributif, enfants mineurs)',
+      en: 'Legal aid eligibility (free and contributory legal aid, minors) (in French)',
+    },
+    url: 'https://www.csj.qc.ca/admissibilite/',
+    checked: '2026-11-13',
+  },
+  {
     id: 'hero-principles-myths-rights-qc-intl-costs',
     publisher: 'Gouvernement du Québec',
     title: { fr: 'Coûts de l’adoption internationale', en: 'Costs of international adoption (in French)' },

@@ -16,6 +16,9 @@ const ypa = (a: string): LegalRef => ({ label: `YPA, s. ${a}`, url: `${LQ}P-34.1
  *
  * Not stated on purpose (could not be confirmed): any fee amount for a domestic adoption, any upper age
  * limit used in practice by a regional adoption service, the number of domestic adoptions per year.
+ * Fact-check 2026-11-13: "free" domestic adoption is UNVERIFIED (Québec.ca simply lists no fee), so the cost
+ * myth is scoped to DPJ adoptions and answered with what official sources say. Art. 579: a child of 10 to 13
+ * who refuses can be overridden by the court; from 14 the child's consent is always required.
  */
 const S = 'hero-principles-myths-rights-'
 
@@ -32,7 +35,7 @@ export const myths: Myths = {
     {
       id: 'dpj-removal',
       myth: 'If the DPJ gets involved, my children will automatically be taken away.',
-      fact: 'No. The law first asks that **the child stay with their family**, with support, if that is in the child’s interest. In 2025–2026, 52.1% of the children taken in charge by the DPJ stayed at home, and 18.3% were entrusted to a person who matters to them.',
+      fact: 'No. The law first asks that **the child stay with their family**, if that is in the child’s interest. In 2025–2026, 52.1% of the children the DPJ took charge of stayed with their family, and 18.3% were entrusted to a person who matters to them.',
       refs: [ypa('4')],
       sources: ['lpj', `${S}bill15`, `${S}dpj-bilan-2026`],
     },
@@ -53,13 +56,13 @@ export const myths: Myths = {
       id: 'consent-withdrawal',
       myth: 'Once you sign consent to adoption, you can never change your mind.',
       fact: 'False. You have **30 days after signing** to withdraw your consent, in writing before two witnesses, and the child must be returned to you. After that, only the court can order the child’s return, and only before the placement order.',
-      refs: [ccq('557'), ccq('558'), ccq('569')],
+      refs: [ccq('557'), ccq('548'), ccq('558')],
       sources: ['ccq-book2', 'educaloi-adopt'],
     },
     {
       id: 'birth-parents',
       myth: 'A parent who places their child for adoption doesn’t love them.',
-      fact: 'False. This choice is often made through pain, and it can leave **a lasting grief**. The law respects it: you can get information without committing to anything, take time to decide, then change your mind within 30 days of signing.',
+      fact: 'False. This choice is often made through pain, and it can leave **a lasting grief**. The adoption service can inform you and support you while you think it over, with no commitment. After signing, you still have 30 days to change your mind.',
       refs: [ccq('548'), ccq('557')],
       sources: ['qc-adoption-about', 'msss-origins-guide'],
     },
@@ -73,7 +76,7 @@ export const myths: Myths = {
     {
       id: 'open-adoption',
       myth: 'In Québec, adoption always cuts off all contact with the birth family.',
-      fact: 'Not necessarily. The adoptive family and the birth family can **agree in writing** to share news or keep in touch, if it is in the child’s interest. From age 10, the child must agree. At 14, they can end it.',
+      fact: 'Not necessarily. If it is in the child’s interest, the adoptive family and the birth family can **agree in writing** to share news or keep in touch. If they disagree, the court can decide. From age 14, the child must agree and can end it.',
       refs: [ccq('579')],
       sources: ['ccq-book2', `${S}qc-contact-agreement`],
     },
@@ -87,41 +90,41 @@ export const myths: Myths = {
     {
       id: 'grandparents',
       myth: 'Grandparents can do nothing if the child can’t stay with their parents.',
-      fact: 'False. The law gives them **priority**: if it is in the child’s interest, the child goes first to the people close to them who matter most. A grandparent can also become the child’s tutor, without cutting ties with the parents, or adopt with a special consent.',
+      fact: 'False. If it is in the child’s interest, the law says the child goes **first** to the people who matter most to them, including grandparents. A grandparent can also become the child’s tutor, without cutting ties with the parents, or adopt with a special consent.',
       refs: [ypa('4'), ccq('199.1'), ccq('555')],
       sources: ['lpj', 'ccq-book1', 'ccq-book2', `${S}qc-suppletive`],
     },
     {
       id: 'who-can-adopt',
       myth: 'You have to be a married man and woman to adopt.',
-      fact: 'No. **Any adult** can adopt, alone or with another person. The conditions are the same for single people and for couples who are married, in a civil union, in a parental union or in a de facto union, same-sex or not. A child can have two mothers or two fathers.',
+      fact: 'No. **Any adult** can adopt, alone or with another person. The conditions are the same for single people and for couples who are married, in a civil union, in a parental union or common-law, same-sex or not. A child can have two mothers or two fathers.',
       refs: [ccq('546')],
       sources: ['ccq-book2', 'educaloi-adopt', `${S}qc-filiation`],
     },
     {
       id: 'age-limit',
       myth: 'Past a certain age, the law won’t let you adopt.',
-      fact: 'No. The law sets **no maximum age**. You must be an adult and, in general, at least 18 years older than the child. To register with the DPJ, what counts most is good health and a stable life as a couple, or as a single person, for at least two years.',
+      fact: 'No. The law sets **no maximum age**. You must be an adult and, in general, at least 18 years older than the child. The published criteria for registering with an adoption service set no maximum either, but ask for good physical and mental health, among other things.',
       refs: [ccq('546'), ccq('547')],
       sources: ['ccq-book2', 'qc-adoption-legal'],
     },
     {
       id: 'cost',
-      myth: 'Adopting a child from here costs tens of thousands of dollars.',
-      fact: 'No. Adopting a child from Québec goes through your region’s **public adoption service**, not an agency. Financial assistance even exists in some cases. High costs mostly come with international adoption. For any other possible costs, ask the adoption service.',
-      sources: ['qc-adoption-legal', `${S}reg-adoption-aid`, `${S}qc-intl-costs`],
+      myth: 'Adopting a child through the DPJ costs tens of thousands of dollars.',
+      fact: 'Not according to official sources. These adoptions go through your region’s **public adoption service**, and Québec.ca mentions no fees for it. Financial assistance even exists in some cases. High costs mostly come with international adoption. If in doubt, ask the adoption service.',
+      sources: ['qc-adoption-legal', 'qc-adoption-about', `${S}reg-adoption-aid`, `${S}qc-intl-costs`],
     },
     {
       id: 'banque-mixte',
       myth: 'In the Banque mixte program, the foster family is sure to adopt the child.',
-      fact: 'No. The child is at high risk of being abandoned, but **going back to their parents is still possible**: the DPJ must plan for that return while preparing another plan just in case. Adoption requires the parents’ consent or a judgment declaring the child eligible.',
+      fact: 'No. The parents are at high risk of not being able to care for the child, but **going back to them is still possible**: the DPJ must plan for that return while preparing another plan just in case. Adoption requires the parents’ consent or a judgment declaring the child eligible.',
       refs: [ypa('4.2'), ccq('544'), ccq('559')],
-      sources: ['qc-adoption-about', 'educaloi-adopt'],
+      sources: ['lpj', 'qc-adoption-about', 'educaloi-adopt'],
     },
     {
       id: 'international',
       myth: 'Adopting from abroad is simpler and faster than adopting here.',
-      fact: 'Not anymore. Since November 26, 2024, **no new file** can be opened with a certified body, for an indefinite period. In 2025, only 17 children arrived in Québec through international adoption, compared with 35 in 2024.',
+      fact: 'Not right now. Since November 26, 2024, **no new file** can be opened with a certified body, for an indefinite period. In 2025, only 17 children arrived in Québec through international adoption, compared with 35 in 2024.',
       sources: [`${S}sasie-stats-2025`],
     },
   ],

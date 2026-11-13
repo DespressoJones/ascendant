@@ -32,14 +32,14 @@ export const principles: Principles = {
       id: 'family-first',
       title: '**Family** first, when it’s safe.',
       body:
-        'The law first asks that the child stay with their parents, with support, if that is in the child’s interest. If not, the child goes first to the people who matter most to them, such as grandparents or other relatives, and then to a setting as close as possible to a family. Brothers and sisters stay together whenever possible.',
+        'The law first asks that the child stay with their parents, if that is in the child’s interest. If not, the child goes first to the people who matter most to them, such as grandparents or other relatives, and then to a setting as close as possible to a family. Efforts are also made to keep brothers and sisters together.',
       refs: [ypa('4'), ypa('4.1')],
     },
     {
       id: 'time-stability',
       title: 'For a child, **time** matters.',
       body:
-        'Children do not experience time the way adults do. When a child lives away from home, the law sets a time limit of 12, 18 or 24 months, depending on their age. After that, if going home is not possible, the court must, with some exceptions, give the child lasting stability: with a relative, through tutorship, in foster care until 18, or through adoption.',
+        'Children do not experience time the way adults do. When a child lives away from home, the law sets a time limit of 12, 18 or 24 months, depending on their age. After that, if going home is not possible, the court must, with some exceptions, give the child lasting stability. That life plan can be a relative or a foster family until 18, tutorship, or adoption.',
       refs: [ypa('4.4'), ypa('53.0.1'), ypa('91.1')],
     },
     {

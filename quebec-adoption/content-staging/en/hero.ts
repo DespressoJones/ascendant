@@ -14,6 +14,8 @@ import type { Hero } from '../../src/content/types'
  * Dossier: the decisive legal moments of a domestic adoption, in real order:
  * the child becomes adoptable (C.C.Q. 544: consent of the parents or tutor, or a court declaration),
  * placement order (566, 567, 569), adoption judgment (566, 573, 577), new act of birth (129, 132; 583).
+ * Each tag names the articles that state the note (fact-check 2026-11-13: 30 days = 567, no return = 569,
+ * 6 months reducible by up to 3 = 566, new filiation = 577, original act = 583).
  */
 export const hero: Hero = {
   eyebrow: 'Independent guide · Québec',
@@ -49,19 +51,19 @@ export const hero: Hero = {
       note: 'The parents consent in writing, or the court declares the child eligible for adoption.',
     },
     {
-      tag: 'C.C.Q. 566',
+      tag: 'C.C.Q. 567–569',
       title: 'Placement order',
-      note: 'At the earliest 30 days after a consent. The child can no longer be returned to the parents.',
+      note: 'At the earliest 30 days after a consent. From then on, the child can no longer be returned to the parents.',
     },
     {
-      tag: 'C.C.Q. 577',
+      tag: 'C.C.Q. 566, 577',
       title: 'Adoption judgment',
-      note: 'After at least 6 months living together (sometimes 3). A legal bond for life.',
+      note: 'After at least 6 months with the family since the order (sometimes 3). The adopters become the child’s legal parents.',
     },
     {
-      tag: 'C.C.Q. 132',
+      tag: 'C.C.Q. 132, 583',
       title: 'New act of birth',
-      note: 'The Directeur de l’état civil draws it up. The adoptee can later get the original act.',
+      note: 'The Directeur de l’état civil draws it up. Later, the adoptee can get the original act.',
     },
   ],
 }

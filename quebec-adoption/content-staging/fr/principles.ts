@@ -32,14 +32,14 @@ export const principles: Principles = {
       id: 'family-first',
       title: 'La **famille** d’abord, quand c’est sécuritaire.',
       body:
-        'La loi demande d’abord de garder l’enfant avec ses parents, avec de l’aide, si c’est dans son intérêt. Sinon, il est confié en priorité aux personnes qui comptent le plus pour lui, comme ses grands-parents ou d’autres proches, puis à un milieu qui ressemble le plus possible à une famille. Les frères et sœurs restent ensemble quand c’est possible.',
+        'La loi demande d’abord de garder l’enfant avec ses parents, si c’est dans son intérêt. Sinon, il est confié en priorité aux personnes qui comptent le plus pour lui, comme ses grands-parents ou d’autres proches, puis à un milieu qui ressemble le plus possible à une famille. On cherche aussi à garder les frères et sœurs ensemble.',
       refs: [lpj('4'), lpj('4.1')],
     },
     {
       id: 'time-stability',
       title: 'Pour un enfant, le **temps** compte.',
       body:
-        'Un enfant ne vit pas le temps comme un adulte. S’il vit hors de chez lui, la loi fixe une durée maximale de 12, 18 ou 24 mois selon son âge. Ensuite, si le retour n’est pas possible, le tribunal doit, sauf exception, lui assurer une stabilité durable : chez un proche, en tutelle, en famille d’accueil jusqu’à 18 ans ou par l’adoption.',
+        'Un enfant ne vit pas le temps comme un adulte. S’il vit hors de chez lui, la loi fixe une durée maximale de 12, 18 ou 24 mois selon son âge. Ensuite, si le retour n’est pas possible, le tribunal doit, sauf exception, lui assurer une stabilité durable. Ce projet de vie peut être un proche ou une famille d’accueil jusqu’à 18 ans, la tutelle ou l’adoption.',
       refs: [lpj('4.4'), lpj('53.0.1'), lpj('91.1')],
     },
     {

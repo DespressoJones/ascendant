@@ -1,1 +1,675 @@
-/* myths section */
+/* ================================================================== myths: the untangling board */
+
+/* ---------------------------------------------------------------- hint (in the section head) */
+.myths-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  justify-self: start;
+  margin-top: var(--space-2xs);
+  font-family: var(--font-mono);
+  font-size: var(--step--1);
+  letter-spacing: 0.04em;
+  color: var(--spruce-ink-2);
+}
+.myths-tap {
+  position: relative;
+  flex: none;
+  width: 22px;
+  height: 22px;
+  display: grid;
+  place-items: center;
+}
+.myths-tap::before,
+.myths-tap::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+}
+.myths-tap::before {
+  width: 8px;
+  height: 8px;
+  background: var(--atoca);
+}
+.myths-tap::after {
+  inset: 0;
+  box-shadow: inset 0 0 0 1.5px var(--atoca);
+  opacity: 0;
+  animation: myths-tap 2.4s var(--ease-out) infinite;
+}
+@keyframes myths-tap {
+  0% {
+    transform: scale(0.3);
+    opacity: 0.9;
+  }
+  70%,
+  100% {
+    transform: scale(1.15);
+    opacity: 0;
+  }
+}
+
+/* ---------------------------------------------------------------- the dock (sticky progress) */
+.myths-weave {
+  height: 0;
+}
+.myths-dock {
+  position: sticky;
+  top: calc(var(--header-h) + env(safe-area-inset-top, 0px) + 10px);
+  z-index: 6;
+  display: flex;
+  align-items: center;
+  gap: clamp(0.75rem, 0.4rem + 1.4vw, 1.6rem);
+  min-height: 64px;
+  margin-bottom: clamp(1rem, 0.7rem + 1vw, 1.6rem);
+  padding: 0.45rem 0.45rem 0.45rem clamp(1rem, 0.8rem + 0.8vw, 1.5rem);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--birch) 86%, transparent);
+  -webkit-backdrop-filter: blur(14px) saturate(1.2);
+  backdrop-filter: blur(14px) saturate(1.2);
+  box-shadow:
+    inset 0 0 0 1px var(--line),
+    var(--shadow);
+  transition: box-shadow var(--dur-3) var(--ease-out);
+}
+.myths-dock.is-complete {
+  box-shadow:
+    inset 0 0 0 1.5px var(--atoca),
+    var(--shadow);
+}
+
+.myths-count {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  flex: none;
+  white-space: nowrap;
+}
+.myths-count-num {
+  display: inline-flex;
+  align-items: baseline;
+  font-family: var(--font-display);
+  font-size: var(--step-2);
+  font-weight: 760;
+  font-stretch: 80%;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+.myths-count-mask {
+  display: inline-block;
+  overflow: hidden;
+  padding-block: 0.08em;
+  margin-block: -0.08em;
+}
+.myths-count-done {
+  display: inline-block;
+  min-width: 0.62em;
+  text-align: right;
+  color: var(--atoca-text);
+}
+.myths-count-sep {
+  margin-inline: 0.06em;
+  color: var(--spruce-ink-3);
+  font-weight: 400;
+}
+.myths-count-total {
+  color: var(--spruce-ink-3);
+}
+.myths-count-word {
+  font-family: var(--font-mono);
+  font-size: var(--step--2);
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--spruce-ink-3);
+  transition: color var(--dur-2) linear;
+}
+.myths-dock.is-complete .myths-count-word {
+  color: var(--atoca-text);
+}
+
+.myths-meter {
+  position: relative;
+  flex: 1 1 auto;
+  min-width: 56px;
+  height: 44px;
+}
+.myths-meter-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.myths-meter-svg path {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.myths-meter-tangle {
+  stroke: var(--spruce-ink-3);
+  stroke-width: 1.4;
+  opacity: 0.85;
+}
+.myths-meter-taut {
+  stroke: var(--atoca);
+  stroke-width: 2.5;
+}
+.myths-meter-bead {
+  fill: var(--atoca);
+  transition: opacity var(--dur-2) linear;
+}
+.myths-meter-knot {
+  stroke: var(--atoca);
+  stroke-width: 2.5;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  opacity: 0; /* a zero-length dash would still paint a round cap */
+  transition:
+    stroke-dashoffset 0.35s var(--ease-out),
+    opacity 0s linear 0.35s;
+}
+.myths-dock.is-complete .myths-meter-knot {
+  stroke-dashoffset: 0;
+  opacity: 1;
+  transition:
+    stroke-dashoffset 1s var(--ease-out) 0.55s,
+    opacity 0s linear 0.55s;
+}
+
+.myths-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex: none;
+}
+.myths-actions > [hidden] {
+  display: none;
+}
+.myths-actions .btn {
+  min-height: 48px;
+}
+.myths-short {
+  display: none;
+}
+.myths-reset .icon {
+  width: 1.15em;
+  height: 1.15em;
+}
+
+@media (max-width: 719px) {
+  .myths-dock {
+    min-height: 58px;
+    gap: 0.7rem;
+    padding-left: 1rem;
+  }
+  .myths-count {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.2rem;
+  }
+  .myths-count-word {
+    font-size: 0.66rem;
+  }
+  .myths-meter {
+    height: 38px;
+  }
+  .myths-long {
+    display: none;
+  }
+  .myths-short {
+    display: inline;
+  }
+  .myths-actions .btn {
+    min-height: 44px;
+    padding-inline: 1em;
+  }
+  .myths-reset {
+    width: 44px;
+    padding: 0;
+  }
+  .myths-reset-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+  }
+}
+
+/* ---------------------------------------------------------------- the grid */
+.myths-grid {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(0.8rem, 0.55rem + 0.9vw, 1.35rem);
+}
+@media (min-width: 720px) {
+  .myths-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .myths-card-wide {
+    grid-column: 1 / -1;
+  }
+}
+@media (min-width: 1100px) {
+  .myths-grid {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+  }
+  .myths-card,
+  .myths-card-wide {
+    grid-column: span var(--span, 4);
+  }
+}
+
+/* ---------------------------------------------------------------- a card: two faces stacked in one cell */
+.myths-card {
+  --pad: clamp(1.2rem, 0.95rem + 1vw, 1.9rem);
+  position: relative;
+  container-type: inline-size;
+  display: grid;
+  grid-template: minmax(0, 1fr) / minmax(0, 1fr);
+  min-height: clamp(15rem, 13rem + 5vw, 18.5rem);
+  border-radius: var(--radius-m);
+  background-color: var(--birch-2);
+  border: 1.5px dashed var(--line-strong);
+  transition:
+    background-color var(--dur-3) var(--ease-out),
+    border-color var(--dur-2) linear,
+    box-shadow var(--dur-3) var(--ease-out),
+    translate var(--dur-3) var(--ease-out),
+    scale var(--dur-2) var(--ease-out);
+}
+.myths-face {
+  grid-area: 1 / 1;
+  position: relative;
+  z-index: 1;
+  min-width: 0;
+}
+.myths-card[data-state='myth'] .myths-fact,
+.myths-card[data-state='fact'] .myths-myth {
+  visibility: hidden;
+}
+/* while a card turns, both faces are present; dust.ts drives the inner contents */
+.myths-card[data-busy] .myths-face {
+  visibility: visible;
+}
+.myths-card[data-busy] {
+  pointer-events: none;
+}
+
+/* confident state: solid paper, a stitched atoca seam drawn down the left edge */
+.myths-card[data-state='fact'] {
+  background-color: var(--card);
+  border-style: solid;
+  border-color: var(--line);
+  box-shadow: var(--shadow);
+}
+.myths-card::before {
+  content: '';
+  position: absolute;
+  z-index: 2;
+  left: -1.5px;
+  top: 16px;
+  bottom: 16px;
+  width: 3px;
+  border-radius: 0 3px 3px 0;
+  background: var(--atoca);
+  transform: scaleY(0);
+  transform-origin: 50% 0;
+  transition: transform 0.45s var(--ease-in-out);
+}
+.myths-card[data-state='fact']::before {
+  transform: scaleY(1);
+  transition: transform 1.1s var(--ease-out) 0.25s;
+}
+
+/* pointer spotlight */
+.myths-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    380px circle at var(--mx, 50%) var(--my, 50%),
+    var(--spruce-soft),
+    transparent 65%
+  );
+  opacity: 0;
+  transition: opacity var(--dur-2) linear;
+  pointer-events: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .myths-card[data-state='myth']:not([data-busy]):hover {
+    translate: 0 -4px;
+    border-color: var(--spruce-ink-3);
+    box-shadow: var(--shadow);
+  }
+  .myths-card[data-state='myth']:hover::after {
+    opacity: 1;
+  }
+}
+.myths-card[data-state='myth']:has(.myths-myth:active) {
+  scale: 0.985;
+  translate: 0 -1px;
+}
+
+/* ---------------------------------------------------------------- shared inner bits */
+.myths-inner {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  height: 100%;
+  min-width: 0;
+}
+.myths-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-family: var(--font-mono);
+  font-size: var(--step--2);
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  line-height: 1.2;
+  color: var(--spruce-ink-3);
+}
+.myths-rule {
+  width: 1.4em;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.6;
+}
+.myths-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35em;
+}
+
+/* ---------------------------------------------------------------- myth face (the whole card is the button) */
+.myths-myth {
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: var(--pad);
+  text-align: left;
+  border-radius: var(--radius-m);
+  -webkit-tap-highlight-color: transparent;
+}
+.myths-myth:focus-visible {
+  outline: 2px solid var(--atoca);
+  outline-offset: 5px;
+  border-radius: var(--radius-m);
+}
+.myths-myth-text {
+  display: block;
+  padding-right: clamp(2.6rem, 1.4rem + 6cqi, 4rem);
+  font-family: var(--font-display);
+  font-size: clamp(1.45rem, 0.9rem + 4cqi, 2.6rem);
+  font-weight: 650;
+  font-stretch: 82%;
+  line-height: 1.06;
+  letter-spacing: -0.02em;
+  color: var(--spruce-ink-2);
+  text-wrap: balance;
+}
+/* footer row: a hairline (a real element, so the dust rasteriser draws it as a line) + the cue */
+.myths-cue {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: auto;
+  padding-top: 0.95rem;
+  font-size: var(--step--1);
+  font-weight: 700;
+  color: var(--spruce-ink);
+}
+.myths-cue-rule {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--line);
+}
+.myths-cue-label {
+  background: linear-gradient(var(--atoca), var(--atoca)) no-repeat 0 100% / 0% 1.5px;
+  padding-bottom: 2px;
+  transition: background-size var(--dur-3) var(--ease-out);
+}
+.myths-cue .icon {
+  width: 1.15em;
+  height: 1.15em;
+  color: var(--atoca-text);
+  transition: translate var(--dur-3) var(--ease-out);
+}
+.myths-myth:hover .myths-cue-label,
+.myths-myth:focus-visible .myths-cue-label {
+  background-size: 100% 1.5px;
+}
+.myths-myth:hover .myths-cue-rule {
+  background: var(--line-strong);
+}
+.myths-myth:hover .myths-cue .icon,
+.myths-myth:focus-visible .myths-cue .icon {
+  translate: 4px 0;
+}
+
+/* the hand-drawn, slightly glitchy question mark */
+.myths-q {
+  position: absolute;
+  top: -0.35rem;
+  right: -0.4rem;
+  width: clamp(2.3rem, 1.5rem + 4.5cqi, 3.4rem);
+  height: auto;
+  aspect-ratio: 40 / 56;
+  overflow: visible;
+  color: var(--spruce-ink-3);
+  pointer-events: none;
+}
+.myths-q path {
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+}
+.myths-q-main {
+  stroke-width: 2.6;
+  stroke-dasharray: 100;
+  stroke-dashoffset: 0;
+  animation: myths-jitter 5.4s steps(1, end) infinite;
+  animation-delay: calc(var(--i, 0) * -1.3s);
+}
+.myths-q-sketch {
+  stroke-width: 1.3;
+  opacity: 0.7;
+}
+.myths-q-dot {
+  stroke-width: 4.4;
+}
+.myths-q-echo {
+  stroke: var(--atoca) !important;
+  stroke-width: 2.6;
+  opacity: 0;
+  animation: myths-glitch 5.4s steps(1, end) infinite;
+  animation-delay: calc(var(--i, 0) * -1.3s);
+}
+@keyframes myths-glitch {
+  0%,
+  86%,
+  96%,
+  100% {
+    opacity: 0;
+    transform: none;
+  }
+  87% {
+    opacity: 0.85;
+    transform: translate(2.5px, -1px);
+  }
+  89% {
+    opacity: 0.6;
+    transform: translate(-2px, 1.5px) skewX(-10deg);
+  }
+  91% {
+    opacity: 0.9;
+    transform: translate(3px, 0.5px);
+  }
+  93% {
+    opacity: 0.5;
+    transform: translate(-1px, -1px) skewX(8deg);
+  }
+}
+@keyframes myths-jitter {
+  0%,
+  86%,
+  96%,
+  100% {
+    transform: none;
+  }
+  87% {
+    transform: translate(-1.5px, 0.5px);
+  }
+  89% {
+    transform: translate(1px, -1px) skewX(7deg);
+  }
+  91% {
+    transform: translate(-0.5px, 1px);
+  }
+  93% {
+    transform: translate(1px, 0) skewX(-5deg);
+  }
+}
+@keyframes myths-scribble {
+  from {
+    stroke-dashoffset: 100;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@media (hover: hover) and (pointer: fine) {
+  .myths-myth:hover .myths-q {
+    color: var(--spruce-ink-2);
+  }
+  .myths-myth:hover .myths-q-main {
+    animation: myths-scribble 0.9s var(--ease-out) both;
+  }
+  .myths-myth:hover .myths-q-echo {
+    animation-duration: 1.2s;
+  }
+}
+
+/* ---------------------------------------------------------------- fact face */
+.myths-fact {
+  padding: var(--pad);
+  padding-left: calc(var(--pad) + 4px);
+}
+.myths-fact-inner {
+  gap: 0.7rem;
+}
+.myths-fact .myths-meta {
+  padding-right: 3rem;
+}
+.myths-label-fact {
+  color: var(--atoca-text);
+  font-weight: 600;
+}
+.myths-label-fact .icon {
+  width: 1.35em;
+  height: 1.35em;
+  stroke-width: 2.4;
+}
+.myths-was {
+  font-size: var(--step--1);
+  line-height: 1.4;
+  color: var(--spruce-ink-3);
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+}
+.myths-was s {
+  text-decoration-color: var(--atoca);
+  text-decoration-thickness: 1.5px;
+}
+.myths-fact-text {
+  max-width: 62ch;
+  font-size: clamp(1rem, 0.96rem + 0.14vw, 1.08rem);
+  line-height: 1.55;
+  color: var(--spruce-ink);
+}
+.myths-fact-text strong {
+  font-weight: 700;
+  background: linear-gradient(transparent 60%, var(--atoca-soft) 0);
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+.myths-fact .refs {
+  margin-top: auto;
+  padding-top: 0.4rem;
+}
+
+.myths-back {
+  position: absolute;
+  z-index: 2;
+  top: calc(var(--pad) - 13px);
+  right: calc(var(--pad) - 13px);
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  color: var(--spruce-ink-3);
+  transition:
+    color var(--dur-2) linear,
+    background-color var(--dur-2) linear,
+    opacity var(--dur-2) linear;
+}
+.myths-back .icon {
+  width: 1.2em;
+  height: 1.2em;
+  transition: rotate var(--dur-3) var(--ease-spring);
+}
+.myths-back:hover,
+.myths-back:focus-visible {
+  color: var(--atoca-text);
+  background-color: var(--atoca-soft);
+}
+.myths-back:hover .icon {
+  rotate: -50deg;
+}
+.myths-back:focus-visible {
+  outline-offset: 1px;
+  border-radius: 50%;
+}
+.myths-card[data-busy] .myths-back {
+  opacity: 0;
+}
+
+/* ---------------------------------------------------------------- small screens */
+@media (max-width: 719px) {
+  .myths-card {
+    min-height: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .myths-tap::after {
+    animation: none;
+    opacity: 0.6;
+    transform: none;
+  }
+  .myths-card[data-state='myth']:has(.myths-myth:active) {
+    scale: none;
+  }
+}

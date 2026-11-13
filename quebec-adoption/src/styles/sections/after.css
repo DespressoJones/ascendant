@@ -1,1 +1,963 @@
-/* after section */
+/* ==================================================================
+   AFTER: "After the adoption"
+   1) the act of birth (mock civil-status paper, envelope, wax seal)
+   2) the bento of practical cards
+   Colours come only from tokens.css, so both themes work.
+   ================================================================== */
+
+/* ================================================================== 1. the act of birth */
+.after-cert {
+  position: relative;
+  display: grid;
+  gap: var(--space-xl);
+}
+.after-cert-text {
+  display: grid;
+  gap: var(--space-m);
+  align-content: start;
+  min-width: 0;
+  max-width: 44rem;
+}
+.after-cert-title {
+  font-size: var(--step-3);
+  font-stretch: 82%;
+  font-weight: 760;
+  line-height: 0.98;
+  letter-spacing: -0.032em;
+}
+.after-cert-body {
+  display: grid;
+  gap: 0.75em;
+  max-width: 50ch;
+  color: var(--spruce-ink-2);
+}
+.after-cert-body strong {
+  color: var(--spruce-ink);
+}
+
+/* ---- stepper (pinned layout only): a little thread that fills with the scrub */
+.after-steps {
+  display: none;
+  position: relative;
+  margin-block: var(--space-2xs);
+}
+.after-steps ol {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: 0.15rem;
+}
+.after-steps-rail {
+  position: absolute;
+  left: 21px;
+  top: 26px;
+  bottom: 26px;
+  width: 2px;
+  border-radius: 2px;
+  background: var(--line);
+  overflow: hidden;
+}
+.after-steps-fill {
+  position: absolute;
+  inset: 0;
+  background: var(--atoca);
+  transform-origin: 50% 0;
+  transform: scaleY(0);
+}
+.after-step {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  width: 100%;
+  min-height: 48px;
+  padding: 0.15rem 0.75rem 0.15rem 0;
+  border-radius: 10px;
+  text-align: left;
+  color: var(--spruce-ink-3);
+  transition:
+    color var(--dur-2) linear,
+    background-color var(--dur-2) linear;
+}
+.after-step:hover {
+  color: var(--spruce-ink);
+  background: var(--spruce-soft);
+}
+.after-step[aria-current] {
+  color: var(--spruce-ink);
+}
+.after-step-dot {
+  position: relative;
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 44px;
+  height: 44px;
+}
+.after-step-dot::before {
+  content: '';
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--birch);
+  box-shadow: inset 0 0 0 2px var(--line-strong);
+  transition:
+    width var(--dur-2) var(--ease-spring),
+    height var(--dur-2) var(--ease-spring),
+    box-shadow var(--dur-2) linear,
+    background-color var(--dur-2) linear;
+}
+.after-step.is-done .after-step-dot::before {
+  background: var(--atoca);
+  box-shadow: inset 0 0 0 2px var(--atoca);
+}
+.after-step[aria-current] .after-step-dot::before {
+  width: 18px;
+  height: 18px;
+  background: var(--birch);
+  box-shadow:
+    inset 0 0 0 2.5px var(--atoca),
+    0 0 0 7px var(--atoca-soft);
+}
+.after-step-num {
+  font-family: var(--font-mono);
+  font-size: var(--step--2);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--atoca-text);
+}
+.after-step-label {
+  font-weight: 700;
+  font-size: var(--step-0);
+  line-height: 1.2;
+}
+.after-hint {
+  display: none;
+  font-family: var(--font-mono);
+  font-size: var(--step--2);
+  letter-spacing: 0.04em;
+  line-height: 1.5;
+  color: var(--spruce-ink-3);
+  max-width: 44ch;
+}
+
+/* ---- figure, desk, slots (static layout first) */
+.after-figure {
+  margin: 0;
+  display: grid;
+  gap: var(--space-m);
+  min-width: 0;
+}
+.after-desk {
+  position: relative;
+  min-width: 0;
+}
+.after-desk-inner {
+  display: grid;
+  gap: var(--space-m);
+  justify-items: center;
+  align-items: start;
+}
+.after-slot {
+  display: grid;
+  gap: var(--space-xs);
+  width: min(100%, 26rem);
+  min-width: 0;
+}
+.after-slot-label,
+.after-sealed-chip,
+.after-archive-tag {
+  display: flex;
+  align-items: center;
+  gap: 0.65em;
+  font-family: var(--font-mono);
+  font-size: var(--step--2);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  line-height: 1.3;
+  color: var(--spruce-ink-2);
+}
+.after-slot-num {
+  flex: none;
+  color: var(--atoca-text);
+}
+.after-slot-num::after {
+  content: ' ·';
+  color: var(--spruce-ink-3);
+}
+.after-sealed-chip {
+  margin-top: var(--space-s);
+  padding-left: 0.1rem;
+}
+.after-arrow {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  color: var(--atoca-text);
+  box-shadow: inset 0 0 0 1.5px var(--line-strong);
+  rotate: 90deg;
+}
+.after-arrow .icon {
+  width: 22px;
+  height: 22px;
+}
+.after-archive-tag {
+  display: none;
+}
+@media (min-width: 860px) {
+  .after-cert:not(.is-pin) .after-desk-inner {
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    column-gap: var(--space-l);
+  }
+  .after-cert:not(.is-pin) .after-arrow {
+    rotate: 0deg;
+    align-self: center;
+    margin-top: 2rem;
+  }
+}
+
+/* ---- the paper */
+.after-doc {
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+  padding: 2.15rem 1.85rem 1.5rem;
+  background: var(--card);
+  border-radius: 5px;
+  box-shadow:
+    inset 0 0 0 1px var(--line),
+    var(--shadow);
+  overflow: hidden;
+  color: var(--spruce-ink);
+}
+@media (max-width: 479px) {
+  .after-doc {
+    padding: 1.95rem 1.35rem 1.3rem;
+  }
+}
+.after-guilloche {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+.after-g-wave {
+  fill: none;
+  stroke: var(--spruce);
+  stroke-width: 0.55;
+  opacity: 0.5;
+}
+.after-g-rule {
+  fill: none;
+  stroke: var(--spruce);
+  stroke-width: 0.8;
+  opacity: 0.4;
+}
+.after-doc-rosette {
+  position: absolute;
+  z-index: -1;
+  left: 50%;
+  top: 56%;
+  width: 82%;
+  translate: -50% -50%;
+  fill: none;
+  stroke: var(--spruce);
+  stroke-width: 0.22;
+  opacity: 0.16;
+  pointer-events: none;
+}
+.after-doc-head {
+  display: grid;
+  justify-items: center;
+  gap: 0.3rem;
+  padding-bottom: 0.85rem;
+  margin-bottom: 0.15rem;
+  border-bottom: 3px double var(--line-strong);
+  text-align: center;
+}
+.after-doc-mark {
+  width: 30px;
+  height: 30px;
+  fill: none;
+  stroke: var(--spruce);
+  stroke-width: 0.9;
+  opacity: 0.75;
+}
+.after-doc-title {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  line-height: 1.3;
+  padding-left: 0.3em; /* optically re-centre the tracked caps */
+}
+.after-doc-spec {
+  display: flex;
+  align-items: center;
+  gap: 0.6em;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--spruce-ink-3);
+}
+.after-doc-spec::before,
+.after-doc-spec::after {
+  content: '';
+  width: 1.6em;
+  height: 1px;
+  background: var(--line-strong);
+}
+.after-doc-rows {
+  display: grid;
+}
+.after-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  column-gap: 0.6rem;
+  row-gap: 0.18rem;
+  padding: 0.6rem 0 0.58rem;
+  border-bottom: 1px dashed var(--line);
+}
+.after-row:last-child {
+  border-bottom: 0;
+  padding-bottom: 0.2rem;
+}
+.after-row-label {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--spruce-ink-3);
+}
+.after-row-same {
+  justify-self: end;
+  padding: 0.12rem 0.5rem 0.1rem;
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ice-ink);
+  background: var(--ice);
+  transition: opacity var(--dur-2) linear;
+}
+.after-row-same::before {
+  content: '= ';
+}
+.after-row-value {
+  grid-column: 1 / -1;
+  position: relative;
+  min-height: 1.4em;
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: -0.01em;
+  overflow-wrap: anywhere;
+}
+.after-row-text {
+  position: relative;
+  z-index: 1;
+}
+
+/* the veil: in the static layout a hatched highlight under the words (still readable);
+   in the pinned sequence an opaque band that covers them */
+.after-veil {
+  position: absolute;
+  z-index: 0;
+  inset: -0.1rem -0.4rem;
+  border-radius: 3px;
+  background:
+    repeating-linear-gradient(-45deg, color-mix(in srgb, var(--ice-ink) 20%, transparent) 0 1px, transparent 1px 6px),
+    var(--ice);
+  transform-origin: 0 50%;
+  opacity: 0.75;
+}
+
+/* new act: changed entries get a red underline once written */
+.after-doc--after .is-changed .after-type {
+  background: linear-gradient(var(--atoca), var(--atoca)) 0 100% / 100% 1.5px no-repeat;
+  padding-bottom: 1px;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+.after-type .c {
+  position: relative;
+}
+
+/* ---- wax seal (static: pressed on the corner of the original) */
+.after-env {
+  position: relative;
+  isolation: isolate;
+}
+.after-seal {
+  position: absolute;
+  z-index: 5;
+  right: -12px;
+  bottom: -26px;
+  width: 78px;
+  aspect-ratio: 1;
+  rotate: -10deg;
+  filter: drop-shadow(0 6px 7px color-mix(in srgb, var(--spruce-ink) 30%, transparent));
+  pointer-events: none;
+}
+.after-seal-svg {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+.after-seal-blob {
+  fill: var(--atoca);
+}
+.after-seal-rim {
+  fill: none;
+  stroke: var(--atoca-text);
+  stroke-width: 3.2;
+  opacity: 0.75;
+}
+.after-seal-knot {
+  fill: none;
+  stroke: var(--on-atoca);
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  opacity: 0.88;
+}
+.after-seal-ring {
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px var(--atoca);
+  opacity: 0;
+}
+
+/* envelope parts exist only in the pinned sequence */
+.after-env-back,
+.after-env-front,
+.after-env-flap {
+  display: none;
+}
+
+/* ---- caption: the "not an official document" note */
+.after-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  font-family: var(--font-mono);
+  font-size: var(--step--2);
+  line-height: 1.5;
+  letter-spacing: 0.02em;
+  color: var(--spruce-ink-2);
+}
+.after-note-mark {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 1.55em;
+  height: 1.55em;
+  margin-top: -0.05em;
+  border-radius: 50%;
+  font-weight: 700;
+  font-style: italic;
+  color: var(--ice-ink);
+  background: var(--ice);
+}
+.after-cert:not(.is-pin) .after-note {
+  justify-content: center;
+  text-align: left;
+}
+
+/* ================================================================== pinned sequence (JS adds .is-pin) */
+.after-cert.is-pin {
+  min-height: 100vh;
+  padding-block: calc(var(--header-h) + 12px) 28px;
+  grid-template-columns: minmax(0, 4.4fr) minmax(0, 7.6fr);
+  align-items: center;
+  column-gap: clamp(2rem, 4vw, 4.5rem);
+  row-gap: 0;
+}
+.is-pin .after-cert-text {
+  gap: var(--space-s);
+}
+.is-pin .after-steps {
+  display: block;
+}
+.is-pin .after-hint {
+  display: block;
+}
+.is-pin .after-figure {
+  gap: 16px;
+}
+.is-pin .after-desk-inner {
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform-origin: 0 0;
+}
+.is-pin .after-slot {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  translate: -50% -50%;
+  display: block;
+  width: auto;
+}
+.is-pin .after-slot--before {
+  z-index: 2;
+}
+.is-pin .after-slot--after {
+  z-index: 3;
+}
+.is-pin .after-slot-label,
+.is-pin .after-sealed-chip,
+.is-pin .after-arrow {
+  display: none;
+}
+.is-pin .after-doc {
+  width: 25rem;
+}
+.is-pin .after-env {
+  padding: 14px;
+}
+.is-pin .after-env > .after-doc {
+  z-index: 1;
+}
+
+/* envelope (we see its back: the pocket and the flap) */
+.is-pin .after-env-back,
+.is-pin .after-env-front {
+  display: block;
+  position: absolute;
+  inset: 0;
+  border-radius: 8px;
+}
+.is-pin .after-env-back {
+  z-index: 0;
+  background: color-mix(in srgb, var(--ice) 86%, var(--ice-ink));
+  box-shadow: var(--shadow);
+}
+.is-pin .after-env-front {
+  z-index: 3;
+  overflow: hidden;
+  background:
+    linear-gradient(to bottom, color-mix(in srgb, var(--ice-ink) 10%, transparent), transparent 18px),
+    var(--ice);
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--ice-ink) 16%, transparent),
+    0 -1px 0 color-mix(in srgb, var(--ice-ink) 12%, transparent);
+}
+.after-env-seams {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.after-env-seams path {
+  fill: none;
+  stroke: var(--ice-ink);
+  stroke-width: 1;
+  opacity: 0.22;
+}
+.after-env-sticker {
+  position: absolute;
+  left: 50%;
+  bottom: 13%;
+  translate: -50% 0;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  max-width: 80%;
+  padding: 0.75rem 1.1rem;
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  line-height: 1.25;
+  color: var(--spruce-ink);
+  background: var(--card);
+  box-shadow:
+    inset 0 0 0 1px var(--line-strong),
+    0 1px 2px color-mix(in srgb, var(--spruce-ink) 12%, transparent);
+}
+.after-env-sticker .icon {
+  width: 1.3em;
+  height: 1.3em;
+  color: var(--atoca-text);
+}
+.is-pin .after-env-flap {
+  display: block;
+  position: absolute;
+  z-index: 4;
+  left: 0;
+  right: 0;
+  top: 0;
+  aspect-ratio: 100 / 36;
+  filter: drop-shadow(0 3px 3px color-mix(in srgb, var(--ice-ink) 22%, transparent));
+}
+.after-env-flap svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.after-env-flap path {
+  fill: color-mix(in srgb, var(--ice) 94%, var(--ice-ink));
+  stroke: color-mix(in srgb, var(--ice-ink) 26%, transparent);
+  stroke-width: 1;
+}
+.is-pin .after-seal {
+  left: 50%;
+  top: calc((25rem + 28px) * 0.335);
+  right: auto;
+  bottom: auto;
+  width: 88px;
+  translate: -50% -50%;
+  rotate: none;
+}
+
+.is-pin .after-veil {
+  z-index: 2;
+  opacity: 1;
+}
+.is-pin .after-archive-tag {
+  display: flex;
+  position: absolute;
+  left: 8px;
+  z-index: 1;
+}
+
+/* typewriter */
+.is-pin .after-type .c {
+  visibility: hidden;
+}
+.is-pin .after-type .c.on {
+  visibility: visible;
+}
+.is-pin .after-row.is-typing .c.cur::after {
+  content: '';
+  position: absolute;
+  right: -0.14em;
+  top: 0.12em;
+  bottom: 0.08em;
+  width: 2px;
+  border-radius: 1px;
+  background: var(--atoca);
+  animation: after-caret 0.9s steps(2, jump-none) infinite;
+}
+.is-pin .after-row-same {
+  opacity: 0;
+}
+.is-pin .after-row.is-typed .after-row-same {
+  opacity: 1;
+}
+@keyframes after-caret {
+  50% {
+    opacity: 0;
+  }
+}
+
+/* ================================================================== the thread's knot + bento */
+.after-tie {
+  height: 1px;
+  margin-block: var(--space-xl);
+}
+.after-end {
+  height: 1px;
+  margin-top: var(--space-l);
+}
+.after-bento {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(0.75rem, 0.5rem + 0.8vw, 1.25rem);
+}
+@media (min-width: 720px) {
+  .after-bento {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .after-card {
+    grid-column: span var(--ts, 1);
+  }
+}
+@media (min-width: 1100px) {
+  .after-bento {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+  }
+  .after-card {
+    grid-column: span var(--cs, 4);
+    grid-row: span var(--rs, 1);
+  }
+}
+
+.after-card {
+  --pad: clamp(1.3rem, 0.95rem + 1.1vw, 2rem);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-s);
+  min-width: 0;
+  padding: var(--pad);
+  background: var(--card);
+  border-radius: var(--radius-m);
+  box-shadow:
+    inset 0 0 0 1px var(--line),
+    var(--shadow);
+  transition:
+    translate var(--dur-3) var(--ease-out),
+    box-shadow var(--dur-3) var(--ease-out);
+}
+@media (hover: hover) and (pointer: fine) {
+  .after-card:hover {
+    translate: 0 -6px;
+    box-shadow:
+      inset 0 0 0 1px var(--line-strong),
+      0 2px 0 color-mix(in srgb, var(--spruce-ink) 4%, transparent),
+      0 34px 60px -30px color-mix(in srgb, var(--spruce-ink) 42%, transparent);
+  }
+}
+/* rim light that follows the pointer (fine pointers; position set in JS) */
+.after-card-rim {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1.5px;
+  background: radial-gradient(260px circle at var(--mx, 50%) var(--my, 0%), var(--atoca), transparent 70%);
+  -webkit-mask:
+    linear-gradient(var(--spruce-ink) 0 0) content-box,
+    linear-gradient(var(--spruce-ink) 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(var(--spruce-ink) 0 0) content-box exclude,
+    linear-gradient(var(--spruce-ink) 0 0);
+  opacity: 0;
+  transition: opacity var(--dur-2) linear;
+  pointer-events: none;
+}
+.after-card:hover .after-card-rim {
+  opacity: 0.85;
+}
+
+.after-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-s);
+}
+.after-card-icon {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  color: var(--ice-ink);
+  background: var(--ice);
+  transition:
+    background-color var(--dur-2) linear,
+    color var(--dur-2) linear,
+    rotate var(--dur-3) var(--ease-spring);
+}
+.after-card-icon .icon {
+  width: 27px;
+  height: 27px;
+}
+.after-card-ico * {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+}
+.after-card:hover .after-card-icon,
+.after-card:focus-within .after-card-icon {
+  color: var(--atoca-text);
+  background: var(--atoca-soft);
+  rotate: -8deg;
+}
+.after-card:hover .after-card-ico *,
+.after-card:focus-within .after-card-ico * {
+  animation: after-draw 1.15s var(--ease-out) both;
+}
+.after-card:hover .after-card-ico :nth-child(2),
+.after-card:focus-within .after-card-ico :nth-child(2) {
+  animation-delay: 0.1s;
+}
+.after-card:hover .after-card-ico :nth-child(3),
+.after-card:focus-within .after-card-ico :nth-child(3) {
+  animation-delay: 0.2s;
+}
+.after-card:hover .after-card-ico :nth-child(n + 4),
+.after-card:focus-within .after-card-ico :nth-child(n + 4) {
+  animation-delay: 0.3s;
+}
+@keyframes after-draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+.after-card-num {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55em;
+  font-family: var(--font-mono);
+  font-size: var(--step--2);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--atoca-text);
+}
+.after-card-num::before {
+  content: '';
+  width: 1.3em;
+  height: 2px;
+  border-radius: 2px;
+  background: currentColor;
+}
+.after-card-main {
+  display: grid;
+  gap: 0.55rem;
+}
+.after-card-title {
+  font-size: var(--step-1);
+  font-stretch: 85%;
+  font-weight: 730;
+  line-height: 1.06;
+  letter-spacing: -0.018em;
+}
+.after-card-body {
+  font-size: 1rem;
+  line-height: 1.55;
+  color: var(--spruce-ink-2);
+  max-width: 60ch;
+}
+.after-card-body strong {
+  color: var(--spruce-ink);
+}
+
+/* figures */
+.after-figs {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 8.5rem), 1fr));
+  gap: var(--space-s) var(--space-m);
+  margin: 0;
+  padding-block: var(--space-s);
+  border-block: 1px solid var(--line);
+}
+.after-fig {
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: flex-end;
+  gap: 0.35rem;
+  min-width: 0;
+}
+.after-fig-value {
+  display: flex;
+  align-items: baseline;
+  gap: 0.08em;
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--step-3);
+  font-weight: 760;
+  font-stretch: 78%;
+  letter-spacing: -0.035em;
+  line-height: 0.92;
+  font-variant-numeric: tabular-nums;
+  color: var(--spruce-ink);
+}
+.after-fig-value.is-text {
+  font-size: var(--step-2);
+}
+.after-fig-affix {
+  font-size: 0.5em;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--spruce-ink-2);
+}
+.after-fig-label {
+  font-size: var(--step--1);
+  line-height: 1.35;
+  color: var(--spruce-ink-3);
+  max-width: 24ch;
+}
+.after-card-points {
+  font-size: 0.98rem;
+  line-height: 1.5;
+  color: var(--spruce-ink-2);
+}
+.after-card-refs {
+  margin-top: auto;
+  padding-top: var(--space-2xs);
+}
+
+/* feature card (first, tall): larger title, figures in a row with big numbers */
+.after-card--feature .after-card-title {
+  font-size: var(--step-2);
+}
+.after-card--feature .after-card-body {
+  font-size: var(--step-0);
+}
+.after-card--feature .after-figs {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 9rem), 1fr));
+  padding-block: var(--space-m);
+}
+.after-card--feature .after-fig-value {
+  font-size: var(--step-4);
+}
+@media (min-width: 1100px) {
+  .after-card--feature {
+    gap: var(--space-m);
+  }
+  .after-card--feature .after-figs {
+    grid-template-columns: repeat(min(var(--n), 3), minmax(0, 1fr));
+  }
+  /* wide strip: title | figures | points in three columns */
+  .after-card--wide {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-areas:
+      'top top top'
+      'main figs points'
+      'refs refs refs';
+    column-gap: var(--space-xl);
+    align-items: start;
+  }
+  .after-card--wide:not(.has-figs) {
+    grid-template-areas:
+      'top top top'
+      'main points points'
+      'refs refs refs';
+  }
+  .after-card--wide:not(.has-points) {
+    grid-template-areas:
+      'top top top'
+      'main figs figs'
+      'refs refs refs';
+  }
+  .after-card--wide > .after-card-top {
+    grid-area: top;
+  }
+  .after-card--wide > .after-card-main {
+    grid-area: main;
+  }
+  .after-card--wide > .after-figs {
+    grid-area: figs;
+    border-block: 0;
+    padding-block: 0;
+  }
+  .after-card--wide > .after-card-points {
+    grid-area: points;
+  }
+  .after-card--wide > .after-card-refs {
+    grid-area: refs;
+  }
+}

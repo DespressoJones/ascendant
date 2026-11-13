@@ -1,1 +1,950 @@
-/* compare section */
+/* ================================================================== compare: kinds of adoption */
+.compare {
+  --cmp-pad: 16px;
+  --cmp-gap: 14px;
+  --cmp-card-w: min(calc(100vw - 64px), 380px);
+  --cmp-end-w: min(calc(100vw - 112px), 250px);
+  /* left/right inset that lines the row up with the .wrap content edge */
+  --cmp-edge: max(var(--cmp-pad), calc((100% - var(--wrap) - 32px) / 2 + var(--cmp-pad)));
+}
+@media (min-width: 720px) {
+  .compare {
+    --cmp-pad: 32px;
+    --cmp-gap: 20px;
+    --cmp-card-w: 380px;
+    --cmp-end-w: 270px;
+  }
+}
+@media (min-width: 1000px) {
+  .compare {
+    --cmp-gap: 24px;
+    --cmp-card-w: 400px;
+  }
+}
+
+.compare .section-head {
+  margin-bottom: var(--space-l);
+}
+.compare-anchor {
+  height: 0;
+}
+
+/* ------------------------------------------------------------------ the stage */
+.compare-stage {
+  position: relative;
+  isolation: isolate;
+}
+/* opaque paper: the page thread passes behind it and the stage draws its own */
+@media (min-width: 720px) {
+  .compare-stage {
+    background: var(--birch);
+  }
+}
+.compare-stage-inner {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  /* the row is max-content wide; never let it widen the column */
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-xs);
+  padding-top: var(--space-s);
+}
+
+.compare-thread {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+  z-index: 0;
+}
+.compare-thread path {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.compare-thread-ghost {
+  stroke: var(--line-strong);
+  stroke-width: 1.5;
+  stroke-dasharray: 2 7;
+}
+.compare-thread-live {
+  stroke: var(--atoca);
+  stroke-width: 2.5;
+}
+.compare-thread-tip {
+  fill: var(--atoca);
+  opacity: 0;
+}
+.compare-thread-halo {
+  fill: var(--atoca-soft);
+  opacity: 0;
+}
+
+/* pinned (wide screens, motion allowed): one screen tall, content centred under the header */
+.compare-stage.is-pin {
+  --cmp-card-w: clamp(400px, 35vw, 520px);
+  --cmp-end-w: clamp(260px, 20vw, 320px);
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-top: var(--header-h);
+  padding-bottom: 8px;
+}
+.compare-stage.is-pin .compare-stage-inner {
+  padding-top: 0;
+}
+
+/* ------------------------------------------------------------------ bar: counter, hint, legend, buttons */
+.compare-bar {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  grid-template-areas:
+    'count hint nav'
+    'legend legend legend';
+  align-items: center;
+  gap: var(--space-xs) var(--space-s);
+}
+@media (min-width: 1000px) {
+  .compare-bar {
+    grid-template-columns: auto auto minmax(0, 1fr) auto;
+    grid-template-areas: 'count hint legend nav';
+  }
+}
+.compare-count {
+  grid-area: count;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.45rem;
+  font-variant-numeric: tabular-nums;
+}
+.compare-count-roll {
+  display: inline-grid;
+  overflow: hidden;
+  height: 1em;
+  font-family: var(--font-display);
+  font-size: var(--step-3);
+  font-weight: 760;
+  font-stretch: 78%;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--spruce-ink);
+}
+.compare-count-roll > span {
+  grid-area: 1 / 1;
+}
+.compare-count-total {
+  font-family: var(--font-mono);
+  font-size: var(--step--1);
+  font-weight: 500;
+  color: var(--spruce-ink-3);
+}
+.compare-hint {
+  grid-area: hint;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55em;
+  min-width: 0;
+  font-family: var(--font-mono);
+  font-size: var(--step--2);
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  line-height: 1.3;
+  text-transform: uppercase;
+  color: var(--spruce-ink-3);
+}
+.compare-hint .icon {
+  width: 1.3em;
+  height: 1.3em;
+  color: var(--atoca-text);
+  animation: compare-nudge 1.9s var(--ease-in-out) infinite;
+}
+.compare-stage.is-swipe .compare-hint .icon {
+  order: -1;
+}
+@keyframes compare-nudge {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(6px);
+  }
+}
+.compare-legend {
+  grid-area: legend;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem 0.9rem;
+  font-size: var(--step--2);
+  color: var(--spruce-ink-2);
+}
+@media (min-width: 1000px) {
+  .compare-legend {
+    justify-self: end;
+    justify-content: flex-end;
+  }
+}
+.compare-legend-label {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--spruce-ink-3);
+}
+.compare-legend ul {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 0.9rem;
+}
+.compare-legend li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-weight: 600;
+}
+.compare-legend .compare-glyph {
+  width: 34px;
+  height: 13px;
+  color: var(--spruce-ink-3);
+}
+.compare-nav {
+  grid-area: nav;
+  display: flex;
+  gap: 0.5rem;
+}
+.compare-navbtn {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  color: var(--spruce-ink);
+  background: var(--birch);
+  box-shadow: inset 0 0 0 1.5px var(--line-strong);
+  transition:
+    background-color var(--dur-2) linear,
+    color var(--dur-2) linear,
+    box-shadow var(--dur-2) linear,
+    opacity var(--dur-2) linear,
+    scale var(--dur-2) var(--ease-spring);
+}
+.compare-navbtn .icon {
+  width: 20px;
+  height: 20px;
+  transition: translate var(--dur-2) var(--ease-out);
+}
+.compare-prev .icon {
+  rotate: 180deg;
+}
+.compare-navbtn:hover:not([aria-disabled='true']) {
+  background: var(--spruce-ink);
+  color: var(--birch);
+  box-shadow: inset 0 0 0 1.5px var(--spruce-ink);
+}
+.compare-next:hover:not([aria-disabled='true']) .icon {
+  translate: 3px 0;
+}
+.compare-prev:hover:not([aria-disabled='true']) .icon {
+  translate: -3px 0;
+}
+.compare-navbtn:active:not([aria-disabled='true']) {
+  scale: 0.9;
+}
+.compare-navbtn[aria-disabled='true'] {
+  opacity: 0.35;
+  cursor: default;
+}
+
+/* ------------------------------------------------------------------ the row */
+.compare-viewport {
+  position: relative;
+  min-width: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-padding-inline: var(--cmp-edge);
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+  border-radius: 4px;
+}
+/* phones: one card at a time, snapped; wider rows scroll freely (several cards are visible) */
+@media (max-width: 719px) {
+  .compare-viewport {
+    scroll-snap-type: x mandatory;
+  }
+}
+.compare-viewport::-webkit-scrollbar {
+  display: none;
+}
+@media (hover: hover) and (pointer: fine) {
+  .compare-stage.is-swipe .compare-viewport {
+    cursor: grab;
+  }
+  .compare-stage.is-swipe .compare-viewport.is-dragging {
+    cursor: grabbing;
+    user-select: none;
+  }
+}
+.compare-viewport:focus-visible {
+  outline-offset: -3px;
+}
+.compare-stage.is-pin .compare-viewport {
+  overflow: clip;
+}
+.compare-track {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  gap: var(--cmp-gap);
+  width: max-content;
+  /* room for card shadows inside the scroller */
+  padding: 10px var(--cmp-edge) 24px;
+}
+.compare-stage.is-pin .compare-track {
+  will-change: transform;
+}
+.compare-list {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  align-items: stretch;
+  gap: var(--cmp-gap);
+}
+.compare-item {
+  flex: none;
+  display: flex;
+  width: var(--cmp-card-w);
+  scroll-snap-align: start;
+}
+
+/* ------------------------------------------------------------------ card */
+.compare-card {
+  --f: 1;
+  position: relative;
+  container-type: inline-size;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  width: 100%;
+  padding: clamp(20px, 0.9rem + 0.8vw, 28px);
+  border-radius: 20px;
+  background: var(--card);
+  box-shadow:
+    inset 0 0 0 1px var(--line),
+    var(--shadow);
+  transition: box-shadow var(--dur-2) linear;
+}
+.compare-card::before {
+  content: '';
+  position: absolute;
+  left: 22px;
+  right: 22px;
+  bottom: 0;
+  height: 3px;
+  border-radius: 3px 3px 0 0;
+  background: var(--atoca);
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  transition: transform var(--dur-3) var(--ease-out);
+}
+.compare-item.is-current .compare-card::before {
+  transform: scaleX(1);
+}
+@media (hover: hover) {
+  .compare-card:hover {
+    box-shadow:
+      inset 0 0 0 1.5px var(--line-strong),
+      var(--shadow);
+  }
+}
+/* pinned: the card under the thread's tip stands up, its neighbours settle back */
+.compare-stage.is-pin .compare-card {
+  scale: calc(0.93 + 0.07 * var(--f));
+  transform-origin: 50% 60%;
+}
+.compare-stage.is-pin .compare-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--birch);
+  opacity: calc((1 - var(--f)) * 0.42);
+  pointer-events: none;
+}
+
+.compare-card-top {
+  order: -1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  min-height: 34px;
+}
+.compare-card-index {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6em;
+  font-family: var(--font-mono);
+  font-size: var(--step--1);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--atoca-text);
+}
+.compare-card-index::before {
+  content: '';
+  width: 1.4em;
+  height: 2px;
+  border-radius: 2px;
+  background: currentColor;
+}
+.compare-name {
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 1.15rem + 0.9vw, 2.05rem);
+  font-weight: 740;
+  font-stretch: 82%;
+  line-height: 1.02;
+  letter-spacing: -0.028em;
+  text-wrap: balance;
+}
+.compare-card .compare-name {
+  /* two lines reserved so "for whom" starts at the same height on every card */
+  min-height: 2.04em;
+}
+.compare-for {
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--spruce-ink-2);
+}
+.compare-for-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35em;
+  margin-right: 0.25em;
+  font-family: var(--font-mono);
+  font-size: var(--step--2);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  vertical-align: 0.06em;
+  color: var(--spruce-ink-3);
+}
+.compare-for-label .icon {
+  width: 1.35em;
+  height: 1.35em;
+  color: var(--atoca-text);
+}
+
+/* the yes / partly / no chip */
+.compare-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 32px;
+  padding: 0.3rem 0.85rem 0.3rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.86rem;
+  font-weight: 700;
+  line-height: 1.15;
+  color: var(--spruce-ink);
+  box-shadow: inset 0 0 0 1.5px var(--line-strong);
+}
+.compare-chip[data-tie='yes'] {
+  background: var(--ice);
+  color: var(--ice-ink);
+  box-shadow: none;
+}
+.compare-chip[data-tie='partial'] {
+  background: var(--spruce-soft);
+  box-shadow: inset 0 0 0 1px var(--line);
+}
+.compare-chip-text {
+  min-width: 0;
+}
+
+/* glyph: two rings and the thread between them */
+.compare-glyph {
+  width: 40px;
+  height: 15px;
+  flex: none;
+  overflow: visible;
+}
+.compare-glyph .g-ring {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+}
+.compare-glyph .g-thread {
+  fill: none;
+  stroke: var(--atoca);
+  stroke-width: 2.1;
+  stroke-linecap: round;
+}
+.compare-glyph .g-dash {
+  stroke-dasharray: 3.4 3.1;
+}
+.compare-glyph .g-dot {
+  stroke: var(--line-strong);
+  stroke-dasharray: 0.5 3.5;
+}
+.compare-glyph .g-fray {
+  fill: none;
+  stroke: var(--atoca);
+  stroke-width: 1.2;
+  stroke-linecap: round;
+}
+.compare-glyph .g-cut {
+  transform-box: view-box;
+}
+.compare-glyph .g-cut-l {
+  transform-origin: 8.4px 9px;
+}
+.compare-glyph .g-cut-r {
+  transform-origin: 39.6px 9px;
+}
+/* each time a card comes into focus its glyph acts out its meaning */
+.compare-item.is-current .compare-glyph-no .g-cut-l {
+  animation: compare-snap-l 1s var(--ease-out) both;
+}
+.compare-item.is-current .compare-glyph-no .g-cut-r {
+  animation: compare-snap-r 1s var(--ease-out) both;
+}
+.compare-item.is-current .compare-glyph-yes .g-thread {
+  stroke-dasharray: 40;
+  animation: compare-draw 0.9s var(--ease-out) both;
+}
+.compare-item.is-current .compare-glyph-partial .g-thread {
+  animation: compare-march 1.1s linear 2;
+}
+@media (hover: hover) {
+  .compare-alt:hover .compare-glyph-yes .g-thread,
+  .compare-end:hover .compare-glyph-yes .g-thread {
+    stroke-dasharray: 40;
+    animation: compare-draw 0.9s var(--ease-out) both;
+  }
+  .compare-card:hover .compare-glyph-no .g-cut-l {
+    animation: compare-snap-l 1s var(--ease-out) both;
+  }
+  .compare-card:hover .compare-glyph-no .g-cut-r {
+    animation: compare-snap-r 1s var(--ease-out) both;
+  }
+}
+@keyframes compare-snap-l {
+  0% {
+    transform: translateX(5.5px) rotate(0deg);
+  }
+  30% {
+    transform: translateX(-2px) rotate(-14deg);
+  }
+  62% {
+    transform: translateX(0.6px) rotate(5deg);
+  }
+  100% {
+    transform: none;
+  }
+}
+@keyframes compare-snap-r {
+  0% {
+    transform: translateX(-5.5px) rotate(0deg);
+  }
+  30% {
+    transform: translateX(2px) rotate(-14deg);
+  }
+  62% {
+    transform: translateX(-0.6px) rotate(5deg);
+  }
+  100% {
+    transform: none;
+  }
+}
+@keyframes compare-draw {
+  from {
+    stroke-dashoffset: 40;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes compare-march {
+  to {
+    stroke-dashoffset: -13;
+  }
+}
+
+/* facts: a small spec sheet */
+.compare-facts {
+  display: grid;
+  gap: 0.6rem 1.1rem;
+  margin: 0;
+}
+@container (min-width: 380px) {
+  .compare-facts {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+  .compare-fact.is-wide {
+    grid-column: 1 / -1;
+  }
+}
+.compare-fact {
+  display: grid;
+  align-content: start;
+  gap: 0.2rem;
+  min-width: 0;
+  padding-top: 0.6rem;
+  border-top: 1px solid var(--line);
+}
+.compare-fact dt {
+  display: flex;
+  align-items: center;
+  gap: 0.45em;
+  font-family: var(--font-mono);
+  font-size: var(--step--2);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  line-height: 1.3;
+  text-transform: uppercase;
+  color: var(--spruce-ink-3);
+}
+.compare-fact dt .icon {
+  width: 1.4em;
+  height: 1.4em;
+  color: var(--atoca-text);
+}
+.compare-fact dd {
+  margin: 0;
+  font-size: 0.94rem;
+  line-height: 1.45;
+  color: var(--spruce-ink);
+}
+.compare-card-refs {
+  margin-top: auto;
+  padding-top: 0.2rem;
+}
+
+/* ------------------------------------------------------------------ the signpost at the end of the row */
+.compare-end {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: var(--space-s);
+  width: var(--cmp-end-w);
+  min-height: 240px;
+  padding: clamp(20px, 0.9rem + 0.8vw, 28px);
+  border-radius: 20px;
+  background: var(--ice);
+  color: var(--ice-ink);
+  text-decoration: none;
+  scroll-snap-align: start;
+  transition:
+    box-shadow var(--dur-2) linear,
+    scale var(--dur-3) var(--ease-out);
+}
+.compare-end-glyph {
+  width: 72px;
+  height: 27px;
+  margin-bottom: auto;
+}
+.compare-end-title {
+  font-family: var(--font-display);
+  font-size: var(--step-2);
+  font-weight: 740;
+  font-stretch: 82%;
+  line-height: 1.02;
+  letter-spacing: -0.028em;
+  text-wrap: balance;
+}
+.compare-end-arrow {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1.5px currentColor;
+  transition:
+    background-color var(--dur-2) linear,
+    color var(--dur-2) linear,
+    translate var(--dur-3) var(--ease-spring);
+}
+.compare-end-arrow .icon {
+  width: 20px;
+  height: 20px;
+}
+.compare-end:hover .compare-end-arrow,
+.compare-end:focus-visible .compare-end-arrow {
+  background: var(--ice-ink);
+  color: var(--ice);
+  translate: 0 5px;
+}
+.compare-end:focus-visible {
+  outline-offset: 4px;
+  border-radius: 20px;
+}
+.compare-stage.is-pin .compare-end {
+  scale: calc(0.95 + 0.05 * var(--f, 1));
+}
+
+/* ------------------------------------------------------------------ rail: ticks under the row */
+.compare-rail {
+  /* tooltips may rise above the rail, never past the page edge */
+  overflow-x: clip;
+}
+@media (hover: none) {
+  .compare-tick-label {
+    display: none;
+  }
+}
+.compare-rail-inner {
+  position: relative;
+  height: 44px;
+}
+.compare-tick {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  margin: -22px 0 0 -22px;
+  border-radius: 50%;
+}
+.compare-tick-knot {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: var(--birch);
+  box-shadow: inset 0 0 0 2px var(--line-strong);
+  transition:
+    background-color var(--dur-2) linear,
+    box-shadow var(--dur-2) linear,
+    scale var(--dur-3) var(--ease-spring);
+}
+.compare-tick.is-end .compare-tick-knot {
+  border-radius: 3px;
+  rotate: 45deg;
+}
+.compare-tick.is-sewn .compare-tick-knot {
+  background: var(--atoca);
+  box-shadow: inset 0 0 0 2px var(--atoca);
+}
+.compare-tick.is-current .compare-tick-knot {
+  scale: 1.5;
+  box-shadow:
+    inset 0 0 0 2px var(--atoca),
+    0 0 0 5px var(--atoca-soft);
+}
+.compare-tick-label {
+  position: absolute;
+  bottom: calc(100% - 2px);
+  left: 50%;
+  translate: -50% 6px;
+  padding: 0.35em 0.65em;
+  border-radius: 6px;
+  font-family: var(--font-mono);
+  font-size: var(--step--2);
+  line-height: 1.2;
+  white-space: nowrap;
+  color: var(--birch);
+  background: var(--spruce-ink);
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity var(--dur-1) linear,
+    translate var(--dur-2) var(--ease-out);
+}
+@media (hover: hover) {
+  .compare-tick:hover .compare-tick-label {
+    opacity: 1;
+    translate: -50% 0;
+  }
+  .compare-tick:hover .compare-tick-knot {
+    scale: 1.5;
+  }
+}
+.compare-tick:first-child .compare-tick-label {
+  left: 0;
+  translate: -22px 6px;
+}
+.compare-tick:last-child .compare-tick-label {
+  left: auto;
+  right: 0;
+  translate: 22px 6px;
+}
+@media (hover: hover) {
+  .compare-tick:first-child:hover .compare-tick-label {
+    translate: -22px 0;
+  }
+  .compare-tick:last-child:hover .compare-tick-label {
+    translate: 22px 0;
+  }
+}
+
+/* ------------------------------------------------------------------ pinned density levels
+   JS tries the normal card, then .is-compact, then .is-compact.is-dense, and pins only if the
+   whole stage fits the screen; otherwise it falls back to the swipe row. */
+.compare-stage.is-compact .compare-stage-inner {
+  gap: 0.35rem;
+}
+.compare-stage.is-compact .compare-count-roll {
+  font-size: var(--step-2);
+}
+.compare-stage.is-compact .compare-navbtn {
+  width: 44px;
+  height: 44px;
+}
+.compare-stage.is-compact .compare-track {
+  padding-top: 6px;
+  padding-bottom: 20px;
+}
+.compare-stage.is-compact .compare-rail-inner {
+  height: 36px;
+}
+.compare-stage.is-compact .compare-card {
+  gap: 0.55rem;
+  padding: 16px 20px 18px;
+}
+.compare-stage.is-compact .compare-card-top {
+  min-height: 28px;
+}
+.compare-stage.is-compact .compare-chip {
+  min-height: 28px;
+  padding-block: 0.2rem;
+}
+.compare-stage.is-compact .compare-name {
+  font-size: clamp(1.3rem, 1rem + 0.75vw, 1.7rem);
+}
+.compare-stage.is-compact .compare-for {
+  font-size: 0.92rem;
+  line-height: 1.42;
+}
+.compare-stage.is-compact .compare-facts {
+  gap: 0.4rem 0.9rem;
+}
+.compare-stage.is-compact .compare-fact {
+  padding-top: 0.4rem;
+  gap: 0.1rem;
+}
+.compare-stage.is-compact .compare-fact dt {
+  font-size: 0.68rem;
+}
+.compare-stage.is-compact .compare-fact dd {
+  font-size: 0.86rem;
+  line-height: 1.4;
+}
+.compare-stage.is-compact .compare-end {
+  min-height: 0;
+}
+@container (min-width: 330px) {
+  .compare-stage.is-compact .compare-facts {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+  .compare-stage.is-compact .compare-fact.is-wide {
+    grid-column: 1 / -1;
+  }
+  /* dense: "how it starts" and "who decides" share a row */
+  .compare-stage.is-dense .compare-fact.compare-fact-start,
+  .compare-stage.is-dense .compare-fact.compare-fact-who {
+    grid-column: auto;
+  }
+}
+
+/* ------------------------------------------------------------------ what isn't adoption */
+.compare-alts {
+  margin-top: var(--space-xl);
+}
+.compare-alts:focus {
+  outline: none;
+}
+.compare-alts-head {
+  margin-bottom: var(--space-l);
+}
+.compare-alts-title {
+  max-width: 24ch;
+  font-size: var(--step-3);
+  font-weight: 740;
+  font-stretch: 82%;
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+@media (max-width: 719px) {
+  /* the page thread ties its knot in this gutter */
+  .compare-alts-title {
+    padding-left: 22px;
+  }
+}
+.compare-alts-grid {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-s);
+}
+@media (min-width: 720px) {
+  .compare-alts-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (min-width: 1000px) {
+  .compare-alts-grid {
+    grid-template-columns: repeat(var(--cols, 3), minmax(0, 1fr));
+    gap: var(--space-m);
+  }
+}
+.compare-alt-item {
+  display: flex;
+}
+.compare-alt {
+  container-type: inline-size;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  width: 100%;
+  padding: clamp(20px, 0.9rem + 0.8vw, 28px);
+  border-radius: var(--radius-m);
+  background: var(--ice);
+  color: var(--ice-ink);
+  transition: box-shadow var(--dur-2) linear;
+}
+@media (hover: hover) {
+  .compare-alt:hover {
+    box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--ice-ink) 35%, transparent);
+  }
+}
+.compare-alt .compare-chip {
+  order: -1;
+  align-self: flex-start;
+  color: var(--ice-ink);
+}
+.compare-alt .compare-chip[data-tie='yes'] {
+  background: var(--card);
+}
+.compare-alt .compare-name {
+  font-size: var(--step-1);
+  color: var(--ice-ink);
+}
+.compare-alt .compare-for,
+.compare-alt .compare-fact dd {
+  color: var(--ice-ink);
+}
+.compare-alt .compare-for-label,
+.compare-alt .compare-fact dt {
+  color: color-mix(in srgb, var(--ice-ink) 72%, transparent);
+}
+.compare-alt .compare-for-label .icon,
+.compare-alt .compare-fact dt .icon {
+  color: var(--atoca-text);
+}
+.compare-alt .compare-fact {
+  border-top-color: color-mix(in srgb, var(--ice-ink) 16%, transparent);
+}
+.compare-alt .compare-fact dd {
+  font-size: 0.92rem;
+}
+.compare-alt .ref {
+  background: color-mix(in srgb, var(--card) 55%, transparent);
+}

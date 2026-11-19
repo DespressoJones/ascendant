@@ -448,7 +448,8 @@ class Scene:
         tl = self.tl
         on_screen = []
         for e, p in self.bars.items():
-            if tl.pos[f, e] >= TOP_N - 1e-3:   # not in the top 10 right now
+            # Hidden when outside the top 10, or when its number is still 0 (not started yet).
+            if tl.pos[f, e] >= TOP_N - 1e-3 or tl.values[f, e] < 0.5:
                 for piece in p.values():
                     piece.set_visible(False)
             else:
